@@ -7,6 +7,7 @@ class AppModule extends Module {
   @override
   List<Module> get imports => [
         ApplicationModule(),
+        HomeModule(),
       ];
 
   @override
