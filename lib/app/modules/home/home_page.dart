@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:penilaian/app/routes/app_routes.dart';
 
 import 'cubit/home_cubit.dart';
 
@@ -25,6 +26,13 @@ class _HomePageState extends State<HomePage> {
           'HomePage is working',
           style: TextStyle(fontSize: 20),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        tooltip: 'Scan KTP',
+        onPressed: () {
+          Modular.to.pushNamed(AppRoutes.KTP_SCAN);
+        },
+        child: const Icon(Icons.qr_code_scanner),
       ),
     );
   }
