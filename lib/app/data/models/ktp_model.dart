@@ -48,22 +48,27 @@ class KtpModel extends Equatable {
   ///Zodiac by born date
   final String? zodiac;
 
-  const KtpModel(
-      {this.nik,
-      this.name,
-      this.gender,
-      this.bornDate,
-      this.province,
-      this.city,
-      this.subdistrict,
-      this.uniqueCode,
-      this.postalCode,
-      this.age,
-      this.ageYear,
-      this.ageMonth,
-      this.ageDay,
-      this.nextBirthday,
-      this.zodiac});
+  /// Photo of the person
+  final String? photo;
+
+  const KtpModel({
+    this.nik,
+    this.name,
+    this.gender,
+    this.bornDate,
+    this.province,
+    this.city,
+    this.subdistrict,
+    this.uniqueCode,
+    this.postalCode,
+    this.age,
+    this.ageYear,
+    this.ageMonth,
+    this.ageDay,
+    this.nextBirthday,
+    this.zodiac,
+    this.photo,
+  });
 
   KtpModel copyWith({
     ValueGetter<String?>? nik,
@@ -82,6 +87,7 @@ class KtpModel extends Equatable {
     ValueGetter<String?>? nextBirthday,
     ValueGetter<String?>? zodiac,
     ValueGetter<bool?>? valid,
+    ValueGetter<String?>? photo,
   }) {
     return KtpModel(
       nik: nik?.call() ?? this.nik,
@@ -99,6 +105,7 @@ class KtpModel extends Equatable {
       ageDay: ageDay?.call() ?? this.ageDay,
       nextBirthday: nextBirthday?.call() ?? this.nextBirthday,
       zodiac: zodiac?.call() ?? this.zodiac,
+      photo: photo?.call() ?? this.photo,
     );
   }
 
@@ -119,6 +126,7 @@ class KtpModel extends Equatable {
       'age_day': ageDay,
       'next_birthday': nextBirthday,
       'zodiac': zodiac,
+      'photo': photo,
     };
   }
 
@@ -158,6 +166,7 @@ class KtpModel extends Equatable {
       ageDay: map['age_day']?.toInt(),
       nextBirthday: map['next_birthday'],
       zodiac: map['zodiac'],
+      photo: map['photo'],
     );
   }
 
@@ -179,6 +188,7 @@ class KtpModel extends Equatable {
       ageDay,
       nextBirthday,
       zodiac,
+      photo,
     ];
   }
 }

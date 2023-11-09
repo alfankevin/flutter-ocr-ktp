@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:penilaian/app/data/extensions/extensions.dart';
 import 'package:penilaian/app/data/models/ktp_model.dart';
 
@@ -19,16 +22,20 @@ class DetailKtpPage extends StatelessWidget {
       ),
       body: Column(
         children: [
-          Container(
-            margin: const EdgeInsets.all(20),
-            width: context.width,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8), border: Border.all(color: Colors.black)),
-            child: Padding(
+          SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: Container(
+              margin: const EdgeInsets.all(20),
               padding: const EdgeInsets.all(10),
+              width: context.width,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8), border: Border.all(color: Colors.black)),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  if (nikResult.photo != null) Center(child: Image.file(File(nikResult.photo!))),
+                  16.verticalSpacingRadius,
+                  const Divider(color: Colors.black),
                   _textWidgeT(title: "NIK", value: nikResult.nik!),
                   const Divider(color: Colors.black),
                   _textWidgeT(title: "Nama", value: nikResult.name!),
@@ -55,7 +62,7 @@ class DetailKtpPage extends StatelessWidget {
                 ],
               ),
             ),
-          ),
+          ).expand(),
         ],
       ),
     );
