@@ -6,24 +6,32 @@ import 'package:penilaian/app/data/models/ktp_model.dart';
 part 'ktp_scan_state.dart';
 
 class KtpScanCubit extends Cubit<KtpScanState> {
-  final textRecognizer = TextRecognizer();
-
   KtpScanCubit() : super(KtpScanInitial());
 
   Future<void> scanKtp(String imagePath) async {
     emit(KtpScanLoading());
+    final textRecognizer = TextRecognizer(script: TextRecognitionScript.latin);
     final inputImage = InputImage.fromFilePath(imagePath);
     RecognizedText recognizedText = await textRecognizer.processImage(inputImage);
-    for (var element in recognizedText.blocks) {
-      NIKModel r = await NIKValidator.instance.parse(nik: element.text);
+    final List<String> dataText = [];
+    for (var item in recognizedText.blocks) {
+      for (var line in item.lines) {
+        dataText.add(line.text.replaceAll(':', '').trim());
+      }
+    }
+
+    for (var i = 0; i < dataText.length; i++) {
+      print("--> ${dataText[i]} <--");
+      NIKModel r = await NIKValidator.instance.parse(nik: dataText[i]);
+      textRecognizer.close();
       if (r.valid == true) {
         final ktp = KtpModel.fromScan(r);
-        emit(KtpScanLoaded(ktp.copyWith(
-          name: () => recognizedText.blocks[1].text,
-        )));
+        String name = dataText[i + 1].replaceAll(':', '');
+        emit(KtpScanLoaded(ktp.copyWith(name: () => name)));
         return;
       }
     }
+
     emit(KtpScanError('NIK tidak ditemukan'));
   }
 }

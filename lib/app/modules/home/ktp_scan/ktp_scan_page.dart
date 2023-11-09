@@ -2,6 +2,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:penilaian/app/core/widgets/camera_overlay/camera_overlay_widget.dart';
 import 'package:penilaian/app/data/extensions/extensions.dart';
 import 'package:penilaian/app/modules/home/ktp_scan/cubit/ktp_scan_cubit.dart';
 import 'package:penilaian/app/routes/app_routes.dart';
@@ -14,37 +15,16 @@ class KtpScanPage extends StatefulWidget {
 }
 
 class _KtpScanPageState extends State<KtpScanPage> {
-  CameraController? controller;
-  List<CameraDescription>? _cameras;
   final KtpScanCubit bloc = Modular.get<KtpScanCubit>();
+  OverlayFormat format = OverlayFormat.cardID2;
 
   @override
   void initState() {
     super.initState();
-    initCamera();
-  }
-
-  Future<void> initCamera() async {
-    _cameras = await availableCameras();
-    print("Haloo => ${_cameras!.length}");
-    var position = _cameras!.isNotEmpty ? 0 : 0;
-    controller = CameraController(
-      _cameras![position],
-      ResolutionPreset.max,
-      enableAudio: false,
-    );
-    controller!.initialize().then((value) {
-      if (!mounted) {
-        return;
-      }
-      setState(() {});
-    });
   }
 
   @override
   void dispose() {
-    controller?.dispose();
-    bloc.textRecognizer.close();
     bloc.close();
     super.dispose();
   }
@@ -61,7 +41,6 @@ class _KtpScanPageState extends State<KtpScanPage> {
           }
           if (state is KtpScanError) {
             context.showSnackbar(message: "NIK ditemukan", error: true, isPop: true);
-            controller?.resumePreview();
           }
           if (state is KtpScanLoaded) {
             context.hideLoading();
@@ -70,54 +49,40 @@ class _KtpScanPageState extends State<KtpScanPage> {
           }
         },
         child: Scaffold(
-          body: Stack(
-            children: [
-              Positioned(
-                left: 0,
-                right: 0,
-                child: controller != null
-                    ? CameraPreview(controller!)
-                    : Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: MediaQuery.of(context).size.height,
-                        decoration: const BoxDecoration(color: Colors.black87),
-                      ),
-              ),
-              Positioned(
-                left: 32,
-                top: 0,
-                bottom: 50,
-                right: 32,
-                child: Center(
-                  child: Container(
-                    width: context.width * .85,
-                    height: context.width * 1.1,
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: Colors.white),
-                    ),
+          body: FutureBuilder<List<CameraDescription>?>(
+            future: availableCameras(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                if (snapshot.data == null) {
+                  return const Align(
+                      alignment: Alignment.center,
+                      child: Text(
+                        'No camera found',
+                        style: TextStyle(color: Colors.black),
+                      ));
+                }
+                return CameraOverlayWidget(
+                  snapshot.data!.first,
+                  CardOverlay.byFormat(format),
+                  (XFile file) async {
+                    bloc.scanKtp(file.path);
+                    // Modular.to.pop(file.path);
+                  },
+                  info:
+                      'Position your ID card within the rectangle and ensure the image is perfectly readable.',
+                  label: 'Scanning KTP',
+                );
+              } else {
+                return const Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    'Fetching cameras',
+                    style: TextStyle(color: Colors.black),
                   ),
-                ),
-              )
-            ],
+                );
+              }
+            },
           ),
-          bottomNavigationBar: controller != null
-              ? Container(
-                  width: double.infinity,
-                  padding: 24.all,
-                  decoration: const BoxDecoration(color: Colors.white),
-                  child: ElevatedButton(
-                    child: const Text("Take Picture"),
-                    onPressed: () {
-                      controller!.takePicture().then((value) {
-                        controller!.pausePreview();
-                        bloc.scanKtp(value.path);
-                      });
-                    },
-                  ),
-                )
-              : Container(),
         ),
       ),
     );
