@@ -29,7 +29,7 @@ final colorTheme = ThemeData(
         borderRadius: 30.rounded,
       ),
       textStyle: AppStyles.text16PxMedium,
-      minimumSize: Size(100.r, 42.r),
+      minimumSize: Size(200.r, 48.r),
     ),
   ),
   outlinedButtonTheme: OutlinedButtonThemeData(
@@ -52,7 +52,7 @@ final colorTheme = ThemeData(
       textStyle: AppStyles.text16PxMedium.copyWith(
         color: ColorTheme.primary,
       ),
-      minimumSize: Size(100.r, 42.r),
+      minimumSize: Size(200.r, 48.r),
     ),
   ),
   colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.blue),

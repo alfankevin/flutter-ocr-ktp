@@ -29,94 +29,113 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return BaseScaffold(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          16.verticalSpacingRadius,
-          const HeaderTitle(
-            title: 'Login',
-          ),
-          40.verticalSpacingRadius,
-          const TextInputComponent(
-            formControlName: '',
-            hint: 'Masukkan Email',
-            label: 'Email',
-            isRequiredText: true,
-            textInputType: TextInputType.emailAddress,
-            prefix: Icon(Icons.person_outline_rounded),
-          ),
-          16.verticalSpacingRadius,
-          const PasswordInput(
-            title: 'Password',
-            formControlName: 'password',
-            hint: "Masukkan Password",
-            prefix: Icon(Icons.lock_outline_rounded),
-          ),
-          8.verticalSpacingRadius,
-          Align(
-            alignment: Alignment.centerRight,
-            child: Text.rich(
-              const TextSpan(
-                text: 'Lupa kata sandi?',
-                children: [
-                  TextSpan(
-                    text: 'Ganti',
-                    style: TextStyle(color: ColorTheme.primary),
-                  ),
-                ],
-              ),
-              style: CustomTextTheme.paragraph1,
-            ),
-          ),
-          30.verticalSpacingRadius,
-          ElevatedButton(
-            onPressed: () {
-              Modular.to.pushNamed(AppRoutes.LOGIN);
-            },
-            child: const Text('Login'),
-          ),
-          30.verticalSpacingRadius,
-          Text(
-            "- Atau masuk dengan -",
-            style: AppStyles.text12Px,
-          ),
-          20.verticalSpacingRadius,
-          InkWell(
-            onTap: () {},
-            child: Container(
-              width: 54,
-              height: 54,
-              padding: const EdgeInsets.all(15),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: 30.rounded,
-                border: Border.all(
-                  color: ColorTheme.placeholder,
-                  width: 1,
+      body: ReactiveFormBuilder(
+        form: () => form,
+        builder: (context, formG, child) {
+          return SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                80.verticalSpacingRadius,
+                const HeaderTitle(
+                  title: 'Login',
                 ),
-              ),
-              child: Image.asset('assets/img/google.png'),
-            ),
-          ),
-          20.verticalSpacingRadius,
-          Text.rich(
-            TextSpan(text: 'Belum punya akun?', children: [
-              TextSpan(
-                text: 'Daftar',
-                style: const TextStyle(color: ColorTheme.primary),
-                recognizer: TapGestureRecognizer()
-                  ..onTap = () {
-                    Modular.to.pushNamed(AppRoutes.REGISTER);
+                60.verticalSpacingRadius,
+                const TextInputComponent(
+                  formControlName: 'email',
+                  hint: 'Masukkan Email',
+                  label: 'Email',
+                  isRequiredText: true,
+                  textInputType: TextInputType.emailAddress,
+                  prefix: Icon(Icons.person_outline_rounded),
+                ),
+                16.verticalSpacingRadius,
+                const PasswordInput(
+                  title: 'Password',
+                  formControlName: 'password',
+                  hint: "Masukkan Password",
+                  prefix: Icon(Icons.lock_outline_rounded),
+                ),
+                18.verticalSpacingRadius,
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Text.rich(
+                    const TextSpan(
+                      text: 'Lupa kata sandi?',
+                      children: [
+                        TextSpan(
+                          text: ' Ganti',
+                          style: TextStyle(
+                            color: ColorTheme.statusGreen,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    style: CustomTextTheme.paragraph1,
+                  ),
+                ),
+                50.verticalSpacingRadius,
+                ReactiveFormConsumer(
+                  builder: (context, formGB, child) {
+                    return ElevatedButton(
+                      onPressed: formGB.valid
+                          ? () {
+                              Modular.to.pushNamed(AppRoutes.LOGIN);
+                            }
+                          : null,
+                      child: const Text('Login'),
+                    );
                   },
-              ),
-            ]),
-            style: AppStyles.text14Px.copyWith(
-              color: ColorTheme.neutral.shade700,
+                ),
+                50.verticalSpacingRadius,
+                Text(
+                  "- Atau masuk dengan -",
+                  style: AppStyles.text14Px.copyWith(
+                    color: ColorTheme.neutral.shade400,
+                  ),
+                ),
+                20.verticalSpacingRadius,
+                InkWell(
+                  onTap: () {},
+                  child: Container(
+                    width: 54,
+                    height: 54,
+                    padding: const EdgeInsets.all(15),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: 30.rounded,
+                      border: Border.all(
+                        color: ColorTheme.placeholder,
+                        width: 1,
+                      ),
+                    ),
+                    child: Image.asset('assets/img/google.png'),
+                  ),
+                ),
+                20.verticalSpacingRadius,
+                Text.rich(
+                  TextSpan(text: 'Belum punya akun?', children: [
+                    TextSpan(
+                      text: ' Daftar',
+                      style: const TextStyle(
+                          color: ColorTheme.statusGreen, fontWeight: FontWeight.bold),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          Modular.to.pushNamed(AppRoutes.REGISTER);
+                        },
+                    ),
+                  ]),
+                  style: AppStyles.text14Px.copyWith(
+                    color: ColorTheme.neutral.shade700,
+                  ),
+                ),
+                60.verticalSpacingRadius,
+              ],
             ),
-          ),
-          60.verticalSpacingRadius,
-        ],
+          );
+        },
       ),
     );
   }

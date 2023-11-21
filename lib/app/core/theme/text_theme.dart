@@ -351,14 +351,15 @@ class CustomTextTheme {
         color: ColorTheme.neutral[800],
         fontWeight: FontWeight.bold,
       );
-  static TextStyle get caption =>
-      AppStyles.text13Px.copyWith(color: ColorTheme.black);
-  static TextStyle get footer =>
-      GoogleFonts.workSans(fontSize: 10, color: ColorTheme.neutral[800]);
+  static TextStyle get caption => AppStyles.text13Px.copyWith(color: ColorTheme.black);
+  static TextStyle get footer => GoogleFonts.workSans(fontSize: 10, color: ColorTheme.neutral[800]);
   static TextStyle get subheading =>
       GoogleFonts.workSans(fontSize: 20, color: ColorTheme.neutral[800]);
-  static TextStyle get heading1 =>
-      GoogleFonts.workSans(fontSize: 36, color: ColorTheme.neutral[800]);
+  static TextStyle get heading1 => GoogleFonts.workSans(
+        fontSize: 36,
+        color: ColorTheme.neutral[800],
+        fontWeight: FontWeight.w800,
+      );
   static TextStyle get heading2 => GoogleFonts.workSans(
         fontSize: 32,
         fontStyle: FontStyle.normal,
@@ -368,9 +369,7 @@ class CustomTextTheme {
   static TextStyle get heading3 =>
       GoogleFonts.workSans(fontSize: 28, color: ColorTheme.neutral[800]);
   static TextStyle get heading4 => GoogleFonts.workSans(
-      fontSize: 24,
-      color: ColorTheme.neutral[800],
-      fontWeight: FontWeight.bold);
+      fontSize: 24, color: ColorTheme.neutral[800], fontWeight: FontWeight.bold);
   static TextStyle get heading5 =>
       GoogleFonts.workSans(fontSize: 20, color: ColorTheme.neutral[800]);
   static TextStyle get heading6 =>

@@ -13,7 +13,7 @@ class HeaderTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       title,
-      style: CustomTextTheme.heading4.copyWith(color: ColorTheme.primary),
+      style: CustomTextTheme.heading1.copyWith(color: ColorTheme.primary),
     );
   }
 }

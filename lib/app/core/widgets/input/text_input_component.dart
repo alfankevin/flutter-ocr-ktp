@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:penilaian/app/core/theme/theme.dart';
-import 'package:penilaian/app/data/extensions/extensions.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 
 class TextInputComponent extends StatefulWidget {
@@ -61,8 +60,7 @@ class _TextInputComponentState extends State<TextInputComponent> {
               if (widget.isRequiredText)
                 TextSpan(
                   text: "*",
-                  style:
-                      AppStyles.text14PxMedium.copyWith(color: ColorTheme.red),
+                  style: AppStyles.text14PxMedium.copyWith(color: ColorTheme.red),
                 ),
             ],
           ),
@@ -72,28 +70,8 @@ class _TextInputComponentState extends State<TextInputComponent> {
         ReactiveTextField(
           keyboardType: widget.textInputType,
           formControlName: widget.formControlName,
-          style: CustomTextTheme.paragraph2
-              .copyWith(color: ColorTheme.neutral[800]),
-          decoration: widget.maxLines > 1
-              ? GenerateTheme.inputDecoration(widget.hint)
-              : InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: 48.rounded,
-                    borderSide: const BorderSide(
-                      color: ColorTheme.primary,
-                      width: 1,
-                    ),
-                  ),
-                  contentPadding: 12.all,
-                  hintText: widget.hint,
-                  suffixIcon: widget.suffix,
-                  prefixIcon: Padding(
-                    padding: EdgeInsets.only(
-                      left: 12.w,
-                    ),
-                    child: widget.prefix,
-                  ),
-                ),
+          style: CustomTextTheme.paragraph2.copyWith(color: ColorTheme.neutral[800]),
+          decoration: GenerateTheme.inputDecorationIcon(widget.hint, widget.prefix, widget.suffix),
           validationMessages: message,
           maxLines: widget.maxLines,
           onChanged: widget.onChanged,
