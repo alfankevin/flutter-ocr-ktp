@@ -3,14 +3,14 @@ import 'package:penilaian/app/data/extensions/extensions.dart';
 
 class BaseScaffold extends StatelessWidget {
   const BaseScaffold({
-    Key? key,
+    super.key,
     required this.body,
     this.isPadding = true,
     this.isSafeArea = true,
     this.appBar,
     this.floatingActionButton,
     this.bottomNavigationBar,
-  }) : super(key: key);
+  });
 
   final Widget body;
   final bool isPadding;
@@ -23,7 +23,7 @@ class BaseScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     final padding = isPadding
         ? Padding(
-            padding: 16.all,
+            padding: 24.all,
             child: body,
           )
         : body;

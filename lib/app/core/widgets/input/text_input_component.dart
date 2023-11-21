@@ -6,7 +6,7 @@ import 'package:reactive_forms/reactive_forms.dart';
 
 class TextInputComponent extends StatefulWidget {
   const TextInputComponent({
-    Key? key,
+    super.key,
     required this.formControlName,
     required this.hint,
     required this.label,
@@ -17,7 +17,7 @@ class TextInputComponent extends StatefulWidget {
     this.prefix,
     this.suffix,
     this.onChanged,
-  }) : super(key: key);
+  });
 
   final String formControlName;
   final String hint;
@@ -36,7 +36,8 @@ class TextInputComponent extends StatefulWidget {
 
 class _TextInputComponentState extends State<TextInputComponent> {
   final Map<String, String Function(Object)> message = {
-    ValidationMessage.required: (_) => 'inputan ini tidak boleh kosong',
+    ValidationMessage.required: (_) => 'Inputan ini tidak boleh kosong',
+    ValidationMessage.email: (_) => 'Email yang ada masukkan tidak valid',
     'validation_error': (e) => (e as String),
   };
 
@@ -60,7 +61,8 @@ class _TextInputComponentState extends State<TextInputComponent> {
               if (widget.isRequiredText)
                 TextSpan(
                   text: "*",
-                  style: AppStyles.text14PxMedium.copyWith(color: ColorTheme.red),
+                  style:
+                      AppStyles.text14PxMedium.copyWith(color: ColorTheme.red),
                 ),
             ],
           ),
@@ -70,7 +72,8 @@ class _TextInputComponentState extends State<TextInputComponent> {
         ReactiveTextField(
           keyboardType: widget.textInputType,
           formControlName: widget.formControlName,
-          style: CustomTextTheme.paragraph2.copyWith(color: ColorTheme.neutral[800]),
+          style: CustomTextTheme.paragraph2
+              .copyWith(color: ColorTheme.neutral[800]),
           decoration: widget.maxLines > 1
               ? GenerateTheme.inputDecoration(widget.hint)
               : InputDecoration(

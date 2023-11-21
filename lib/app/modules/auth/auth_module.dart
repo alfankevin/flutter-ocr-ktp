@@ -1,5 +1,7 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:penilaian/app/modules/auth/login/login_page.dart';
+import 'package:penilaian/app/modules/auth/register/register_page.dart';
+import 'package:penilaian/app/routes/app_routes.dart';
 
 class AuthModule extends Module {
   @override
@@ -7,6 +9,7 @@ class AuthModule extends Module {
 
   @override
   void routes(RouteManager r) {
-    r.child('/', child: (ctx) => const LoginPage());
+    r.child(AppRoutes.LOGIN, child: (ctx) => const LoginPage());
+    r.child(AppRoutes.REGISTER, child: (ctx) => const RegisterPage());
   }
 }

@@ -11,7 +11,7 @@ final colorTheme = ThemeData(
   useMaterial3: true,
   primaryColor: ColorTheme.primary,
   secondaryHeaderColor: ColorTheme.secondary,
-  textTheme: GoogleFonts.poppinsTextTheme(),
+  textTheme: GoogleFonts.workSansTextTheme(),
   appBarTheme: AppBarTheme(
     backgroundColor: ColorTheme.scaffoldBackground,
     shadowColor: ColorTheme.neutral.shade400,
@@ -29,7 +29,7 @@ final colorTheme = ThemeData(
         borderRadius: 30.rounded,
       ),
       textStyle: AppStyles.text16PxMedium,
-      fixedSize: Size(1000, 48.h),
+      minimumSize: Size(100.r, 42.r),
     ),
   ),
   outlinedButtonTheme: OutlinedButtonThemeData(
@@ -52,9 +52,9 @@ final colorTheme = ThemeData(
       textStyle: AppStyles.text16PxMedium.copyWith(
         color: ColorTheme.primary,
       ),
-      fixedSize: Size(1000, 48.w),
+      minimumSize: Size(100.r, 42.r),
     ),
   ),
-  colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.green),
+  colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.blue),
   scaffoldBackgroundColor: ColorTheme.scaffoldBackground,
 );

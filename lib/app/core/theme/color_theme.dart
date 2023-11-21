@@ -25,6 +25,7 @@ class ColorTheme {
       300: Color(0xFFC3BECC),
       400: Color(0xffAFA8BB),
       600: Color(0xff989FAD),
+      700: Color(0xff575757),
       900: Color(0xFF4B3C65),
     },
   );
@@ -46,8 +47,9 @@ class ColorTheme {
   );
 
   // Color
-  static const Color primary = Color(0xff03A64D);
-  static const Color secondary = Color(0xff372654);
+  static const Color primary = Color(0xff1f73d9);
+  static const Color secondary = Color(0xff19348d);
+  static const Color placeholder = Color(0xffB3B3B3);
   static const Color red = Color(0xffDE453A);
   static const Color yellow = Color(0xffFAFF00);
 

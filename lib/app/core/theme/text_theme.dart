@@ -3,31 +3,27 @@ part of 'theme.dart';
 abstract class AppStyles {
   // text 9px
   //regular
-  static TextStyle text9Px = TextStyle(
-    fontFamily: 'Poppins',
+  static TextStyle text9Px = GoogleFonts.workSans(
     fontSize: 9.sp,
     fontStyle: FontStyle.normal,
   );
 
   //medium
-  static TextStyle text9PxMedium = TextStyle(
-    fontFamily: 'Poppins',
+  static TextStyle text9PxMedium = GoogleFonts.workSans(
     fontSize: 9.sp,
     fontWeight: FontWeight.w500,
     fontStyle: FontStyle.normal,
   );
 
   //SemiBold
-  static TextStyle text9PxSemiBold = TextStyle(
-    fontFamily: 'Poppins',
+  static TextStyle text9PxSemiBold = GoogleFonts.workSans(
     fontSize: 9.sp,
     fontWeight: FontWeight.w600,
     fontStyle: FontStyle.normal,
   );
 
   //bold
-  static TextStyle text9PxBold = TextStyle(
-    fontFamily: 'Poppins',
+  static TextStyle text9PxBold = GoogleFonts.workSans(
     fontSize: 9.sp,
     fontWeight: FontWeight.bold,
     fontStyle: FontStyle.normal,
@@ -35,38 +31,33 @@ abstract class AppStyles {
 
   // text 10px
   //small
-  static TextStyle text10PxSmall = TextStyle(
-    fontFamily: 'Poppins',
+  static TextStyle text10PxSmall = GoogleFonts.workSans(
     fontSize: 10.sp,
     fontWeight: FontWeight.w300,
     fontStyle: FontStyle.normal,
   );
   //regular
-  static TextStyle text10Px = TextStyle(
-    fontFamily: 'Poppins',
+  static TextStyle text10Px = GoogleFonts.workSans(
     fontSize: 10.sp,
     fontStyle: FontStyle.normal,
   );
 
   //medium
-  static TextStyle text10PxMedium = TextStyle(
-    fontFamily: 'Poppins',
+  static TextStyle text10PxMedium = GoogleFonts.workSans(
     fontSize: 10.sp,
     fontWeight: FontWeight.w500,
     fontStyle: FontStyle.normal,
   );
 
   //SemiBold
-  static TextStyle text10PxSemiBold = TextStyle(
-    fontFamily: 'Poppins',
+  static TextStyle text10PxSemiBold = GoogleFonts.workSans(
     fontSize: 10.sp,
     fontWeight: FontWeight.w600,
     fontStyle: FontStyle.normal,
   );
 
   //bold
-  static TextStyle text10PxBold = TextStyle(
-    fontFamily: 'Poppins',
+  static TextStyle text10PxBold = GoogleFonts.workSans(
     fontSize: 10.sp,
     fontWeight: FontWeight.bold,
     fontStyle: FontStyle.normal,
@@ -75,31 +66,27 @@ abstract class AppStyles {
   // text 12px
 
   //regular
-  static TextStyle text12Px = TextStyle(
-    fontFamily: 'Poppins',
+  static TextStyle text12Px = GoogleFonts.workSans(
     fontSize: 12.sp,
     fontStyle: FontStyle.normal,
   );
 
   //medium
-  static TextStyle text12PxMedium = TextStyle(
-    fontFamily: 'Poppins',
+  static TextStyle text12PxMedium = GoogleFonts.workSans(
     fontSize: 12.sp,
     fontWeight: FontWeight.w500,
     fontStyle: FontStyle.normal,
   );
 
   //SemiBold
-  static TextStyle text12PxSemiBold = TextStyle(
-    fontFamily: 'Poppins',
+  static TextStyle text12PxSemiBold = GoogleFonts.workSans(
     fontSize: 12.sp,
     fontWeight: FontWeight.w600,
     fontStyle: FontStyle.normal,
   );
 
   //bold
-  static TextStyle text12PxBold = TextStyle(
-    fontFamily: 'Poppins',
+  static TextStyle text12PxBold = GoogleFonts.workSans(
     fontSize: 12.sp,
     fontWeight: FontWeight.bold,
     fontStyle: FontStyle.normal,
@@ -107,31 +94,27 @@ abstract class AppStyles {
 
   // text 13px
   //regular
-  static TextStyle text13Px = TextStyle(
-    fontFamily: 'Poppins',
+  static TextStyle text13Px = GoogleFonts.workSans(
     fontSize: 13.sp,
     fontStyle: FontStyle.normal,
   );
 
   //medium
-  static TextStyle text13PxMedium = TextStyle(
-    fontFamily: 'Poppins',
+  static TextStyle text13PxMedium = GoogleFonts.workSans(
     fontSize: 13.sp,
     fontWeight: FontWeight.w500,
     fontStyle: FontStyle.normal,
   );
 
   //SemiBold
-  static TextStyle text13PxSemiBold = TextStyle(
-    fontFamily: 'Poppins',
+  static TextStyle text13PxSemiBold = GoogleFonts.workSans(
     fontSize: 13.sp,
     fontWeight: FontWeight.w600,
     fontStyle: FontStyle.normal,
   );
 
   //bold
-  static TextStyle text13PxBold = TextStyle(
-    fontFamily: 'Poppins',
+  static TextStyle text13PxBold = GoogleFonts.workSans(
     fontSize: 13.sp,
     fontWeight: FontWeight.bold,
     fontStyle: FontStyle.normal,
@@ -139,31 +122,27 @@ abstract class AppStyles {
 
   // text 14px
   //regular
-  static TextStyle text14Px = TextStyle(
-    fontFamily: 'Poppins',
+  static TextStyle text14Px = GoogleFonts.workSans(
     fontSize: 14.sp,
     fontStyle: FontStyle.normal,
   );
 
   //medium
-  static TextStyle text14PxMedium = TextStyle(
-    fontFamily: 'Poppins',
+  static TextStyle text14PxMedium = GoogleFonts.workSans(
     fontSize: 14.sp,
     fontWeight: FontWeight.w500,
     fontStyle: FontStyle.normal,
   );
 
   //SemiBold
-  static TextStyle text14PxSemiBold = TextStyle(
-    fontFamily: 'Poppins',
+  static TextStyle text14PxSemiBold = GoogleFonts.workSans(
     fontSize: 14.sp,
     fontWeight: FontWeight.w600,
     fontStyle: FontStyle.normal,
   );
 
   //bold
-  static TextStyle text14PxBold = TextStyle(
-    fontFamily: 'Poppins',
+  static TextStyle text14PxBold = GoogleFonts.workSans(
     fontSize: 14.sp,
     fontWeight: FontWeight.bold,
     fontStyle: FontStyle.normal,
@@ -171,31 +150,27 @@ abstract class AppStyles {
 
   // text 16px
   //regular
-  static TextStyle text16Px = TextStyle(
-    fontFamily: 'Poppins',
+  static TextStyle text16Px = GoogleFonts.workSans(
     fontSize: 16.sp,
     fontStyle: FontStyle.normal,
   );
 
   //medium
-  static TextStyle text16PxMedium = TextStyle(
-    fontFamily: 'Poppins',
+  static TextStyle text16PxMedium = GoogleFonts.workSans(
     fontSize: 16.sp,
     fontWeight: FontWeight.w500,
     fontStyle: FontStyle.normal,
   );
 
   //SemiBold
-  static TextStyle text16PxSemiBold = TextStyle(
-    fontFamily: 'Poppins',
+  static TextStyle text16PxSemiBold = GoogleFonts.workSans(
     fontSize: 16.sp,
     fontWeight: FontWeight.w600,
     fontStyle: FontStyle.normal,
   );
 
   //bold
-  static TextStyle text16PxBold = TextStyle(
-    fontFamily: 'Poppins',
+  static TextStyle text16PxBold = GoogleFonts.workSans(
     fontSize: 16.sp,
     fontWeight: FontWeight.bold,
     fontStyle: FontStyle.normal,
@@ -203,31 +178,27 @@ abstract class AppStyles {
 
   // text 18px
   //regular
-  static TextStyle text18Px = TextStyle(
-    fontFamily: 'Poppins',
+  static TextStyle text18Px = GoogleFonts.workSans(
     fontSize: 18.sp,
     fontStyle: FontStyle.normal,
   );
 
   //medium
-  static TextStyle text18PxMedium = TextStyle(
-    fontFamily: 'Poppins',
+  static TextStyle text18PxMedium = GoogleFonts.workSans(
     fontSize: 18.sp,
     fontWeight: FontWeight.w500,
     fontStyle: FontStyle.normal,
   );
 
   //SemiBold
-  static TextStyle text18PxSemiBold = TextStyle(
-    fontFamily: 'Poppins',
+  static TextStyle text18PxSemiBold = GoogleFonts.workSans(
     fontSize: 18.sp,
     fontWeight: FontWeight.w600,
     fontStyle: FontStyle.normal,
   );
 
   //bold
-  static TextStyle text18PxBold = TextStyle(
-    fontFamily: 'Poppins',
+  static TextStyle text18PxBold = GoogleFonts.workSans(
     fontSize: 18.sp,
     fontWeight: FontWeight.bold,
     fontStyle: FontStyle.normal,
@@ -235,31 +206,27 @@ abstract class AppStyles {
 
   // text 20px
   //regular
-  static TextStyle text20Px = TextStyle(
-    fontFamily: 'Poppins',
+  static TextStyle text20Px = GoogleFonts.workSans(
     fontSize: 20.sp,
     fontStyle: FontStyle.normal,
   );
 
   //medium
-  static TextStyle text20PxMedium = TextStyle(
-    fontFamily: 'Poppins',
+  static TextStyle text20PxMedium = GoogleFonts.workSans(
     fontSize: 20.sp,
     fontWeight: FontWeight.w500,
     fontStyle: FontStyle.normal,
   );
 
   //SemiBold
-  static TextStyle text20PxSemiBold = TextStyle(
-    fontFamily: 'Poppins',
+  static TextStyle text20PxSemiBold = GoogleFonts.workSans(
     fontSize: 20.sp,
     fontWeight: FontWeight.w600,
     fontStyle: FontStyle.normal,
   );
 
   //bold
-  static TextStyle text20PxBold = TextStyle(
-    fontFamily: 'Poppins',
+  static TextStyle text20PxBold = GoogleFonts.workSans(
     fontSize: 20.sp,
     fontWeight: FontWeight.bold,
     fontStyle: FontStyle.normal,
@@ -267,31 +234,27 @@ abstract class AppStyles {
 
   // text 24px
   //regular
-  static TextStyle text24Px = TextStyle(
-    fontFamily: 'Poppins',
+  static TextStyle text24Px = GoogleFonts.workSans(
     fontSize: 24.sp,
     fontStyle: FontStyle.normal,
   );
 
   //medium
-  static TextStyle text24PxMedium = TextStyle(
-    fontFamily: 'Poppins',
+  static TextStyle text24PxMedium = GoogleFonts.workSans(
     fontSize: 24.sp,
     fontWeight: FontWeight.w500,
     fontStyle: FontStyle.normal,
   );
 
   //SemiBold
-  static TextStyle text24PxSemiBold = TextStyle(
-    fontFamily: 'Poppins',
+  static TextStyle text24PxSemiBold = GoogleFonts.workSans(
     fontSize: 24.sp,
     fontWeight: FontWeight.w600,
     fontStyle: FontStyle.normal,
   );
 
   //bold
-  static TextStyle text24PxBold = TextStyle(
-    fontFamily: 'Poppins',
+  static TextStyle text24PxBold = GoogleFonts.workSans(
     fontSize: 24.sp,
     fontWeight: FontWeight.bold,
     fontStyle: FontStyle.normal,
@@ -299,16 +262,14 @@ abstract class AppStyles {
 
   // text 36px
   //regular
-  static TextStyle text36Px = TextStyle(
-    fontFamily: 'Poppins',
+  static TextStyle text36Px = GoogleFonts.workSans(
     fontSize: 36.sp,
     fontStyle: FontStyle.normal,
     letterSpacing: calculateSpacing(-0.02),
   );
 
   //medium
-  static TextStyle text36PxMedium = TextStyle(
-    fontFamily: 'Poppins',
+  static TextStyle text36PxMedium = GoogleFonts.workSans(
     fontSize: 36.sp,
     fontWeight: FontWeight.w500,
     fontStyle: FontStyle.normal,
@@ -316,8 +277,7 @@ abstract class AppStyles {
   );
 
   //SemiBold
-  static TextStyle text36PxSemiBold = TextStyle(
-    fontFamily: 'Poppins',
+  static TextStyle text36PxSemiBold = GoogleFonts.workSans(
     fontSize: 36.sp,
     fontWeight: FontWeight.w600,
     fontStyle: FontStyle.normal,
@@ -325,8 +285,7 @@ abstract class AppStyles {
   );
 
   //bold
-  static TextStyle text36PxBold = TextStyle(
-    fontFamily: 'Poppins',
+  static TextStyle text36PxBold = GoogleFonts.workSans(
     fontSize: 36.sp,
     fontWeight: FontWeight.bold,
     fontStyle: FontStyle.normal,
@@ -335,16 +294,14 @@ abstract class AppStyles {
 
   // text 40px
   //regular
-  static TextStyle text40Px = TextStyle(
-    fontFamily: 'Poppins',
+  static TextStyle text40Px = GoogleFonts.workSans(
     fontSize: 40.sp,
     fontStyle: FontStyle.normal,
     letterSpacing: calculateSpacing(-0.02),
   );
 
   //medium
-  static TextStyle text40PxMedium = TextStyle(
-    fontFamily: 'Poppins',
+  static TextStyle text40PxMedium = GoogleFonts.workSans(
     fontSize: 40.sp,
     fontWeight: FontWeight.w500,
     fontStyle: FontStyle.normal,
@@ -352,8 +309,7 @@ abstract class AppStyles {
   );
 
   //SemiBold
-  static TextStyle text40PxSemiBold = TextStyle(
-    fontFamily: 'Poppins',
+  static TextStyle text40PxSemiBold = GoogleFonts.workSans(
     fontSize: 40.sp,
     fontWeight: FontWeight.w600,
     fontStyle: FontStyle.normal,
@@ -361,8 +317,7 @@ abstract class AppStyles {
   );
 
   //bold
-  static TextStyle text40PxBold = TextStyle(
-    fontFamily: 'Poppins',
+  static TextStyle text40PxBold = GoogleFonts.workSans(
     fontSize: 40.sp,
     fontWeight: FontWeight.bold,
     fontStyle: FontStyle.normal,
@@ -370,8 +325,7 @@ abstract class AppStyles {
   );
 
   //bold
-  static TextStyle text56PxBold = TextStyle(
-    fontFamily: 'Poppins',
+  static TextStyle text56PxBold = GoogleFonts.workSans(
     fontSize: 56.sp,
     fontWeight: FontWeight.bold,
     fontStyle: FontStyle.normal,
@@ -388,26 +342,37 @@ abstract class AppStyles {
 }
 
 class CustomTextTheme {
-  static TextStyle get paragraph1 => TextStyle(fontSize: 14, color: ColorTheme.neutral[800]);
-  static TextStyle get paragraph2 => TextStyle(fontSize: 16, color: ColorTheme.neutral[800]);
-  static TextStyle get paragraph3 => TextStyle(
+  static TextStyle get paragraph1 =>
+      GoogleFonts.workSans(fontSize: 14, color: ColorTheme.neutral[800]);
+  static TextStyle get paragraph2 =>
+      GoogleFonts.workSans(fontSize: 16, color: ColorTheme.neutral[800]);
+  static TextStyle get paragraph3 => GoogleFonts.workSans(
         fontSize: 18,
         color: ColorTheme.neutral[800],
         fontWeight: FontWeight.bold,
       );
-  static TextStyle get caption => AppStyles.text13Px.copyWith(color: ColorTheme.black);
-  static TextStyle get footer => TextStyle(fontSize: 10, color: ColorTheme.neutral[800]);
-  static TextStyle get subheading => TextStyle(fontSize: 20, color: ColorTheme.neutral[800]);
-  static TextStyle get heading1 => TextStyle(fontSize: 34, color: ColorTheme.neutral[800]);
-  static TextStyle get heading2 => const TextStyle(
-        fontFamily: 'Poppins',
-        fontSize: 22,
+  static TextStyle get caption =>
+      AppStyles.text13Px.copyWith(color: ColorTheme.black);
+  static TextStyle get footer =>
+      GoogleFonts.workSans(fontSize: 10, color: ColorTheme.neutral[800]);
+  static TextStyle get subheading =>
+      GoogleFonts.workSans(fontSize: 20, color: ColorTheme.neutral[800]);
+  static TextStyle get heading1 =>
+      GoogleFonts.workSans(fontSize: 36, color: ColorTheme.neutral[800]);
+  static TextStyle get heading2 => GoogleFonts.workSans(
+        fontSize: 32,
         fontStyle: FontStyle.normal,
         fontWeight: FontWeight.w600,
         color: ColorTheme.black,
       );
-  static TextStyle get heading3 => TextStyle(fontSize: 28, color: ColorTheme.neutral[800]);
-  static TextStyle get heading4 => TextStyle(fontSize: 23, color: ColorTheme.neutral[800]);
-  static TextStyle get heading5 => TextStyle(fontSize: 19, color: ColorTheme.neutral[800]);
-  static TextStyle get heading6 => TextStyle(fontSize: 14, color: ColorTheme.neutral[800]);
+  static TextStyle get heading3 =>
+      GoogleFonts.workSans(fontSize: 28, color: ColorTheme.neutral[800]);
+  static TextStyle get heading4 => GoogleFonts.workSans(
+      fontSize: 24,
+      color: ColorTheme.neutral[800],
+      fontWeight: FontWeight.bold);
+  static TextStyle get heading5 =>
+      GoogleFonts.workSans(fontSize: 20, color: ColorTheme.neutral[800]);
+  static TextStyle get heading6 =>
+      GoogleFonts.workSans(fontSize: 16, color: ColorTheme.neutral[800]);
 }
