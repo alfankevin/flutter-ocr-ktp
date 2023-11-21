@@ -8,6 +8,7 @@ part 'generate_theme.dart';
 part 'text_theme.dart';
 
 final colorTheme = ThemeData(
+  useMaterial3: true,
   primaryColor: ColorTheme.primary,
   secondaryHeaderColor: ColorTheme.secondary,
   textTheme: GoogleFonts.poppinsTextTheme(),

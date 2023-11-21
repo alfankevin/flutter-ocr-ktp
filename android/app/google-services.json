@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "472136949613",
+    "project_id": "penilaian-blt-uta",
+    "storage_bucket": "penilaian-blt-uta.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:472136949613:android:4c6a14e1534dd9a2ccc464",
+        "android_client_info": {
+          "package_name": "tubes.smt5.penilaian"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQIgN8tTmezsmsQz2V5S1cdrNmtmmWU_o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
