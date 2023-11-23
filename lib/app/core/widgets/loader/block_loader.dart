@@ -5,8 +5,9 @@ class BlockLoader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      child: const Center(
+    return const PopScope(
+      canPop: false,
+      child: Center(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -15,9 +16,6 @@ class BlockLoader extends StatelessWidget {
           ],
         ),
       ),
-      onWillPop: () {
-        return Future<bool>.value(false);
-      },
     );
   }
 }

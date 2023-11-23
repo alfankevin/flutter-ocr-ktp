@@ -47,6 +47,8 @@ dependencies:
   flutter_svg: ^2.0.9
   auto_size_text: ^3.0.0
   camera: ^0.10.5+5
+  cached_network_image: ^3.3.0
+  shimmer: ^3.0.0
 
   # Form
   reactive_forms: ^16.1.1

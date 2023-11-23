@@ -49,8 +49,8 @@ class BaseLoadingIndicator extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         SizedBox(
-          width: width,
-          height: height,
+          width: width * 2 / 3,
+          height: height * 2 / 3,
           child: CircularProgressIndicator(
             backgroundColor: backgroundColor,
             semanticsLabel: semanticsLabel,
@@ -62,7 +62,7 @@ class BaseLoadingIndicator extends StatelessWidget {
         ),
         Text(
           '$semanticsLabel...',
-          style: TextStyle(fontSize: 18, color: color),
+          style: TextStyle(fontSize: 14, color: color),
         ),
       ],
     );
@@ -73,9 +73,7 @@ class BaseLoadingIndicator extends StatelessWidget {
     return Center(
       child: Container(
         alignment: Alignment.center,
-        child: isRow
-            ? _buildLoadingRowWidget(context)
-            : _buildLoadingWidget(context),
+        child: isRow ? _buildLoadingRowWidget(context) : _buildLoadingWidget(context),
       ),
     );
   }
