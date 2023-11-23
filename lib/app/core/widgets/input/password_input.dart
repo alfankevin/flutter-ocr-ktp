@@ -55,17 +55,17 @@ class _PasswordInputState extends State<PasswordInput> {
               if (widget.isRequiredText)
                 TextSpan(
                   text: "*",
-                  style: AppStyles.text14PxMedium.copyWith(color: ColorTheme.red),
+                  style: AppStyles.text16PxMedium.copyWith(color: ColorTheme.red),
                 ),
             ],
           ),
-          style: AppStyles.text14PxMedium.copyWith(fontWeight: FontWeight.w700),
+          style: AppStyles.text16PxMedium.copyWith(fontWeight: FontWeight.w700),
         ),
         8.verticalSpacingRadius,
         ReactiveTextField(
           formControlName: widget.formControlName,
           obscureText: !showPassword,
-          style: CustomTextTheme.paragraph2.copyWith(color: ColorTheme.neutral[800]),
+          style: AppStyles.text18Px.copyWith(color: ColorTheme.neutral[800]),
           keyboardType: TextInputType.visiblePassword,
           validationMessages: message,
           decoration: GenerateTheme.inputDecorationIcon(

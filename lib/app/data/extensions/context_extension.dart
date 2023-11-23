@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart' show IModularNavigator, Modular;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:penilaian/app/core/theme/theme.dart';
 import 'package:penilaian/app/core/widgets/snackbar/top_snackbar.dart';
@@ -9,6 +10,8 @@ import 'num_extension.dart';
 
 extension BuildContextX on BuildContext {
   ThemeData get theme => Theme.of(this);
+
+  IModularNavigator get to => Modular.to;
 
   ColorScheme get colorScheme => Theme.of(this).colorScheme;
 
@@ -33,16 +36,19 @@ extension BuildContextX on BuildContext {
   }) {
     showDialog(
       context: this,
-      builder: (context) => WillPopScope(
-        onWillPop: () async {
-          return false;
-        },
+      builder: (context) => PopScope(
+        canPop: false,
         child: AlertDialog(
           backgroundColor: Colors.transparent,
           elevation: 0,
-          content: BaseLoadingIndicator(
+          content: Container(
+            width: 150.w,
+            height: 150.h,
             color: Colors.white,
-            semanticsLabel: message,
+            child: BaseLoadingIndicator(
+              color: ColorTheme.primary,
+              semanticsLabel: message,
+            ),
           ),
         ),
       ),

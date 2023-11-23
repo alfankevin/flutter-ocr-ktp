@@ -60,17 +60,17 @@ class _TextInputComponentState extends State<TextInputComponent> {
               if (widget.isRequiredText)
                 TextSpan(
                   text: "*",
-                  style: AppStyles.text14PxMedium.copyWith(color: ColorTheme.red),
+                  style: AppStyles.text16PxMedium.copyWith(color: ColorTheme.red),
                 ),
             ],
           ),
-          style: AppStyles.text14PxMedium.copyWith(fontWeight: FontWeight.w700),
+          style: AppStyles.text16PxMedium.copyWith(fontWeight: FontWeight.w700),
         ),
         8.verticalSpacingRadius,
         ReactiveTextField(
           keyboardType: widget.textInputType,
           formControlName: widget.formControlName,
-          style: CustomTextTheme.paragraph2.copyWith(color: ColorTheme.neutral[800]),
+          style: AppStyles.text18Px.copyWith(color: ColorTheme.neutral[800]),
           decoration: GenerateTheme.inputDecorationIcon(widget.hint, widget.prefix, widget.suffix),
           validationMessages: message,
           maxLines: widget.maxLines,
