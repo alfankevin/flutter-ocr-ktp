@@ -5,5 +5,6 @@ class AppRoutes {
   static const KTP_RESULT = '/home/ktp-result';
   // auth module
   static const REGISTER = '/register';
-  static const LOGIN = '/';
+  static const LOGIN = '/login';
+  static const SPLASH = '/';
 }

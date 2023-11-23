@@ -39,7 +39,7 @@ class _LoginPageState extends State<LoginPage> {
               children: <Widget>[
                 80.verticalSpacingRadius,
                 const HeaderTitle(
-                  title: 'Login',
+                  title: 'Masuk',
                 ),
                 60.verticalSpacingRadius,
                 const TextInputComponent(
@@ -48,7 +48,7 @@ class _LoginPageState extends State<LoginPage> {
                   label: 'Email',
                   isRequiredText: true,
                   textInputType: TextInputType.emailAddress,
-                  prefix: Icon(Icons.person_outline_rounded),
+                  prefix: Icon(Icons.email_outlined),
                 ),
                 16.verticalSpacingRadius,
                 const PasswordInput(

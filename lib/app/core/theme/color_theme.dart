@@ -47,7 +47,7 @@ class ColorTheme {
   );
 
   // Color
-  static const Color primary = Color(0xff1f73d9);
+  static const Color primary = Color(0xff309CFF);
   static const Color secondary = Color(0xff19348d);
   static const Color placeholder = Color(0xffB3B3B3);
   static const Color red = Color(0xffDE453A);
@@ -78,7 +78,7 @@ class ColorTheme {
   static const Color statusOrange = Color(0xFFFF9212);
 
   // background colors
-  static const Color scaffoldBackground = Color(0xffFFFFFF);
+  static const Color scaffoldBackground = Color(0xffE0F4FF);
   static const Color fabRedBackground = Color(0xFFFD6464);
   static const Color brandBackground = Color(0xFFEBEFF9);
   static const Color brandBackgroundLight = Color(0xFFABC4F1);

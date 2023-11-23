@@ -13,9 +13,9 @@ final colorTheme = ThemeData(
   secondaryHeaderColor: ColorTheme.secondary,
   textTheme: GoogleFonts.workSansTextTheme(),
   appBarTheme: AppBarTheme(
-    backgroundColor: ColorTheme.scaffoldBackground,
+    backgroundColor: ColorTheme.primary,
     shadowColor: ColorTheme.neutral.shade400,
-    elevation: 1,
+    elevation: 0.5,
     foregroundColor: Colors.black,
     titleTextStyle: AppStyles.text16PxSemiBold.copyWith(
       color: Colors.black,
