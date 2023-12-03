@@ -52,6 +52,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '472136949613',
     projectId: 'penilaian-blt-uta',
     authDomain: 'penilaian-blt-uta.firebaseapp.com',
+    databaseURL: 'https://penilaian-blt-uta-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'penilaian-blt-uta.appspot.com',
     measurementId: 'G-N5QXS4YT6N',
   );
@@ -61,6 +62,7 @@ class DefaultFirebaseOptions {
     appId: '1:472136949613:android:4c6a14e1534dd9a2ccc464',
     messagingSenderId: '472136949613',
     projectId: 'penilaian-blt-uta',
+    databaseURL: 'https://penilaian-blt-uta-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'penilaian-blt-uta.appspot.com',
   );
 
@@ -69,7 +71,10 @@ class DefaultFirebaseOptions {
     appId: '1:472136949613:ios:222bbc3b602adf61ccc464',
     messagingSenderId: '472136949613',
     projectId: 'penilaian-blt-uta',
+    databaseURL: 'https://penilaian-blt-uta-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'penilaian-blt-uta.appspot.com',
+    androidClientId: '472136949613-o0mgv6idi8o2tqu7438inptvtm96uird.apps.googleusercontent.com',
+    iosClientId: '472136949613-q1sgf30jehi577j1abkq6sippfmvmuik.apps.googleusercontent.com',
     iosBundleId: 'tubes.smt5.penilaian',
   );
 }

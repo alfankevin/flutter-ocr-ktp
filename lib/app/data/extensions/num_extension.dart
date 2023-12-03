@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -47,4 +49,10 @@ extension NumExtensionX on num {
   EdgeInsets get vertical => EdgeInsets.symmetric(vertical: toDouble().h);
 
   Iterable<int> get range => Iterable<int>.generate(toInt());
+
+  String get generateRandomString {
+    var r = Random();
+    const chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+    return List.generate(toInt(), (index) => chars[r.nextInt(chars.length)]).join();
+  }
 }

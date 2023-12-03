@@ -68,6 +68,7 @@ dependencies:
   google_sign_in: ^6.1.6
   permission_handler: ^11.1.0
   connectivity_plus: ^5.0.2
+  firebase_database: ^10.3.6
 
 dev_dependencies:
   flutter_test:
