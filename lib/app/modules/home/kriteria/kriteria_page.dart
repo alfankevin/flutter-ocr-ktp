@@ -35,13 +35,23 @@ class _KriteriaPageState extends State<KriteriaPage> {
       ),
       body: FirebaseAnimatedList(
         query: _kriteriaRef,
-        itemBuilder: (context, snapshot, anim, i) => KriteriaFormCard(
-          number: i + 1,
-          name: "${snapshot.value}",
-          w: "${snapshot.value}",
-          onChanged: (name, w) {},
-          onDelete: () {},
-        ),
+        itemBuilder: (context, snapshot, anim, i) {
+          final data = snapshot.value as Map<Object?, Object?>;
+          return KriteriaFormCard(
+            number: i + 1,
+            name: "${data['name']}",
+            w: "${data['w']}",
+            onChanged: (name, w) {
+              _kriteriaRef.child(snapshot.key!).update({
+                'name': name,
+                'w': w,
+              });
+            },
+            onDelete: () {
+              _kriteriaRef.child(snapshot.key!).remove();
+            },
+          ).py(8);
+        },
       ),
       bottomNavigationBar: Padding(
         padding: 16.all.copyWith(top: 0),
@@ -63,12 +73,10 @@ class _KriteriaPageState extends State<KriteriaPage> {
                   minimumSize: Size(200.r, 48.r),
                 ),
                 onPressed: () {
-                  // listKriteria.add(8.generateRandomString);
                   _kriteriaRef.child(8.generateRandomString).set({
                     'name': '',
                     'w': 0,
                   });
-                  // setState(() {});
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
