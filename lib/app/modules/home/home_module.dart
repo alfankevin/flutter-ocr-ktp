@@ -22,7 +22,7 @@ class HomeModule extends Module {
     r.child(AppRoutes.home, child: (context) => const HomePage());
     r.child(AppRoutes.ktpScanHome, child: (context) => const KtpScanPage());
     r.child(AppRoutes.ktpResultHome, child: (context) => DetailKtpPage(nikResult: r.args.data));
-    r.child(AppRoutes.kriteriaHome, child: (ctx) => const KriteriaPage());
+    r.child(AppRoutes.kriteriaHome, child: (ctx) => KriteriaPage(refKey: r.args.data));
     r.child(AppRoutes.alternatifHome, child: (ctx) => const AlternatifPage());
     r.child(AppRoutes.penilaianHome, child: (ctx) => const PenilaianPage());
   }

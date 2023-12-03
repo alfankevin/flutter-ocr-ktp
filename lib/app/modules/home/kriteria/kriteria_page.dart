@@ -6,11 +6,17 @@ import 'package:penilaian/app/core/theme/theme.dart';
 import 'package:penilaian/app/core/widgets/base/base_app_bar.dart';
 import 'package:penilaian/app/core/widgets/base/base_scaffold.dart';
 import 'package:penilaian/app/data/extensions/extensions.dart';
+import 'package:penilaian/app/routes/app_routes.dart';
 
 import 'widgets/kriteria_form_card.dart';
 
 class KriteriaPage extends StatefulWidget {
-  const KriteriaPage({super.key});
+  const KriteriaPage({
+    super.key,
+    required this.refKey,
+  });
+
+  final String refKey;
 
   @override
   State<KriteriaPage> createState() => _KriteriaPageState();
@@ -24,14 +30,14 @@ class _KriteriaPageState extends State<KriteriaPage> {
   @override
   void initState() {
     super.initState();
-    _kriteriaRef = FirebaseDatabase.instance.ref('kriteria');
+    _kriteriaRef = FirebaseDatabase.instance.ref('data/${widget.refKey}/kriteria');
   }
 
   @override
   Widget build(BuildContext context) {
     return BaseScaffold(
       appBar: const BaseAppBar(
-        title: "Kreteria",
+        title: "Kriteria",
       ),
       body: FirebaseAnimatedList(
         query: _kriteriaRef,
@@ -103,13 +109,15 @@ class _KriteriaPageState extends State<KriteriaPage> {
                   textStyle: AppStyles.text16PxMedium,
                   minimumSize: Size(200.r, 48.r),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  context.to.pushNamed(AppRoutes.alternatifHome);
+                },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text('Simpan'),
+                    const Text('Alternatif'),
                     6.horizontalSpaceRadius,
-                    const Icon(Icons.save_rounded),
+                    const Icon(Icons.format_align_center_rounded),
                   ],
                 ),
               ),

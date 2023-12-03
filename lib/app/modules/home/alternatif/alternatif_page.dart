@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:penilaian/app/core/theme/theme.dart';
+import 'package:penilaian/app/core/widgets/base/base_app_bar.dart';
+import 'package:penilaian/app/core/widgets/base/base_scaffold.dart';
 import 'package:penilaian/app/data/extensions/extensions.dart';
+import 'package:penilaian/app/routes/app_routes.dart';
 
 class AlternatifPage extends StatefulWidget {
   const AlternatifPage({super.key});
@@ -13,10 +16,9 @@ class AlternatifPage extends StatefulWidget {
 class _AlternatifPageState extends State<AlternatifPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Alternatif'),
-        centerTitle: true,
+    return BaseScaffold(
+      appBar: const BaseAppBar(
+        title: "Alternatif",
       ),
       body: Column(
         children: [
@@ -49,25 +51,53 @@ class _AlternatifPageState extends State<AlternatifPage> {
           children: [
             Expanded(
               child: ElevatedButton(
-                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: ColorTheme.green,
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(16.r),
+                      bottomLeft: Radius.circular(16.r),
+                    ),
+                  ),
+                  textStyle: AppStyles.text16PxMedium,
+                  minimumSize: Size(200.r, 48.r),
+                ),
+                onPressed: () {
+                  context.to.pushNamed(AppRoutes.ktpScanHome);
+                },
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(Icons.add_box_outlined),
+                    const Icon(Icons.qr_code_scanner_rounded),
                     6.horizontalSpaceRadius,
                     const Text('Tambah'),
                   ],
                 ),
               ),
             ),
-            16.horizontalSpaceRadius,
+            12.horizontalSpaceRadius,
             Expanded(
               child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: ColorTheme.primary,
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(16.r),
+                      bottomRight: Radius.circular(16.r),
+                    ),
+                  ),
+                  textStyle: AppStyles.text16PxMedium,
+                  minimumSize: Size(200.r, 48.r),
+                ),
                 onPressed: () {},
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text('Simpan'),
+                    const Text('Hitung'),
                     6.horizontalSpaceRadius,
-                    const Icon(Icons.save_rounded),
+                    const Icon(Icons.calculate),
                   ],
                 ),
               ),

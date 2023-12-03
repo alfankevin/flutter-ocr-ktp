@@ -12,6 +12,15 @@ final colorTheme = ThemeData(
   primaryColor: ColorTheme.primary,
   secondaryHeaderColor: ColorTheme.secondary,
   textTheme: GoogleFonts.workSansTextTheme(),
+  dialogTheme: DialogTheme(
+    backgroundColor: ColorTheme.white,
+    titleTextStyle: AppStyles.text18PxSemiBold.copyWith(
+      color: ColorTheme.primary,
+    ),
+    contentTextStyle: AppStyles.text14Px.copyWith(
+      color: ColorTheme.neutral.shade800,
+    ),
+  ),
   appBarTheme: AppBarTheme(
     backgroundColor: ColorTheme.primary,
     shadowColor: ColorTheme.neutral.shade400,

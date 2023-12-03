@@ -87,16 +87,17 @@ class _KriteriaFormCardState extends State<KriteriaFormCard> {
           10.horizontalSpaceRadius,
           Expanded(
             child: TextField(
-                decoration: GenerateTheme.inputDecoration("Nama Kriteria"),
-                style: AppStyles.text16Px.copyWith(color: ColorTheme.black),
-                controller: nameCont,
-                onSubmitted: (value) {
-                  if (nameCont.text.isNotEmpty) {
-                    final clear = wCont.text.replaceAll(RegExp(r'[^0-9]'), '');
-                    wCont.text = clear;
-                    widget.onChanged(nameCont.text, clear);
-                  }
-                }),
+              decoration: GenerateTheme.inputDecoration("Nama Kriteria"),
+              style: AppStyles.text16Px.copyWith(color: ColorTheme.black),
+              controller: nameCont,
+              onSubmitted: (value) {
+                if (nameCont.text.isNotEmpty) {
+                  final clear = wCont.text.replaceAll(RegExp(r'[^0-9]'), '');
+                  wCont.text = clear;
+                  widget.onChanged(nameCont.text, clear);
+                }
+              },
+            ),
           ),
           10.horizontalSpaceRadius,
           SizedBox(
