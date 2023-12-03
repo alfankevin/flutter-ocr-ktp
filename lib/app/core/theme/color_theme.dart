@@ -75,6 +75,7 @@ class ColorTheme {
   static const Color statusRed = Color(0xFFFF4D4F);
   static const Color statusLightRed = Color(0xFFF9E3E3);
   static const Color statusGreen = Color(0xFF52C41A);
+  static const Color green = Color(0xFF2DC714);
   static const Color statusOrange = Color(0xFFFF9212);
 
   // background colors

@@ -16,9 +16,9 @@ final colorTheme = ThemeData(
     backgroundColor: ColorTheme.primary,
     shadowColor: ColorTheme.neutral.shade400,
     elevation: 0.5,
-    foregroundColor: Colors.black,
-    titleTextStyle: AppStyles.text16PxSemiBold.copyWith(
-      color: Colors.black,
+    foregroundColor: Colors.white,
+    titleTextStyle: AppStyles.text18PxSemiBold.copyWith(
+      color: Colors.white,
     ),
   ),
   elevatedButtonTheme: ElevatedButtonThemeData(

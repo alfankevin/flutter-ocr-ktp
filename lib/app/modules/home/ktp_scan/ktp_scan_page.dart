@@ -44,7 +44,7 @@ class _KtpScanPageState extends State<KtpScanPage> {
           }
           if (state is KtpScanLoaded) {
             context.hideLoading();
-            Modular.to.pushNamed(AppRoutes.KTP_RESULT, arguments: state.item);
+            Modular.to.pushNamed(AppRoutes.ktpResultHome, arguments: state.item);
             context.showSnackbar(message: "NIK ditemukan");
           }
         },
@@ -55,11 +55,12 @@ class _KtpScanPageState extends State<KtpScanPage> {
               if (snapshot.hasData) {
                 if (snapshot.data == null) {
                   return const Align(
-                      alignment: Alignment.center,
-                      child: Text(
-                        'No camera found',
-                        style: TextStyle(color: Colors.black),
-                      ));
+                    alignment: Alignment.center,
+                    child: Text(
+                      'No camera found',
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  );
                 }
                 return CameraOverlayWidget(
                   snapshot.data!.first,

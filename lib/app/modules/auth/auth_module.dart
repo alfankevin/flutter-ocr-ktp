@@ -12,7 +12,7 @@ class AuthModule extends Module {
 
   @override
   void routes(RouteManager r) {
-    r.child(AppRoutes.LOGIN, child: (ctx) => const LoginPage());
-    r.child(AppRoutes.REGISTER, child: (ctx) => const RegisterPage());
+    r.child(AppRoutes.login, child: (ctx) => const LoginPage());
+    r.child(AppRoutes.register, child: (ctx) => const RegisterPage());
   }
 }

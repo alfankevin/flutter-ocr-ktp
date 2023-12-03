@@ -2,10 +2,13 @@ part of 'theme.dart';
 
 class GenerateTheme {
   static InputDecoration inputDecoration(String hint) => InputDecoration(
-        contentPadding: const EdgeInsets.all(12),
+        contentPadding: 12.all,
         fillColor: ColorTheme.white,
         filled: true,
         hintText: hint,
+        hintStyle: AppStyles.text14Px.copyWith(
+          color: ColorTheme.neutral[400],
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(5),
           borderSide: const BorderSide(color: ColorTheme.primary, width: 1),

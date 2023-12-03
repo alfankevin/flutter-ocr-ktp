@@ -17,8 +17,8 @@ class AppModule extends Module {
 
   @override
   void routes(r) {
-    r.child(AppRoutes.SPLASH, child: (_) => const SplashPage());
-    r.child(AppRoutes.NO_INTERNET, child: (context) => const ConnectivityPage());
+    r.child(AppRoutes.splash, child: (_) => const SplashPage());
+    r.child(AppRoutes.noInternet, child: (context) => const ConnectivityPage());
     r.module('/', module: AuthModule());
     r.module('/', module: HomeModule());
   }

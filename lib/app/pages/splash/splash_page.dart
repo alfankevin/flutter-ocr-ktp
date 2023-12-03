@@ -31,9 +31,9 @@ class _SplashPageState extends State<SplashPage> {
     return BlocListener<SessionCubit, SessionState>(
       listener: (context, state) {
         if (state is SessionReadyState) {
-          context.to.pushNamedAndRemoveUntil(AppRoutes.HOME, (_) => false);
+          context.to.pushReplacementNamed(AppRoutes.home);
         } else {
-          context.to.pushNamedAndRemoveUntil(AppRoutes.LOGIN, (_) => false);
+          context.to.pushReplacementNamed(AppRoutes.login);
         }
       },
       child: Scaffold(

@@ -1,13 +1,16 @@
 class AppRoutes {
   // home module
-  static const HOME = '/home';
-  static const KTP_SCAN = '/home/ktp-scan';
-  static const KTP_RESULT = '/home/ktp-result';
+  static const home = '/home';
+  static const kriteriaHome = '/home/kriteria';
+  static const alternatifHome = '/home/alternatif';
+  static const penilaianHome = '/home/penilaian';
+  static const ktpScanHome = '/home/ktp-scan';
+  static const ktpResultHome = '/home/ktp-result';
   // auth module
-  static const REGISTER = '/auth/register';
-  static const LOGIN = '/auth/login';
+  static const register = '/auth/register';
+  static const login = '/auth/login';
 
   // pages
-  static const SPLASH = '/';
-  static const NO_INTERNET = '/no-internet';
+  static const splash = '/';
+  static const noInternet = '/no-internet';
 }

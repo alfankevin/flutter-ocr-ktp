@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:reactive_forms/reactive_forms.dart';
-
 import 'package:penilaian/app/core/theme/theme.dart';
 import 'package:penilaian/app/data/extensions/extensions.dart';
+import 'package:reactive_forms/reactive_forms.dart';
 
 class TextInputVariant extends StatefulWidget {
   const TextInputVariant({
-    Key? key,
+    super.key,
     required this.formControlName,
     required this.hint,
     this.textInputType = TextInputType.text,
@@ -17,7 +16,7 @@ class TextInputVariant extends StatefulWidget {
     this.prefix,
     this.suffix,
     this.onChanged,
-  }) : super(key: key);
+  });
 
   final String formControlName;
   final String hint;
