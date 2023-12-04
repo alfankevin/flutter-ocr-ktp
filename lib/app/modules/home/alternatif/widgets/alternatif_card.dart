@@ -125,7 +125,7 @@ class AlternatifCard extends StatelessWidget {
                                   style: AppStyles.text14PxMedium.copyWith(
                                     color: ColorTheme.white,
                                     backgroundColor:
-                                        data.filled ? ColorTheme.green : ColorTheme.green,
+                                        data.filled ? ColorTheme.green : ColorTheme.red,
                                   ),
                                 )
                               ],

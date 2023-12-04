@@ -27,7 +27,7 @@ class DataModel extends Equatable {
       deskripsi: deskripsi ?? this.deskripsi,
       color: color ?? this.color,
       createdAt: createdAt ?? this.createdAt,
-      updatedAt: updatedAt ?? this.updatedAt,
+      updatedAt: updatedAt ?? DateTime.now(),
     );
   }
 

@@ -47,7 +47,7 @@ class _DetailKtpPageState extends State<DetailKtpPage> {
     context.showLoadingIndicator();
     final filePath = widget.nikResult.photo!;
     final file = File(filePath);
-    String key = 8.generateRandomString;
+    String key = 16.generateRandomString;
     if (local.selectedEdit.isNotEmpty) {
       key = local.selectedEdit;
     }

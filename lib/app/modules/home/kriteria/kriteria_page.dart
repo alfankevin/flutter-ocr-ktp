@@ -24,7 +24,7 @@ class KriteriaPage extends StatefulWidget {
 }
 
 class _KriteriaPageState extends State<KriteriaPage> {
-  final List<String> listKriteria = [8.generateRandomString];
+  final List<String> listKriteria = [16.generateRandomString];
 
   late DatabaseReference _kriteriaRef;
   late String _refKey;

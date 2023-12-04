@@ -40,7 +40,7 @@ class _HomePageState extends State<HomePage> {
         isBack: false,
       ),
       body: FirebaseAnimatedList(
-        query: _penilaianRef,
+        query: _penilaianRef.orderByChild('created_at'),
         itemBuilder: (context, snapshot, anim, i) {
           final data = DataModel.fromMap(snapshot.value as Map<Object?, Object?>);
           return HomeCard(
@@ -58,7 +58,7 @@ class _HomePageState extends State<HomePage> {
                   final textCont = TextEditingController(text: data.deskripsi);
 
                   return AlertDialog(
-                    title: const Text('Tambah data'),
+                    title: const Text('Ubah data'),
                     content: IntrinsicHeight(
                       child: Column(
                         children: [
@@ -80,7 +80,11 @@ class _HomePageState extends State<HomePage> {
                     actions: [
                       ElevatedButton(
                         onPressed: () {
-                          final model = DataModel.initial(nameCont.text, textCont.text, data.color);
+                          final model = data.copyWith(
+                            name: nameCont.text,
+                            deskripsi: textCont.text,
+                            color: data.color,
+                          );
                           _penilaianRef
                               .child(snapshot.key!)
                               .set(model.toMap())
@@ -140,10 +144,7 @@ class _HomePageState extends State<HomePage> {
                   ElevatedButton(
                     onPressed: () {
                       final data = DataModel.initial(nameCont.text, textCont.text, 6.randColor);
-                      _penilaianRef
-                          .child(12.generateRandomString)
-                          .set(data.toMap())
-                          .then((value) => Modular.to.pop());
+                      _penilaianRef.push().set(data.toMap()).then((value) => Modular.to.pop());
                     },
                     child: const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
