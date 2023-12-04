@@ -51,6 +51,9 @@ class KtpModel extends Equatable {
   /// Photo of the person
   final String? photo;
 
+  /// penilaian sudah terisi
+  final bool filled;
+
   const KtpModel({
     this.nik,
     this.name,
@@ -68,6 +71,7 @@ class KtpModel extends Equatable {
     this.nextBirthday,
     this.zodiac,
     this.photo,
+    this.filled = false,
   });
 
   KtpModel copyWith({
@@ -88,6 +92,7 @@ class KtpModel extends Equatable {
     ValueGetter<String?>? zodiac,
     ValueGetter<bool?>? valid,
     ValueGetter<String?>? photo,
+    ValueGetter<bool?>? filled,
   }) {
     return KtpModel(
       nik: nik?.call() ?? this.nik,
@@ -106,6 +111,7 @@ class KtpModel extends Equatable {
       nextBirthday: nextBirthday?.call() ?? this.nextBirthday,
       zodiac: zodiac?.call() ?? this.zodiac,
       photo: photo?.call() ?? this.photo,
+      filled: filled?.call() ?? this.filled,
     );
   }
 
@@ -127,6 +133,7 @@ class KtpModel extends Equatable {
       'next_birthday': nextBirthday,
       'zodiac': zodiac,
       'photo': photo,
+      'filled': filled,
     };
   }
 
@@ -146,6 +153,7 @@ class KtpModel extends Equatable {
       subdistrict: item.subdistrict,
       uniqueCode: item.uniqueCode,
       zodiac: item.zodiac,
+      filled: false,
     );
   }
 
@@ -167,6 +175,7 @@ class KtpModel extends Equatable {
       nextBirthday: map['next_birthday'],
       zodiac: map['zodiac'],
       photo: map['photo'],
+      filled: map['filled'] ?? false,
     );
   }
 
@@ -189,6 +198,7 @@ class KtpModel extends Equatable {
       nextBirthday,
       zodiac,
       photo,
+      filled,
     ];
   }
 }

@@ -4,7 +4,6 @@ import 'package:penilaian/app/core/theme/theme.dart';
 import 'package:penilaian/app/core/widgets/images/image_with_loader.dart';
 import 'package:penilaian/app/data/extensions/extensions.dart';
 import 'package:penilaian/app/data/models/ktp_model.dart';
-import 'package:penilaian/app/modules/home/alternatif/alternatif_page.dart';
 
 import '../../../../core/widgets/button/icon_rounded_button.dart';
 
@@ -12,13 +11,17 @@ class AlternatifCard extends StatelessWidget {
   const AlternatifCard({
     super.key,
     required this.data,
+    required this.number,
     this.onDelete,
     this.onEdit,
+    this.onTap,
   });
 
   final KtpModel data;
+  final int number;
   final VoidCallback? onDelete;
   final VoidCallback? onEdit;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -38,13 +41,16 @@ class AlternatifCard extends StatelessWidget {
         await snackbarController.closed;
         return delete;
       },
-      background: Container(
-        color: ColorTheme.red,
-        alignment: Alignment.centerRight,
-        padding: EdgeInsets.only(right: 16.w),
-        child: const Icon(
-          Icons.delete,
-          color: ColorTheme.white,
+      background: InkWell(
+        onTap: onTap,
+        child: Container(
+          color: ColorTheme.red,
+          alignment: Alignment.centerRight,
+          padding: EdgeInsets.only(right: 16.w),
+          child: const Icon(
+            Icons.delete,
+            color: ColorTheme.white,
+          ),
         ),
       ),
       child: SizedBox(
@@ -64,7 +70,7 @@ class AlternatifCard extends StatelessWidget {
               ),
               alignment: Alignment.center,
               child: Text(
-                "1",
+                number.toString(),
                 style: AppStyles.text18PxBold.copyWith(color: ColorTheme.white),
               ),
             ),
@@ -103,9 +109,27 @@ class AlternatifCard extends StatelessWidget {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      data.name ?? "Nama",
-                      style: AppStyles.text16PxBold.copyWith(color: ColorTheme.white),
+                    Column(
+                      children: [
+                        Text(
+                          data.name ?? "-",
+                          style: AppStyles.text16PxBold.copyWith(color: ColorTheme.white),
+                        ).expand(),
+                        Text.rich(
+                          TextSpan(
+                            text: "Status: ",
+                            children: [
+                              TextSpan(
+                                text: data.filled ? "Sudah Diisi" : "Belum Diisi",
+                                style: AppStyles.text14PxMedium.copyWith(
+                                  color: data.filled ? ColorTheme.orangeColor : ColorTheme.red,
+                                ),
+                              )
+                            ],
+                          ),
+                          style: AppStyles.text14PxMedium.copyWith(color: ColorTheme.white),
+                        )
+                      ],
                     ).expand(),
                     IconRoundedButton(
                       icon: Icons.edit_square,

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:penilaian/app/core/widgets/base/base_app_bar.dart';
+import 'package:penilaian/app/core/widgets/base/base_scaffold.dart';
 
 class PenilaianPage extends StatefulWidget {
   const PenilaianPage({super.key});
@@ -10,16 +12,12 @@ class PenilaianPage extends StatefulWidget {
 class _PenilaianPageState extends State<PenilaianPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Penilaian'),
-        centerTitle: true,
+    return BaseScaffold(
+      appBar: BaseAppBar(
+        title: 'Penilaian',
       ),
-      body: const Center(
-        child: Text(
-          'PenilaianPage is working',
-          style: TextStyle(fontSize: 20),
-        ),
+      body: Column(
+        children: [],
       ),
     );
   }
