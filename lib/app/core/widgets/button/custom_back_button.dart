@@ -19,7 +19,7 @@ class CustomBackButton extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: 30.rounded,
           ),
-          padding: const EdgeInsets.all(5),
+          padding: EdgeInsets.all(5.r),
           backgroundColor: Colors.white,
           foregroundColor: ColorTheme.primary,
         ),

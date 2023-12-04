@@ -7,9 +7,11 @@ import 'package:penilaian/app/core/theme/theme.dart';
 import 'package:penilaian/app/core/widgets/base/base_app_bar.dart';
 import 'package:penilaian/app/core/widgets/base/base_scaffold.dart';
 import 'package:penilaian/app/data/extensions/extensions.dart';
+import 'package:penilaian/app/data/models/kriteria_model.dart';
 import 'package:penilaian/app/data/services/local_services/selected_local_services.dart';
 import 'package:penilaian/app/routes/app_routes.dart';
 
+import '../../../core/widgets/text/warning_text.dart';
 import 'widgets/kriteria_form_card.dart';
 
 class KriteriaPage extends StatefulWidget {
@@ -40,25 +42,42 @@ class _KriteriaPageState extends State<KriteriaPage> {
       appBar: const BaseAppBar(
         title: "Kriteria",
       ),
-      body: FirebaseAnimatedList(
-        query: _kriteriaRef,
-        itemBuilder: (context, snapshot, anim, i) {
-          final data = snapshot.value as Map<Object?, Object?>;
-          return KriteriaFormCard(
-            number: i + 1,
-            name: "${data['name']}",
-            w: "${data['w']}",
-            onChanged: (name, w) {
-              _kriteriaRef.child(snapshot.key!).update({
-                'name': name,
-                'w': w,
-              });
+      body: Column(
+        children: [
+          const WarningText(
+            text:
+                "Untuk menentukan jenis kriteria, dapat diklik bagian kotak nomor. Jika berwarna biru maka kriteria benefit dan berwarna merah untuk cost.",
+          ),
+          12.verticalSpacingRadius,
+          FirebaseAnimatedList(
+            query: _kriteriaRef,
+            itemBuilder: (context, snapshot, anim, i) {
+              final data = KriteriaModel.fromMap(snapshot.value as Map<Object?, Object?>);
+              return KriteriaFormCard(
+                number: i + 1,
+                name: data.name,
+                w: "${data.w}",
+                isBenefit: data.isBenefit,
+                onChanged: (name, w) {
+                  _kriteriaRef.child(snapshot.key!).update(data
+                      .copyWith(
+                        name: name,
+                        w: double.tryParse(w),
+                      )
+                      .toMap());
+                },
+                onDelete: () {
+                  _kriteriaRef.child(snapshot.key!).remove();
+                },
+                onTap: () {
+                  _kriteriaRef
+                      .child(snapshot.key!)
+                      .update(data.copyWith(isBenefit: !data.isBenefit).toMap());
+                },
+              ).py(8);
             },
-            onDelete: () {
-              _kriteriaRef.child(snapshot.key!).remove();
-            },
-          ).py(8);
-        },
+          ).expand(),
+        ],
       ),
       bottomNavigationBar: Padding(
         padding: 16.all.copyWith(top: 0),
@@ -80,10 +99,7 @@ class _KriteriaPageState extends State<KriteriaPage> {
                   minimumSize: Size(200.r, 48.r),
                 ),
                 onPressed: () {
-                  _kriteriaRef.child(8.generateRandomString).set({
-                    'name': '',
-                    'w': 0,
-                  });
+                  _kriteriaRef.child(8.generateRandomString).set(const KriteriaModel().toMap());
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,

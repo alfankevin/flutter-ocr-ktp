@@ -86,7 +86,7 @@ extension BuildContextX on BuildContext {
               Text(title,
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 14.sp,
+                    fontSize: 14.spMin,
                     fontWeight: FontWeight.w600,
                   )),
               const SizedBox(height: 10),
@@ -95,7 +95,7 @@ extension BuildContextX on BuildContext {
                   e.value,
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 12.sp,
+                    fontSize: 12.spMin,
                     fontWeight: FontWeight.w400,
                   ),
                 ),

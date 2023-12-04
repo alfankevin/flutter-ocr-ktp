@@ -8,6 +8,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:penilaian/app/core/helpers/string_helper.dart';
 import 'package:penilaian/app/core/theme/theme.dart';
+import 'package:penilaian/app/core/widgets/text/warning_text.dart';
 import 'package:penilaian/app/data/extensions/extensions.dart';
 import 'package:penilaian/app/data/models/ktp_model.dart';
 import 'package:penilaian/app/data/services/local_services/selected_local_services.dart';
@@ -84,14 +85,8 @@ class _DetailKtpPageState extends State<DetailKtpPage> {
         child: Column(
           children: [
             16.verticalSpacingRadius,
-            Text.rich(
-              TextSpan(text: "Perhatian: ", children: [
-                TextSpan(
-                  text: "Tap pada data yang perlu diubah!",
-                  style: AppStyles.text16PxMedium.copyWith(color: ColorTheme.red),
-                ),
-              ]),
-              style: AppStyles.text16PxMedium.copyWith(color: ColorTheme.black),
+            const WarningText(
+              text: "Klik pada bagian yang ingin diubah!",
             ),
             Container(
               margin: const EdgeInsets.all(20),

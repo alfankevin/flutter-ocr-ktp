@@ -26,7 +26,11 @@ class IconRoundedButton extends StatelessWidget {
           color: color,
           borderRadius: 8.rounded,
         ),
-        child: Icon(icon, color: ColorTheme.white),
+        child: Icon(
+          icon,
+          color: ColorTheme.white,
+          size: 24.r,
+        ),
       ),
     );
   }

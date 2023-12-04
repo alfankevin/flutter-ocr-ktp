@@ -18,7 +18,7 @@ class BaseAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       leading: isBack ? const CustomBackButton() : null,
-      leadingWidth: 70,
+      leadingWidth: 70.r,
       title: Text(title),
       centerTitle: true,
       actions: actions,

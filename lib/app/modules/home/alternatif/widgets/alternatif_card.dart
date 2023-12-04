@@ -41,106 +41,110 @@ class AlternatifCard extends StatelessWidget {
         await snackbarController.closed;
         return delete;
       },
-      background: InkWell(
-        onTap: onTap,
-        child: Container(
-          color: ColorTheme.red,
-          alignment: Alignment.centerRight,
-          padding: EdgeInsets.only(right: 16.w),
-          child: const Icon(
-            Icons.delete,
-            color: ColorTheme.white,
-          ),
+      background: Container(
+        color: ColorTheme.red,
+        alignment: Alignment.centerRight,
+        padding: EdgeInsets.only(right: 16.w),
+        child: const Icon(
+          Icons.delete,
+          color: ColorTheme.white,
         ),
       ),
-      child: SizedBox(
-        height: 64.r,
-        width: 1.sw,
-        child: Row(
-          children: [
-            Container(
-              height: 64.r,
-              width: 44.r,
-              decoration: BoxDecoration(
-                color: ColorTheme.primary,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(10.r),
-                  bottomLeft: Radius.circular(10.r),
-                ),
-              ),
-              alignment: Alignment.center,
-              child: Text(
-                number.toString(),
-                style: AppStyles.text18PxBold.copyWith(color: ColorTheme.white),
-              ),
-            ),
-            8.horizontalSpaceRadius,
-            Stack(
-              fit: StackFit.loose,
-              children: [
-                Container(
-                  height: 64.r,
-                  width: 24.r,
-                  margin: const EdgeInsets.only(left: 22),
-                  decoration: const BoxDecoration(color: ColorTheme.primary),
-                ),
-                Positioned(
-                  top: 9,
-                  left: 0,
-                  child: ImageWithLoader(
-                    imageUrl: data.photo ?? "https://picsum.photos/200/300",
-                    size: 45,
-                    radius: 45,
-                  ),
-                ),
-              ],
-            ),
-            Expanded(
-              child: Container(
+      child: InkWell(
+        onTap: onTap,
+        child: SizedBox(
+          height: 64.r,
+          width: 1.sw,
+          child: Row(
+            children: [
+              Container(
                 height: 64.r,
-                padding: 10.all,
+                width: 44.r,
                 decoration: BoxDecoration(
                   color: ColorTheme.primary,
                   borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(10.r),
-                    bottomRight: Radius.circular(10.r),
+                    topLeft: Radius.circular(10.r),
+                    bottomLeft: Radius.circular(10.r),
                   ),
                 ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Column(
-                      children: [
-                        Text(
-                          data.name ?? "-",
-                          style: AppStyles.text16PxBold.copyWith(color: ColorTheme.white),
-                        ).expand(),
-                        Text.rich(
-                          TextSpan(
-                            text: "Status: ",
-                            children: [
-                              TextSpan(
-                                text: data.filled ? "Sudah Diisi" : "Belum Diisi",
-                                style: AppStyles.text14PxMedium.copyWith(
-                                  color: data.filled ? ColorTheme.orangeColor : ColorTheme.red,
-                                ),
-                              )
-                            ],
-                          ),
-                          style: AppStyles.text14PxMedium.copyWith(color: ColorTheme.white),
-                        )
-                      ],
-                    ).expand(),
-                    IconRoundedButton(
-                      icon: Icons.edit_square,
-                      color: ColorTheme.orangeColor,
-                      onTap: onEdit,
-                    ),
-                  ],
+                alignment: Alignment.center,
+                child: Text(
+                  number.toString(),
+                  style: AppStyles.text18PxBold.copyWith(color: ColorTheme.white),
                 ),
               ),
-            ),
-          ],
+              8.horizontalSpaceRadius,
+              Stack(
+                fit: StackFit.loose,
+                children: [
+                  Container(
+                    height: 64.r,
+                    width: 24.r,
+                    margin: EdgeInsets.only(left: 22.r),
+                    decoration: const BoxDecoration(color: ColorTheme.primary),
+                  ),
+                  Positioned(
+                    top: 9.r,
+                    left: 0,
+                    child: ImageWithLoader(
+                      imageUrl: data.photo ?? "https://picsum.photos/200/300",
+                      size: 45.r,
+                      radius: 45.r,
+                    ),
+                  ),
+                ],
+              ),
+              Expanded(
+                child: Container(
+                  height: 64.r,
+                  padding: 10.all,
+                  decoration: const BoxDecoration(
+                    color: ColorTheme.primary,
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(10),
+                      bottomRight: Radius.circular(10),
+                    ),
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(
+                            data.name ?? "-",
+                            style: AppStyles.text16PxBold.copyWith(color: ColorTheme.white),
+                          ).expand(),
+                          Text.rich(
+                            TextSpan(
+                              text: "Status: ",
+                              children: [
+                                TextSpan(
+                                  text: data.filled ? "Sudah Diisi!" : "Belum Diisi!",
+                                  style: AppStyles.text14PxMedium.copyWith(
+                                    color: ColorTheme.white,
+                                    backgroundColor:
+                                        data.filled ? ColorTheme.green : ColorTheme.green,
+                                  ),
+                                )
+                              ],
+                            ),
+                            style: AppStyles.text14PxMedium.copyWith(color: ColorTheme.white),
+                          )
+                        ],
+                      ).expand(),
+                      IconRoundedButton(
+                        icon: Icons.edit_square,
+                        color: ColorTheme.orangeColor,
+                        onTap: onEdit,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
