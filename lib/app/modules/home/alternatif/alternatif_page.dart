@@ -1,10 +1,17 @@
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:penilaian/app/core/theme/theme.dart';
 import 'package:penilaian/app/core/widgets/base/base_app_bar.dart';
 import 'package:penilaian/app/core/widgets/base/base_scaffold.dart';
 import 'package:penilaian/app/data/extensions/extensions.dart';
+import 'package:penilaian/app/data/models/ktp_model.dart';
+import 'package:penilaian/app/data/services/local_services/selected_local_services.dart';
 import 'package:penilaian/app/routes/app_routes.dart';
+
+import 'widgets/alternatif_card.dart';
 
 class AlternatifPage extends StatefulWidget {
   const AlternatifPage({super.key});
@@ -14,36 +21,37 @@ class AlternatifPage extends StatefulWidget {
 }
 
 class _AlternatifPageState extends State<AlternatifPage> {
+  late final DatabaseReference _alternatifRef;
+  late final String _refKey;
+
+  @override
+  void initState() {
+    super.initState();
+    _refKey = Modular.get<SelectedLocalServices>().selected;
+    _alternatifRef = FirebaseDatabase.instance.ref('$_refKey/alternatif');
+  }
+
   @override
   Widget build(BuildContext context) {
     return BaseScaffold(
       appBar: const BaseAppBar(
         title: "Alternatif",
       ),
-      body: Column(
-        children: [
-          Row(
-            children: [
-              Container(
-                height: 63,
-                width: 44,
-                decoration: BoxDecoration(
-                  color: Colors.blue,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(10.r),
-                    bottomLeft: Radius.circular(10.r),
-                  ),
-                ),
-                alignment: Alignment.center,
-                child: Text(
-                  "1",
-                  style: AppStyles.text14Px.copyWith(color: ColorTheme.white),
-                ),
-              ),
-              8.horizontalSpaceRadius,
-            ],
-          ),
-        ],
+      body: FirebaseAnimatedList(
+        query: _alternatifRef,
+        itemBuilder: (context, snapshot, anim, i) {
+          final data = KtpModel.fromMap(snapshot.value as Map<Object?, Object?>);
+          return AlternatifCard(
+            data: data,
+            onDelete: () {
+              _alternatifRef.child(snapshot.key!).remove();
+            },
+            onEdit: () {
+              Modular.get<SelectedLocalServices>().setSelectedEdit(snapshot.key!);
+              Modular.to.pushNamed(AppRoutes.ktpScanHome);
+            },
+          );
+        },
       ),
       bottomNavigationBar: Padding(
         padding: 16.all.copyWith(top: 0),

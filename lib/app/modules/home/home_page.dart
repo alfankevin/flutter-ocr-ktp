@@ -8,6 +8,7 @@ import 'package:penilaian/app/core/widgets/base/base_app_bar.dart';
 import 'package:penilaian/app/core/widgets/base/base_scaffold.dart';
 import 'package:penilaian/app/data/extensions/extensions.dart';
 import 'package:penilaian/app/data/models/data_model.dart';
+import 'package:penilaian/app/data/services/local_services/selected_local_services.dart';
 import 'package:penilaian/app/routes/app_routes.dart';
 
 import 'cubit/home_cubit.dart';
@@ -98,11 +99,10 @@ class _HomePageState extends State<HomePage> {
                 },
               );
             },
-            onTap: () {
-              Modular.to.pushNamed(
-                AppRoutes.kriteriaHome,
-                arguments: snapshot.key,
-              );
+            onTap: () async {
+              final key = snapshot.key!;
+              await Modular.get<SelectedLocalServices>().setSelected("data/$key");
+              Modular.to.pushNamed(AppRoutes.kriteriaHome);
             },
           ).py(8);
         },

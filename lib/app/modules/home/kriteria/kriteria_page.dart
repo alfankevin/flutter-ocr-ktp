@@ -1,11 +1,13 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:penilaian/app/core/theme/theme.dart';
 import 'package:penilaian/app/core/widgets/base/base_app_bar.dart';
 import 'package:penilaian/app/core/widgets/base/base_scaffold.dart';
 import 'package:penilaian/app/data/extensions/extensions.dart';
+import 'package:penilaian/app/data/services/local_services/selected_local_services.dart';
 import 'package:penilaian/app/routes/app_routes.dart';
 
 import 'widgets/kriteria_form_card.dart';
@@ -13,10 +15,7 @@ import 'widgets/kriteria_form_card.dart';
 class KriteriaPage extends StatefulWidget {
   const KriteriaPage({
     super.key,
-    required this.refKey,
   });
-
-  final String refKey;
 
   @override
   State<KriteriaPage> createState() => _KriteriaPageState();
@@ -26,11 +25,13 @@ class _KriteriaPageState extends State<KriteriaPage> {
   final List<String> listKriteria = [8.generateRandomString];
 
   late DatabaseReference _kriteriaRef;
+  late String _refKey;
 
   @override
   void initState() {
     super.initState();
-    _kriteriaRef = FirebaseDatabase.instance.ref('data/${widget.refKey}/kriteria');
+    _refKey = Modular.get<SelectedLocalServices>().selected;
+    _kriteriaRef = FirebaseDatabase.instance.ref('$_refKey/kriteria');
   }
 
   @override

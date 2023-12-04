@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:penilaian/app/core/theme/theme.dart';
 import 'package:penilaian/app/data/extensions/extensions.dart';
 
@@ -11,7 +12,7 @@ class CustomBackButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 20, top: 6),
+      padding: EdgeInsets.only(left: 20.r, top: 6.r, bottom: 6.r, right: 6.r),
       child: IconButton(
         style: IconButton.styleFrom(
           alignment: Alignment.center,

@@ -1,17 +1,76 @@
 import 'dart:io';
 
+import 'package:firebase_core/firebase_core.dart' as firebase_core;
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:penilaian/app/core/helpers/string_helper.dart';
+import 'package:penilaian/app/core/theme/theme.dart';
 import 'package:penilaian/app/data/extensions/extensions.dart';
 import 'package:penilaian/app/data/models/ktp_model.dart';
+import 'package:penilaian/app/data/services/local_services/selected_local_services.dart';
+import 'package:penilaian/app/routes/app_routes.dart';
 
-class DetailKtpPage extends StatelessWidget {
+import 'widgets/text_result_card.dart';
+
+class DetailKtpPage extends StatefulWidget {
   const DetailKtpPage({
-    Key? key,
+    super.key,
     required this.nikResult,
-  }) : super(key: key);
+  });
 
   final KtpModel nikResult;
+
+  @override
+  State<DetailKtpPage> createState() => _DetailKtpPageState();
+}
+
+class _DetailKtpPageState extends State<DetailKtpPage> {
+  final storageRef = FirebaseStorage.instance.ref(StringHelper.imageStorage);
+  late final DatabaseReference _alternatifRef;
+  final local = Modular.get<SelectedLocalServices>();
+  late final String _refKey;
+  late KtpModel model;
+
+  @override
+  void initState() {
+    super.initState();
+    _refKey = local.selected;
+    model = widget.nikResult;
+    _alternatifRef = FirebaseDatabase.instance.ref('$_refKey/alternatif');
+  }
+
+  Future<void> kirim() async {
+    context.showLoadingIndicator();
+    final filePath = widget.nikResult.photo!;
+    final file = File(filePath);
+    String key = 8.generateRandomString;
+    if (local.selectedEdit.isNotEmpty) {
+      key = local.selectedEdit;
+    }
+
+    // Create the file metadata
+    final metadata = SettableMetadata(contentType: "image/jpeg");
+
+    // Upload file and metadata to the path 'images/mountains.jpg'
+    final uploadTask = storageRef.child("$key.jpg");
+
+    try {
+      final hasil = await uploadTask.putFile(file, metadata);
+      final url = await hasil.ref.getDownloadURL();
+
+      model = model.copyWith(photo: () => url);
+      await _alternatifRef.child(key).set(model.toMap());
+      await local.removeSelectedEdit();
+    } on firebase_core.FirebaseException catch (e) {
+      context.showSnackbar(message: e.message ?? "Terjadi kesalahan", error: true, isPop: true);
+    } finally {
+      Modular.to.popUntil((p0) => p0.settings.name == AppRoutes.alternatifHome);
+      context.showSnackbar(message: "Berhasil Membuat Alternatif!");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,11 +79,21 @@ class DetailKtpPage extends StatelessWidget {
         title: const Text('Detail KTP'),
         centerTitle: true,
       ),
-      body: Column(
-        children: [
-          SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
-            child: Container(
+      body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        child: Column(
+          children: [
+            16.verticalSpacingRadius,
+            Text.rich(
+              TextSpan(text: "Perhatian: ", children: [
+                TextSpan(
+                  text: "Tap pada data yang perlu diubah!",
+                  style: AppStyles.text16PxMedium.copyWith(color: ColorTheme.red),
+                ),
+              ]),
+              style: AppStyles.text16PxMedium.copyWith(color: ColorTheme.black),
+            ),
+            Container(
               margin: const EdgeInsets.all(20),
               padding: const EdgeInsets.all(10),
               width: context.width,
@@ -33,59 +102,184 @@ class DetailKtpPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (nikResult.photo != null) Center(child: Image.file(File(nikResult.photo!))),
+                  if (widget.nikResult.photo != null)
+                    Center(child: Image.file(File(widget.nikResult.photo!))),
                   16.verticalSpacingRadius,
                   const Divider(color: Colors.black),
-                  _textWidgeT(title: "NIK", value: nikResult.nik!),
+                  TextResultCard(
+                    title: "NIK",
+                    value: widget.nikResult.nik!,
+                    onChanged: (x) {
+                      model = model.copyWith(nik: () => x);
+                      setState(() {});
+                    },
+                  ),
                   const Divider(color: Colors.black),
-                  _textWidgeT(title: "Nama", value: nikResult.name!),
+                  TextResultCard(
+                    title: "Nama",
+                    value: widget.nikResult.name!,
+                    onChanged: (x) {
+                      model = model.copyWith(name: () => x);
+                      setState(() {});
+                    },
+                  ),
                   const Divider(color: Colors.black),
-                  _textWidgeT(title: "Kode Unik", value: nikResult.uniqueCode!),
+                  TextResultCard(
+                    title: "Kode Unik",
+                    value: widget.nikResult.uniqueCode!,
+                    onChanged: (x) {
+                      model = model.copyWith(uniqueCode: () => x);
+                      setState(() {});
+                    },
+                  ),
                   const Divider(color: Colors.black),
-                  _textWidgeT(title: "Jenis Kelamin", value: nikResult.gender!),
+                  TextResultCard(
+                    title: "Jenis Kelamin",
+                    value: widget.nikResult.gender!,
+                    onChanged: (x) {
+                      model = model.copyWith(gender: () => x);
+                      setState(() {});
+                    },
+                  ),
                   const Divider(color: Colors.black),
-                  _textWidgeT(title: "Tanggal Lahir", value: nikResult.bornDate!),
+                  TextResultCard(
+                    title: "Tanggal Lahir",
+                    value: widget.nikResult.bornDate!,
+                    onChanged: (x) {
+                      model = model.copyWith(bornDate: () => x);
+                      setState(() {});
+                    },
+                  ),
                   const Divider(color: Colors.black),
-                  _textWidgeT(title: "Usia", value: nikResult.age!),
+                  TextResultCard(
+                    title: "Usia",
+                    value: widget.nikResult.age!,
+                    onChanged: (x) {
+                      model = model.copyWith(age: () => x);
+                      setState(() {});
+                    },
+                  ),
                   const Divider(color: Colors.black),
-                  _textWidgeT(title: "Ulang Tahun", value: nikResult.nextBirthday!),
+                  TextResultCard(
+                    title: "Ulang Tahun",
+                    value: widget.nikResult.nextBirthday!,
+                    onChanged: (x) {
+                      model = model.copyWith(nextBirthday: () => x);
+                      setState(() {});
+                    },
+                  ),
                   const Divider(color: Colors.black),
-                  _textWidgeT(title: "Zodiak", value: nikResult.zodiac!),
+                  TextResultCard(
+                    title: "Zodiak",
+                    value: widget.nikResult.zodiac!,
+                    onChanged: (x) {
+                      model = model.copyWith(zodiac: () => x);
+                      setState(() {});
+                    },
+                  ),
                   const Divider(color: Colors.black),
-                  _textWidgeT(title: "Provinsi", value: nikResult.province!),
+                  TextResultCard(
+                    title: "Provinsi",
+                    value: widget.nikResult.province!,
+                    onChanged: (x) {
+                      model = model.copyWith(province: () => x);
+                      setState(() {});
+                    },
+                  ),
                   const Divider(color: Colors.black),
-                  _textWidgeT(title: "Kota/Kabupaten", value: nikResult.city!),
+                  TextResultCard(
+                    title: "Kota/Kabupaten",
+                    value: widget.nikResult.city!,
+                    onChanged: (x) {
+                      model = model.copyWith(city: () => x);
+                      setState(() {});
+                    },
+                  ),
                   const Divider(color: Colors.black),
-                  _textWidgeT(title: "Kecamatan", value: nikResult.subdistrict!),
+                  TextResultCard(
+                    title: "Kecamatan",
+                    value: widget.nikResult.subdistrict!,
+                    onChanged: (x) {
+                      model = model.copyWith(subdistrict: () => x);
+                      setState(() {});
+                    },
+                  ),
                   const Divider(color: Colors.black),
-                  _textWidgeT(title: "Kode Pos", value: nikResult.postalCode!),
+                  TextResultCard(
+                    title: "Kode Pos",
+                    value: widget.nikResult.postalCode!,
+                    onChanged: (x) {
+                      model = model.copyWith(postalCode: () => x);
+                      setState(() {});
+                    },
+                  ),
                 ],
               ),
             ),
-          ).expand(),
-        ],
-      ),
-    );
-  }
-
-  Widget _textWidgeT({required String title, required String value}) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Expanded(
-          child: Text(
-            title,
-            style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
-          ),
+            16.verticalSpacingRadius,
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: ColorTheme.red,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(16.r),
+                          bottomLeft: Radius.circular(16.r),
+                        ),
+                      ),
+                      textStyle: AppStyles.text16PxMedium,
+                      minimumSize: Size(200.r, 48.r),
+                    ),
+                    onPressed: () {
+                      Modular.to.pop();
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(Icons.replay_rounded),
+                        6.horizontalSpaceRadius,
+                        const Text('Ulangi'),
+                      ],
+                    ),
+                  ),
+                ),
+                12.horizontalSpaceRadius,
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: ColorTheme.primary,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(16.r),
+                          bottomRight: Radius.circular(16.r),
+                        ),
+                      ),
+                      textStyle: AppStyles.text16PxMedium,
+                      minimumSize: Size(200.r, 48.r),
+                    ),
+                    onPressed: () {
+                      kirim();
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text('Simpan'),
+                        6.horizontalSpaceRadius,
+                        const Icon(Icons.save_rounded),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ).px(16),
+            16.verticalSpacingRadius,
+          ],
         ),
-        Expanded(
-          child: Text(
-            value,
-            textAlign: TextAlign.end,
-            style: const TextStyle(color: Colors.black, fontSize: 18),
-          ),
-        )
-      ],
+      ),
     );
   }
 }

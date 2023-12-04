@@ -31,6 +31,9 @@ class KtpScanCubit extends Cubit<KtpScanState> {
       options: FaceDetectorOptions(
         enableContours: true,
         enableLandmarks: true,
+        enableClassification: true,
+        enableTracking: true,
+        performanceMode: FaceDetectorMode.accurate,
       ),
     );
 
@@ -49,6 +52,9 @@ class KtpScanCubit extends Cubit<KtpScanState> {
         ..writeToFile(savePath);
 
       await cmd.executeThread();
+    } else {
+      emit(KtpScanError('Wajah tidak ditemukan'));
+      return;
     }
 
     RecognizedText recognizedText = await textRecognizer.processImage(inputImage);
@@ -63,6 +69,7 @@ class KtpScanCubit extends Cubit<KtpScanState> {
       // print("--> ${dataText[i]} <--");
       NIKModel r = await NIKValidator.instance.parse(nik: dataText[i]);
       textRecognizer.close();
+      faceDetector.close();
       if (r.valid == true) {
         final ktp = KtpModel.fromScan(r);
         String name = dataText[i + 1].replaceAll(':', '');

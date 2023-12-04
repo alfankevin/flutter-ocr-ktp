@@ -149,7 +149,7 @@ class KtpModel extends Equatable {
     );
   }
 
-  factory KtpModel.fromMap(Map<String, dynamic> map) {
+  factory KtpModel.fromMap(Map<dynamic, dynamic> map) {
     return KtpModel(
       nik: map['nik'],
       name: map['name'],

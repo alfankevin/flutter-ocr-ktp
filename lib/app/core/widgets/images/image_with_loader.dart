@@ -7,7 +7,7 @@ import 'empty_image.dart';
 
 class ImageWithLoader extends StatelessWidget {
   const ImageWithLoader({
-    Key? key,
+    super.key,
     required this.imageUrl,
     this.size = 100,
     this.width,
@@ -18,7 +18,7 @@ class ImageWithLoader extends StatelessWidget {
     this.isBG = false,
     this.fit,
     this.border,
-  }) : super(key: key);
+  });
 
   final String imageUrl;
   final double size;
@@ -46,6 +46,7 @@ class ImageWithLoader extends StatelessWidget {
               child: EmptyImage(
                 size: size,
                 width: width ?? size,
+                radius: radius,
               ),
             ),
             imageBuilder: (context, imageProvider) => Container(
@@ -75,6 +76,7 @@ class ImageWithLoader extends StatelessWidget {
                 : EmptyImage(
                     size: size,
                     width: width ?? size,
+                    radius: radius,
                     child: const Center(
                       child: Icon(CupertinoIcons.photo, color: Colors.grey),
                     ),
