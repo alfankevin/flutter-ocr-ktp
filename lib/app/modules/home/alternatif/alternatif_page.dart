@@ -40,6 +40,59 @@ class _AlternatifPageState extends State<AlternatifPage> {
     _storageRef = FirebaseStorage.instance.ref(StringHelper.imageStorage);
   }
 
+  Future<void> penilaian() async {
+    context.showLoadingIndicator();
+    final penilaian = await _penilaianRef.once();
+    final kriteria = (await _kriteriaRef.once()).snapshot.children;
+    Map<String, bool> benefitAll = {};
+    for (var e in kriteria) {
+      final data = e.value as Map<Object?, Object?>;
+      benefitAll.addAll({e.key!: data['is_benefit'] as bool});
+    }
+    print(benefitAll);
+    Map<String, Map<String, num>> matrix = {};
+    Map<String, Map<String, num>> minMax = {};
+    final pen = penilaian.snapshot.value as Map<Object?, Object?>;
+    for (var e in pen.keys) {
+      matrix[e.toString()] = {};
+      minMax[e.toString()] = {
+        'min': 100000,
+        'max': 0,
+      };
+      final data = pen[e] as Map<Object?, Object?>;
+      if (kriteria.length != data.length) {
+        context.showSnackbar(message: "Data penilaian belum lengkap", error: true, isPop: true);
+      }
+      for (var key in data.keys) {
+        final isi = data[key.toString()] as Map<Object?, Object?>;
+        matrix[e.toString()]!.addAll({
+          key.toString(): isi['nilai'] as num,
+        });
+        if (isi['nilai'] as num > minMax[e.toString()]!['max']!) {
+          minMax[e.toString()]!['max'] = isi['nilai'] as num;
+        }
+        if (isi['nilai'] as num < minMax[e.toString()]!['min']!) {
+          minMax[e.toString()]!['min'] = isi['nilai'] as num;
+        }
+      }
+    }
+    print(minMax);
+    for (var e in matrix.keys) {
+      final data = matrix[e]!;
+      for (var key in data.keys) {
+        final nilai = data[key] as num;
+        if (benefitAll[key]!) {
+          matrix[e]![key] = nilai / minMax[e]!['max']!;
+        } else {
+          print("Min => ${minMax[e]!['min']}");
+          matrix[e]![key] = minMax[e]!['min']! / nilai;
+        }
+      }
+    }
+    print(matrix);
+    context.hideLoading();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BaseScaffold(
@@ -118,7 +171,11 @@ class _AlternatifPageState extends State<AlternatifPage> {
                   textStyle: AppStyles.text16PxMedium,
                   minimumSize: Size(200.r, 48.r),
                 ),
-                onPressed: filledAll ? () {} : null,
+                onPressed: filledAll
+                    ? () {
+                        penilaian();
+                      }
+                    : null,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
