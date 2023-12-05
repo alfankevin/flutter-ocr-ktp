@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
@@ -24,12 +25,14 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final controller = Modular.get<HomeCubit>();
   String file = '';
-  late DatabaseReference _penilaianRef;
+  late final DatabaseReference _penilaianRef;
+  late final User user;
 
   @override
   void initState() {
     super.initState();
-    _penilaianRef = FirebaseDatabase.instance.ref('data');
+    user = FirebaseAuth.instance.currentUser!;
+    _penilaianRef = FirebaseDatabase.instance.ref('data/${user.uid}');
   }
 
   @override
@@ -107,7 +110,7 @@ class _HomePageState extends State<HomePage> {
             },
             onTap: () async {
               final key = snapshot.key!;
-              await Modular.get<SelectedLocalServices>().setSelected("data/$key");
+              await Modular.get<SelectedLocalServices>().setSelected("data/${user.uid}/$key");
               Modular.to.pushNamed(AppRoutes.kriteriaHome);
             },
           ).py(8);
