@@ -64,7 +64,7 @@ class _AlternatifPageState extends State<AlternatifPage> {
             },
             onTap: () async {
               await Modular.to.pushNamed(AppRoutes.penilaianHome, arguments: snapshot.key!);
-              final pen = await _penilaianRef.once();
+              final pen = await _penilaianRef.child(snapshot.key!).once();
               final kriteria = await _kriteriaRef.once();
               bool filled = pen.snapshot.children.length == kriteria.snapshot.children.length;
               await _alternatifRef.child(snapshot.key!).update({'filled': filled});

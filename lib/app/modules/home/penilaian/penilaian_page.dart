@@ -12,7 +12,12 @@ import 'package:penilaian/app/data/services/local_services/selected_local_servic
 import 'widgets/penilaian_form_card.dart';
 
 class PenilaianPage extends StatefulWidget {
-  const PenilaianPage({super.key});
+  const PenilaianPage({
+    super.key,
+    required this.altKey,
+  });
+
+  final String altKey;
 
   @override
   State<PenilaianPage> createState() => _PenilaianPageState();
@@ -28,7 +33,7 @@ class _PenilaianPageState extends State<PenilaianPage> {
   void initState() {
     super.initState();
     _refKey = Modular.get<SelectedLocalServices>().selected;
-    _penilaianRef = FirebaseDatabase.instance.ref('$_refKey/penilaian');
+    _penilaianRef = FirebaseDatabase.instance.ref('$_refKey/penilaian/${widget.altKey}');
     _kriteriaRef = FirebaseDatabase.instance.ref('$_refKey/kriteria');
   }
 

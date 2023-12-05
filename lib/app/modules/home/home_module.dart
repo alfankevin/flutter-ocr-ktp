@@ -28,6 +28,6 @@ class HomeModule extends Module {
         child: (context) => DetailKtpPage(nikResult: r.args.data as KtpModel));
     r.child(AppRoutes.kriteriaHome, child: (ctx) => const KriteriaPage());
     r.child(AppRoutes.alternatifHome, child: (ctx) => const AlternatifPage());
-    r.child(AppRoutes.penilaianHome, child: (ctx) => const PenilaianPage());
+    r.child(AppRoutes.penilaianHome, child: (ctx) => PenilaianPage(altKey: r.args.data as String));
   }
 }
