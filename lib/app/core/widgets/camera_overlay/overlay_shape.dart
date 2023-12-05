@@ -1,7 +1,7 @@
 part of 'camera_overlay_widget.dart';
 
 class OverlayShape extends StatelessWidget {
-  const OverlayShape(this.model, {Key? key}) : super(key: key);
+  const OverlayShape(this.model, {super.key});
 
   final OverlayModel model;
 

@@ -49,8 +49,9 @@ class _ConnectivityPageState extends State<ConnectivityPage> {
                     width: 173,
                     height: 48,
                     child: ElevatedButton(
-                      onPressed: () =>
-                          context.read<ConnectivityCubit>().recheckInternetConnection(),
+                      onPressed: () => context
+                          .read<ConnectivityCubit>()
+                          .recheckInternetConnection(),
                       child: const Text(
                         "Try Again",
                       ),

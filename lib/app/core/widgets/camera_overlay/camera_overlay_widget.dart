@@ -12,14 +12,14 @@ class CameraOverlayWidget extends StatefulWidget {
     this.camera,
     this.model,
     this.onCapture, {
-    Key? key,
+    super.key,
     this.flash = false,
     this.enableCaptureButton = true,
     this.label,
     this.info,
     this.loadingWidget,
     this.infoMargin,
-  }) : super(key: key);
+  });
   final CameraDescription camera;
   final OverlayModel model;
   final bool flash;

@@ -39,7 +39,8 @@ class _TextResultCardState extends State<TextResultCard> {
             return AlertDialog(
               title: Text('Ubah ${widget.title}'),
               content: TextField(
-                decoration: GenerateTheme.inputDecoration("Masukkan ${widget.title}"),
+                decoration:
+                    GenerateTheme.inputDecoration("Masukkan ${widget.title}"),
                 style: AppStyles.text16Px.copyWith(color: ColorTheme.black),
                 controller: nameCont,
               ),
@@ -73,7 +74,8 @@ class _TextResultCardState extends State<TextResultCard> {
           Expanded(
             child: Text(
               widget.title,
-              style: AppStyles.text16PxSemiBold.copyWith(color: ColorTheme.black),
+              style:
+                  AppStyles.text16PxSemiBold.copyWith(color: ColorTheme.black),
             ),
           ),
           Expanded(

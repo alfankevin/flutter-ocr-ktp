@@ -34,7 +34,8 @@ class HomeCard extends StatelessWidget {
         final snackbarController = ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Yakin Ingin Hapus Kriteria $title?'),
-            action: SnackBarAction(label: 'Hapus', onPressed: () => delete = true),
+            action:
+                SnackBarAction(label: 'Hapus', onPressed: () => delete = true),
           ),
         );
         await snackbarController.closed;
@@ -61,7 +62,8 @@ class HomeCard extends StatelessWidget {
               offset: const Offset(0, 0), // changes position of shadow
             ),
           ],
-          color: color != null && srcImg == null ? HexColor(color!) : Colors.black,
+          color:
+              color != null && srcImg == null ? HexColor(color!) : Colors.black,
           image: color == null && srcImg != null
               ? DecorationImage(
                   image: AssetImage(srcImg ?? 'assets/img/desa.jpg'),

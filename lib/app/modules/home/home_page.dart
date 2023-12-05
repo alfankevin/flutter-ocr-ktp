@@ -40,7 +40,9 @@ class _HomePageState extends State<HomePage> {
         isBack: false,
       ),
       body: FirebaseAnimatedList(
-        query: _penilaianRef.orderByChild('created_at'),
+        sort: (a, b) => (DataModel.fromMap(a.value as Map<Object?, Object?>).createdAt)
+            .compareTo(DataModel.fromMap(b.value as Map<Object?, Object?>).createdAt),
+        query: _penilaianRef,
         itemBuilder: (context, snapshot, anim, i) {
           final data = DataModel.fromMap(snapshot.value as Map<Object?, Object?>);
           return HomeCard(

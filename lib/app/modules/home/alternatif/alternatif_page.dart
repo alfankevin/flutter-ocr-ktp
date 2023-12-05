@@ -24,14 +24,19 @@ class AlternatifPage extends StatefulWidget {
 
 class _AlternatifPageState extends State<AlternatifPage> {
   late final DatabaseReference _alternatifRef;
+  late final DatabaseReference _penilaianRef;
+  late final DatabaseReference _kriteriaRef;
   late final Reference _storageRef;
   late final String _refKey;
+  bool filledAll = true;
 
   @override
   void initState() {
     super.initState();
     _refKey = Modular.get<SelectedLocalServices>().selected;
     _alternatifRef = FirebaseDatabase.instance.ref('$_refKey/alternatif');
+    _penilaianRef = FirebaseDatabase.instance.ref('$_refKey/penilaian');
+    _kriteriaRef = FirebaseDatabase.instance.ref('$_refKey/kriteria');
     _storageRef = FirebaseStorage.instance.ref(StringHelper.imageStorage);
   }
 
@@ -45,6 +50,7 @@ class _AlternatifPageState extends State<AlternatifPage> {
         query: _alternatifRef,
         itemBuilder: (context, snapshot, anim, i) {
           final data = KtpModel.fromMap(snapshot.value as Map<Object?, Object?>);
+          filledAll &= data.filled;
           return AlternatifCard(
             number: i + 1,
             data: data,
@@ -52,12 +58,16 @@ class _AlternatifPageState extends State<AlternatifPage> {
               await _alternatifRef.child(snapshot.key!).remove();
               await _storageRef.child('${snapshot.key!}.jpg').delete();
             },
-            onEdit: () {
-              Modular.get<SelectedLocalServices>().setSelectedEdit(snapshot.key!);
-              Modular.to.pushNamed(AppRoutes.ktpScanHome);
+            onEdit: () async {
+              await Modular.get<SelectedLocalServices>().setSelectedEdit(snapshot.key!);
+              Modular.to.pushNamed(AppRoutes.ktpResultHome, arguments: data);
             },
-            onTap: () {
-              Modular.to.pushNamed(AppRoutes.penilaianHome);
+            onTap: () async {
+              await Modular.to.pushNamed(AppRoutes.penilaianHome, arguments: snapshot.key!);
+              final pen = await _penilaianRef.once();
+              final kriteria = await _kriteriaRef.once();
+              bool filled = pen.snapshot.children.length == kriteria.snapshot.children.length;
+              await _alternatifRef.child(snapshot.key!).update({'filled': filled});
             },
           );
         },
@@ -108,7 +118,7 @@ class _AlternatifPageState extends State<AlternatifPage> {
                   textStyle: AppStyles.text16PxMedium,
                   minimumSize: Size(200.r, 48.r),
                 ),
-                onPressed: () {},
+                onPressed: filledAll ? () {} : null,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

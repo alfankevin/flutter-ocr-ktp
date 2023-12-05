@@ -39,11 +39,13 @@ class DropdownInputVariant<T extends Object> extends StatelessWidget {
               if (isRequiredText)
                 TextSpan(
                   text: "*",
-                  style: CustomTextTheme.caption.copyWith(color: ColorTheme.primary),
+                  style: CustomTextTheme.caption
+                      .copyWith(color: ColorTheme.primary),
                 ),
             ],
           ),
-          style: CustomTextTheme.paragraph1.copyWith(fontWeight: FontWeight.w700),
+          style:
+              CustomTextTheme.paragraph1.copyWith(fontWeight: FontWeight.w700),
         ),
         8.verticalSpace,
         ReactiveDropdownField<T>(
@@ -52,7 +54,8 @@ class DropdownInputVariant<T extends Object> extends StatelessWidget {
                 (e) => DropdownMenuItem<T>(
                   value: e['value'],
                   child: Text(e['text'] ?? '-',
-                      style: CustomTextTheme.paragraph2.copyWith(color: ColorTheme.neutral[800])),
+                      style: CustomTextTheme.paragraph2
+                          .copyWith(color: ColorTheme.neutral[800])),
                 ),
               )
               .toList(),

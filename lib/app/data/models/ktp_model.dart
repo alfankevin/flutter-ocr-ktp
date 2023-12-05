@@ -134,6 +134,7 @@ class KtpModel extends Equatable {
       'zodiac': zodiac,
       'photo': photo,
       'filled': filled,
+      'created_at': DateTime.now().toIso8601String(),
     };
   }
 

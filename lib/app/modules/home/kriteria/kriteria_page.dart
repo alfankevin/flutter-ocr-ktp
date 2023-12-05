@@ -51,6 +51,8 @@ class _KriteriaPageState extends State<KriteriaPage> {
           12.verticalSpacingRadius,
           FirebaseAnimatedList(
             query: _kriteriaRef,
+            sort: (a, b) => (KriteriaModel.fromMap(a.value as Map<Object?, Object?>).createdAt)
+                .compareTo(KriteriaModel.fromMap(b.value as Map<Object?, Object?>).createdAt),
             itemBuilder: (context, snapshot, anim, i) {
               final data = KriteriaModel.fromMap(snapshot.value as Map<Object?, Object?>);
               return KriteriaFormCard(
@@ -99,7 +101,8 @@ class _KriteriaPageState extends State<KriteriaPage> {
                   minimumSize: Size(200.r, 48.r),
                 ),
                 onPressed: () {
-                  _kriteriaRef.child(8.generateRandomString).set(const KriteriaModel().toMap());
+                  final v = KriteriaModel.init();
+                  _kriteriaRef.child(16.generateRandomString).set(v.toMap());
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,

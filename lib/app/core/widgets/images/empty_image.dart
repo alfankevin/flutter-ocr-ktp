@@ -25,7 +25,8 @@ class EmptyImage extends StatelessWidget {
         borderRadius: BorderRadius.circular(radius ?? 10),
         border: Border.all(color: Colors.grey[200]!, width: 1),
       ),
-      child: child ?? const Center(child: Icon(CupertinoIcons.photo, color: Colors.grey)),
+      child: child ??
+          const Center(child: Icon(CupertinoIcons.photo, color: Colors.grey)),
     );
   }
 }

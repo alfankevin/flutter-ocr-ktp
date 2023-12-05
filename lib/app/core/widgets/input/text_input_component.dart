@@ -60,7 +60,8 @@ class _TextInputComponentState extends State<TextInputComponent> {
               if (widget.isRequiredText)
                 TextSpan(
                   text: "*",
-                  style: AppStyles.text16PxMedium.copyWith(color: ColorTheme.red),
+                  style:
+                      AppStyles.text16PxMedium.copyWith(color: ColorTheme.red),
                 ),
             ],
           ),
@@ -71,7 +72,8 @@ class _TextInputComponentState extends State<TextInputComponent> {
           keyboardType: widget.textInputType,
           formControlName: widget.formControlName,
           style: AppStyles.text18Px.copyWith(color: ColorTheme.neutral[800]),
-          decoration: GenerateTheme.inputDecorationIcon(widget.hint, widget.prefix, widget.suffix),
+          decoration: GenerateTheme.inputDecorationIcon(
+              widget.hint, widget.prefix, widget.suffix),
           validationMessages: message,
           maxLines: widget.maxLines,
           onChanged: widget.onChanged,

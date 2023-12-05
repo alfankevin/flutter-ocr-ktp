@@ -54,8 +54,14 @@ extension WidgetExtensionX on Widget {
         padding: EdgeInsets.symmetric(vertical: pad.h),
         child: this,
       );
-  Padding pOnly({double left = 0, double top = 0, double right = 0, double bottom = 0}) => Padding(
-        padding: EdgeInsets.only(left: left.w, top: top.h, right: right.w, bottom: bottom.h),
+  Padding pOnly(
+          {double left = 0,
+          double top = 0,
+          double right = 0,
+          double bottom = 0}) =>
+      Padding(
+        padding: EdgeInsets.only(
+            left: left.w, top: top.h, right: right.w, bottom: bottom.h),
         child: this,
       );
 }

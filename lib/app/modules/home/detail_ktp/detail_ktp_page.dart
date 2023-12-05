@@ -8,6 +8,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:penilaian/app/core/helpers/string_helper.dart';
 import 'package:penilaian/app/core/theme/theme.dart';
+import 'package:penilaian/app/core/widgets/images/image_with_loader.dart';
 import 'package:penilaian/app/core/widgets/text/warning_text.dart';
 import 'package:penilaian/app/data/extensions/extensions.dart';
 import 'package:penilaian/app/data/models/ktp_model.dart';
@@ -66,7 +67,8 @@ class _DetailKtpPageState extends State<DetailKtpPage> {
       await _alternatifRef.child(key).set(model.toMap());
       await local.removeSelectedEdit();
     } on firebase_core.FirebaseException catch (e) {
-      context.showSnackbar(message: e.message ?? "Terjadi kesalahan", error: true, isPop: true);
+      context.showSnackbar(
+          message: e.message ?? "Terjadi kesalahan", error: true, isPop: true);
     } finally {
       Modular.to.popUntil((p0) => p0.settings.name == AppRoutes.alternatifHome);
       context.showSnackbar(message: "Berhasil Membuat Alternatif!");
@@ -87,18 +89,28 @@ class _DetailKtpPageState extends State<DetailKtpPage> {
             16.verticalSpacingRadius,
             const WarningText(
               text: "Klik pada bagian yang ingin diubah!",
-            ),
+            ).px(16),
             Container(
               margin: const EdgeInsets.all(20),
               padding: const EdgeInsets.all(10),
               width: context.width,
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8), border: Border.all(color: Colors.black)),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Colors.black)),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   if (widget.nikResult.photo != null)
-                    Center(child: Image.file(File(widget.nikResult.photo!))),
+                    Center(
+                      child: widget.nikResult.photo!.contains('firebase')
+                          ? ImageWithLoader(
+                              imageUrl: widget.nikResult.photo!,
+                              size: 200,
+                            )
+                          : Image.file(
+                              File(widget.nikResult.photo!),
+                            ),
+                    ),
                   16.verticalSpacingRadius,
                   const Divider(color: Colors.black),
                   TextResultCard(

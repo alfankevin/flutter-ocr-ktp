@@ -30,7 +30,8 @@ class _PasswordInputState extends State<PasswordInput> {
 
   final Map<String, String Function(Object)> message = {
     ValidationMessage.required: (_) => 'inputan ini tidak boleh kosong',
-    ValidationMessage.minLength: (_) => 'inputan password kurang dari 8 karakter',
+    ValidationMessage.minLength: (_) =>
+        'inputan password kurang dari 8 karakter',
     ValidationMessage.mustMatch: (_) => 'inputan password tidak sama',
     'validation_error': (e) => (e as String),
   };
@@ -55,7 +56,8 @@ class _PasswordInputState extends State<PasswordInput> {
               if (widget.isRequiredText)
                 TextSpan(
                   text: "*",
-                  style: AppStyles.text16PxMedium.copyWith(color: ColorTheme.red),
+                  style:
+                      AppStyles.text16PxMedium.copyWith(color: ColorTheme.red),
                 ),
             ],
           ),

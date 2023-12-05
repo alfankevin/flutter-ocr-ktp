@@ -73,7 +73,9 @@ class BaseLoadingIndicator extends StatelessWidget {
     return Center(
       child: Container(
         alignment: Alignment.center,
-        child: isRow ? _buildLoadingRowWidget(context) : _buildLoadingWidget(context),
+        child: isRow
+            ? _buildLoadingRowWidget(context)
+            : _buildLoadingWidget(context),
       ),
     );
   }

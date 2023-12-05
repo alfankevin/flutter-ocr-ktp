@@ -46,8 +46,9 @@ class DataModel extends Equatable {
       name: map['name'] ?? '',
       deskripsi: map['deskripsi'] ?? '',
       color: map['color'] ?? '',
-      createdAt:
-          map['created_at'] == null ? DateTime.parse(map['created_at'] ?? '') : DateTime.now(),
+      createdAt: map['created_at'] == null
+          ? DateTime.parse(map['created_at'] ?? '')
+          : DateTime.now(),
       updatedAt: map['updated_at'] == null
           ? null
           : (map['updated_at']).toString().isNotEmpty

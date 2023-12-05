@@ -38,10 +38,12 @@ class _LoginPageState extends State<LoginPage> {
         body: BlocListener<AuthCubit, AuthState>(
           listener: (context, state) {
             if (state is AuthSuccess) {
-              context.to.pushNamedAndRemoveUntil(AppRoutes.home, (route) => false);
+              context.to
+                  .pushNamedAndRemoveUntil(AppRoutes.home, (route) => false);
               context.showSnackbar(message: 'Berhasil Masuk!');
             } else if (state is AuthError) {
-              context.showSnackbar(message: state.message, error: true, isPop: true);
+              context.showSnackbar(
+                  message: state.message, error: true, isPop: true);
             } else if (state is AuthLoading) {
               context.showLoadingIndicator();
             }
@@ -139,7 +141,8 @@ class _LoginPageState extends State<LoginPage> {
                         TextSpan(
                           text: ' Daftar',
                           style: const TextStyle(
-                              color: ColorTheme.statusGreen, fontWeight: FontWeight.bold),
+                              color: ColorTheme.statusGreen,
+                              fontWeight: FontWeight.bold),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
                               Modular.to.pushNamed(AppRoutes.register);

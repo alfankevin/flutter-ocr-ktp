@@ -10,15 +10,15 @@ class GenerateTheme {
           color: ColorTheme.neutral[400],
         ),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(5),
+          borderRadius: 5.rounded,
           borderSide: const BorderSide(color: ColorTheme.primary, width: 1),
         ),
         disabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(5),
+          borderRadius: 5.rounded,
           borderSide: BorderSide(color: ColorTheme.tint[200]!, width: 1),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(5),
+          borderRadius: 5.rounded,
           borderSide: BorderSide(color: ColorTheme.tint[400]!, width: 1),
         ),
       );

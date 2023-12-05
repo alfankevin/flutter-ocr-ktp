@@ -55,7 +55,8 @@ class _KriteriaFormCardState extends State<KriteriaFormCard> {
         final snackbarController = ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Yakin Ingin Hapus Kriteria ${widget.number}?'),
-            action: SnackBarAction(label: 'Hapus', onPressed: () => delete = true),
+            action:
+                SnackBarAction(label: 'Hapus', onPressed: () => delete = true),
           ),
         );
         await snackbarController.closed;
@@ -78,7 +79,7 @@ class _KriteriaFormCardState extends State<KriteriaFormCard> {
               height: 48.r,
               width: 44.r,
               decoration: BoxDecoration(
-                color: widget.isBenefit? ColorTheme.primary: ColorTheme.red,
+                color: widget.isBenefit ? ColorTheme.primary : ColorTheme.red,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(10.r),
                   bottomLeft: Radius.circular(10.r),

@@ -49,7 +49,8 @@ class _TextInputVariantState extends State<TextInputVariant> {
     return ReactiveTextField(
       keyboardType: widget.textInputType,
       formControlName: widget.formControlName,
-      style: CustomTextTheme.paragraph2.copyWith(color: ColorTheme.neutral[800]),
+      style:
+          CustomTextTheme.paragraph2.copyWith(color: ColorTheme.neutral[800]),
       decoration: widget.maxLines > 1
           ? GenerateTheme.inputDecoration(widget.hint)
           : InputDecoration(

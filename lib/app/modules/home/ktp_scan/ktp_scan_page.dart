@@ -40,11 +40,13 @@ class _KtpScanPageState extends State<KtpScanPage> {
             context.showLoadingIndicator();
           }
           if (state is KtpScanError) {
-            context.showSnackbar(message: "NIK ditemukan", error: true, isPop: true);
+            context.showSnackbar(
+                message: "NIK ditemukan", error: true, isPop: true);
           }
           if (state is KtpScanLoaded) {
             context.hideLoading();
-            Modular.to.pushNamed(AppRoutes.ktpResultHome, arguments: state.item);
+            Modular.to
+                .pushNamed(AppRoutes.ktpResultHome, arguments: state.item);
             context.showSnackbar(message: "NIK ditemukan");
           }
         },

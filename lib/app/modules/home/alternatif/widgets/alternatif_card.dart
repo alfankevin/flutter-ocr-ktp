@@ -35,7 +35,8 @@ class AlternatifCard extends StatelessWidget {
         final snackbarController = ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Yakin Ingin Hapus Kriteria ${data.name}?'),
-            action: SnackBarAction(label: 'Hapus', onPressed: () => delete = true),
+            action:
+                SnackBarAction(label: 'Hapus', onPressed: () => delete = true),
           ),
         );
         await snackbarController.closed;
@@ -70,7 +71,8 @@ class AlternatifCard extends StatelessWidget {
                 alignment: Alignment.center,
                 child: Text(
                   number.toString(),
-                  style: AppStyles.text18PxBold.copyWith(color: ColorTheme.white),
+                  style:
+                      AppStyles.text18PxBold.copyWith(color: ColorTheme.white),
                 ),
               ),
               8.horizontalSpaceRadius,
@@ -114,23 +116,28 @@ class AlternatifCard extends StatelessWidget {
                         children: [
                           Text(
                             data.name ?? "-",
-                            style: AppStyles.text16PxBold.copyWith(color: ColorTheme.white),
+                            style: AppStyles.text16PxBold
+                                .copyWith(color: ColorTheme.white),
                           ).expand(),
                           Text.rich(
                             TextSpan(
                               text: "Status: ",
                               children: [
                                 TextSpan(
-                                  text: data.filled ? "Sudah Diisi!" : "Belum Diisi!",
+                                  text: data.filled
+                                      ? "Sudah Diisi!"
+                                      : "Belum Diisi!",
                                   style: AppStyles.text14PxMedium.copyWith(
                                     color: ColorTheme.white,
-                                    backgroundColor:
-                                        data.filled ? ColorTheme.green : ColorTheme.red,
+                                    backgroundColor: data.filled
+                                        ? ColorTheme.green
+                                        : ColorTheme.red,
                                   ),
                                 )
                               ],
                             ),
-                            style: AppStyles.text14PxMedium.copyWith(color: ColorTheme.white),
+                            style: AppStyles.text14PxMedium
+                                .copyWith(color: ColorTheme.white),
                           )
                         ],
                       ).expand(),

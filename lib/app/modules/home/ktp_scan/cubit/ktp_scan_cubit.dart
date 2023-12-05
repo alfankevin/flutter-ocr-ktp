@@ -57,7 +57,8 @@ class KtpScanCubit extends Cubit<KtpScanState> {
       return;
     }
 
-    RecognizedText recognizedText = await textRecognizer.processImage(inputImage);
+    RecognizedText recognizedText =
+        await textRecognizer.processImage(inputImage);
     final List<String> dataText = [];
     for (var item in recognizedText.blocks) {
       for (var line in item.lines) {
@@ -73,7 +74,8 @@ class KtpScanCubit extends Cubit<KtpScanState> {
       if (r.valid == true) {
         final ktp = KtpModel.fromScan(r);
         String name = dataText[i + 1].replaceAll(':', '');
-        emit(KtpScanLoaded(ktp.copyWith(name: () => name, photo: () => savePath)));
+        emit(KtpScanLoaded(
+            ktp.copyWith(name: () => name, photo: () => savePath)));
         return;
       }
     }
