@@ -6,6 +6,8 @@ import 'package:penilaian/app/core/theme/theme.dart';
 import 'package:penilaian/app/data/extensions/extensions.dart';
 import 'package:penilaian/app/routes/app_routes.dart';
 
+import '../../data/services/local_services/flavor_local_services.dart';
+
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
 
@@ -14,6 +16,8 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
+  final local = FlavorLocalServicesImpl();
+
   Future<void> _init() async {
     await Future.delayed(const Duration(seconds: 2));
     // ignore: use_build_context_synchronously
@@ -41,7 +45,7 @@ class _SplashPageState extends State<SplashPage> {
         body: SafeArea(
           child: Center(
             child: Image.asset(
-              'assets/img/logo.png',
+              local.image,
               width: 250.r,
             ),
           ),

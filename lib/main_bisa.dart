@@ -4,11 +4,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:penilaian/app/data/services/local_services/flavor_local_services.dart';
 
 import 'app/app_module.dart';
 import 'app/app_widget.dart';
 import 'app/core/config/firebase_options.dart';
+import 'app/data/services/local_services/flavor_local_services.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

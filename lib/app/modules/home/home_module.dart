@@ -1,4 +1,8 @@
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:penilaian/app/core/permission/permission.dart';
+import 'package:penilaian/app/core/permission/permission_impl.dart';
+import 'package:penilaian/app/core/storage/storage_interface.dart';
+import 'package:penilaian/app/core/storage/storage_path.dart';
 import 'package:penilaian/app/data/models/ktp_model.dart';
 import 'package:penilaian/app/data/services/local_services/selected_local_services.dart';
 import 'package:penilaian/app/modules/home/alternatif/alternatif_page.dart';
@@ -18,6 +22,8 @@ class HomeModule extends Module {
     i.add(HomeCubit.new);
     i.add(KtpScanCubit.new);
     i.addLazySingleton<SelectedLocalServices>(SelectedLocalServicesImpl.new);
+    i.addLazySingleton<StoragePathInterface>(StoragePathImpl.new);
+    i.addLazySingleton<StorageInterface>(Storage.new);
   }
 
   @override

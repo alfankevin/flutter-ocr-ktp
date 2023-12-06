@@ -2,6 +2,10 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:penilaian/app/core/permission/permission.dart';
+import 'package:penilaian/app/core/storage/storage_interface.dart';
+import 'package:penilaian/app/core/theme/theme.dart';
+import 'package:penilaian/app/core/widgets/base/base_app_bar.dart';
 import 'package:penilaian/app/core/widgets/camera_overlay/camera_overlay_widget.dart';
 import 'package:penilaian/app/data/extensions/extensions.dart';
 import 'package:penilaian/app/modules/home/ktp_scan/cubit/ktp_scan_cubit.dart';
@@ -17,10 +21,12 @@ class KtpScanPage extends StatefulWidget {
 class _KtpScanPageState extends State<KtpScanPage> {
   final KtpScanCubit bloc = Modular.get<KtpScanCubit>();
   OverlayFormat format = OverlayFormat.cardID2;
+  final storage = Modular.get<StorageInterface>();
 
   @override
   void initState() {
     super.initState();
+    Modular.get<PermissionInterface>().storage();
   }
 
   @override
@@ -40,17 +46,32 @@ class _KtpScanPageState extends State<KtpScanPage> {
             context.showLoadingIndicator();
           }
           if (state is KtpScanError) {
-            context.showSnackbar(
-                message: "NIK ditemukan", error: true, isPop: true);
+            context.showSnackbar(message: "NIK ditemukan", error: true, isPop: true);
           }
           if (state is KtpScanLoaded) {
             context.hideLoading();
-            Modular.to
-                .pushNamed(AppRoutes.ktpResultHome, arguments: state.item);
+            Modular.to.pushNamed(AppRoutes.ktpResultHome, arguments: state.item);
             context.showSnackbar(message: "NIK ditemukan");
           }
         },
         child: Scaffold(
+          appBar: BaseAppBar(
+            title: "Scan KTP",
+            actions: [
+              IconButton(
+                onPressed: () async {
+                  final file = await storage.pickFile(
+                    extensions: ["jpg", "jpeg", "png"],
+                  );
+                  if (file != null) {
+                    bloc.scanKtp(file.path);
+                  }
+                },
+                icon: const Icon(Icons.upload_file_rounded, color: ColorTheme.white),
+                tooltip: "Upload KTP",
+              ),
+            ],
+          ),
           body: FutureBuilder<List<CameraDescription>?>(
             future: availableCameras(),
             builder: (context, snapshot) {

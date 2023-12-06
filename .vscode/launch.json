@@ -11,7 +11,9 @@
             "flutterMode": "debug",
             "args": [
                 "--flavor",
-                "bantu"
+                "bantu",
+                "-t",
+                "lib/main_bantu.dart"
             ]
         },
         {
@@ -21,7 +23,9 @@
             "flutterMode": "debug",
             "args": [
                 "--flavor",
-                "bisa"
+                "bisa",
+                "-t",
+                "lib/main_bisa.dart"
             ]
         },
         {

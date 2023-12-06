@@ -4,6 +4,7 @@ import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:penilaian/app/blocs/session/session_cubit.dart';
 import 'package:penilaian/app/core/theme/theme.dart';
 import 'package:penilaian/app/core/widgets/base/base_app_bar.dart';
 import 'package:penilaian/app/core/widgets/base/base_scaffold.dart';
@@ -38,9 +39,18 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return BaseScaffold(
-      appBar: const BaseAppBar(
+      appBar: BaseAppBar(
         title: "Beranda",
         isBack: false,
+        actions: [
+          IconButton(
+            onPressed: () {
+              context.read<SessionCubit>().deleteSession();
+            },
+            icon: const Icon(Icons.logout_rounded, color: ColorTheme.white),
+            tooltip: "Logout",
+          ).pOnly(right: 12),
+        ],
       ),
       body: FirebaseAnimatedList(
         sort: (a, b) => (DataModel.fromMap(a.value as Map<Object?, Object?>).createdAt)

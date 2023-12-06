@@ -3,7 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:penilaian/app/blocs/session/session_cubit.dart';
+import 'package:penilaian/app/core/storage/storage_path.dart';
 import 'package:penilaian/app/data/extensions/extensions.dart';
+import 'package:penilaian/app/data/services/local_services/flavor_local_services.dart';
 import 'package:penilaian/app/pages/connectivity/cubit/connectivity_cubit.dart';
 import 'package:penilaian/app/pages/connectivity/cubit/connectivity_state.dart';
 
@@ -21,11 +23,13 @@ class _AppWidgetState extends State<AppWidget> {
   final messengerKey = GlobalKey<ScaffoldMessengerState>();
   final sessionBloc = SessionCubit();
   final connectivityBloc = Modular.get<ConnectivityCubit>();
+  final local = FlavorLocalServicesImpl();
 
   @override
   void initState() {
     super.initState();
     Modular.setInitialRoute('/');
+    Modular.get<StoragePathInterface>().initialize();
     connectivityBloc.recheckInternetConnection();
   }
 
@@ -67,7 +71,7 @@ class _AppWidgetState extends State<AppWidget> {
             return MaterialApp.router(
               debugShowCheckedModeBanner: false,
               scaffoldMessengerKey: messengerKey,
-              title: 'Pemilihan Batuan Sosial',
+              title: local.name,
               theme: colorTheme,
               routeInformationParser: Modular.routeInformationParser,
               routerDelegate: Modular.routerDelegate,

@@ -131,6 +131,7 @@ class _FlutterCameraOverlayState extends State<CameraOverlayWidget> {
 
                         XFile file = await controller.takePicture();
                         widget.onCapture(file);
+                        controller.pausePreview();
                       },
                       icon: const Icon(
                         Icons.camera,
