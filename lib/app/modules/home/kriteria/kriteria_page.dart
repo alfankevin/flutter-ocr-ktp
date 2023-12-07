@@ -1,11 +1,12 @@
 import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_database/ui/firebase_animated_list.dart';
+import 'package:firebase_pagination/firebase_pagination.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:penilaian/app/core/theme/theme.dart';
 import 'package:penilaian/app/core/widgets/base/base_app_bar.dart';
 import 'package:penilaian/app/core/widgets/base/base_scaffold.dart';
+import 'package:penilaian/app/core/widgets/text/no_found_widget.dart';
 import 'package:penilaian/app/data/extensions/extensions.dart';
 import 'package:penilaian/app/data/models/kriteria_model.dart';
 import 'package:penilaian/app/data/services/local_services/selected_local_services.dart';
@@ -49,14 +50,14 @@ class _KriteriaPageState extends State<KriteriaPage> {
                 "Untuk menentukan jenis kriteria, dapat diklik bagian kotak nomor. Jika berwarna biru maka kriteria benefit dan berwarna merah untuk cost.",
           ),
           12.verticalSpacingRadius,
-          FirebaseAnimatedList(
+          RealtimeDBPagination(
             query: _kriteriaRef,
-            sort: (a, b) => (KriteriaModel.fromMap(a.value as Map<Object?, Object?>).createdAt)
-                .compareTo(KriteriaModel.fromMap(b.value as Map<Object?, Object?>).createdAt),
-            itemBuilder: (context, snapshot, anim, i) {
+            orderBy: null,
+            onEmpty: const NoFoundWidget(),
+            itemBuilder: (context, snapshot, i) {
               final data = KriteriaModel.fromMap(snapshot.value as Map<Object?, Object?>);
               return KriteriaFormCard(
-                number: i + 1,
+                number: 1,
                 name: data.name,
                 w: "${data.w}",
                 isBenefit: data.isBenefit,

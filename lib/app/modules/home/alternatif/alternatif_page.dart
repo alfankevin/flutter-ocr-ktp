@@ -1,5 +1,5 @@
 import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_database/ui/firebase_animated_list.dart';
+import 'package:firebase_pagination/firebase_pagination.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -8,7 +8,9 @@ import 'package:penilaian/app/core/helpers/string_helper.dart';
 import 'package:penilaian/app/core/theme/theme.dart';
 import 'package:penilaian/app/core/widgets/base/base_app_bar.dart';
 import 'package:penilaian/app/core/widgets/base/base_scaffold.dart';
+import 'package:penilaian/app/core/widgets/text/no_found_widget.dart';
 import 'package:penilaian/app/data/extensions/extensions.dart';
+import 'package:penilaian/app/data/models/kriteria_model.dart';
 import 'package:penilaian/app/data/models/ktp_model.dart';
 import 'package:penilaian/app/data/services/local_services/selected_local_services.dart';
 import 'package:penilaian/app/routes/app_routes.dart';
@@ -44,12 +46,23 @@ class _AlternatifPageState extends State<AlternatifPage> {
     context.showLoadingIndicator();
     final penilaian = await _penilaianRef.once();
     final kriteria = (await _kriteriaRef.once()).snapshot.children;
-    Map<String, bool> benefitAll = {};
+    if (kriteria.isEmpty) {
+      context.showSnackbar(message: "Data kriteria belum ada!", error: true, isPop: true);
+      return;
+    }
+    if (penilaian.snapshot.children.isEmpty) {
+      context.showSnackbar(
+          message: "Data alternatif per kriteria belum diisi!", error: true, isPop: true);
+      return;
+    }
+    Map<String, KriteriaModel> kriteriaAll = {};
+    num totalW = 0;
     for (var e in kriteria) {
       final data = e.value as Map<Object?, Object?>;
-      benefitAll.addAll({e.key!: data['is_benefit'] as bool});
+      final model = KriteriaModel.fromMap(data);
+      kriteriaAll.addAll({e.key!: model});
+      totalW += model.w;
     }
-    print(benefitAll);
     Map<String, Map<String, num>> matrix = {};
     Map<String, Map<String, num>> minMax = {};
     final pen = penilaian.snapshot.value as Map<Object?, Object?>;
@@ -62,12 +75,11 @@ class _AlternatifPageState extends State<AlternatifPage> {
       final data = pen[e] as Map<Object?, Object?>;
       if (kriteria.length != data.length) {
         context.showSnackbar(message: "Data penilaian belum lengkap", error: true, isPop: true);
+        return;
       }
       for (var key in data.keys) {
         final isi = data[key.toString()] as Map<Object?, Object?>;
-        matrix[e.toString()]!.addAll({
-          key.toString(): isi['nilai'] as num,
-        });
+        matrix[e.toString()]!.addAll({key.toString(): isi['nilai'] as num});
         if (isi['nilai'] as num > minMax[e.toString()]!['max']!) {
           minMax[e.toString()]!['max'] = isi['nilai'] as num;
         }
@@ -77,19 +89,50 @@ class _AlternatifPageState extends State<AlternatifPage> {
       }
     }
     print(minMax);
+    final Map<String, Map<String, dynamic>> parameter = {};
+    // Normalisasi
     for (var e in matrix.keys) {
       final data = matrix[e]!;
       for (var key in data.keys) {
         final nilai = data[key] as num;
-        if (benefitAll[key]!) {
+        if (kriteriaAll[key]!.isBenefit) {
           matrix[e]![key] = nilai / minMax[e]!['max']!;
         } else {
           print("Min => ${minMax[e]!['min']}");
           matrix[e]![key] = minMax[e]!['min']! / nilai;
         }
+        // perhitungan parameter
+        if (parameter[key] == null) {
+          parameter[key] = {
+            'g-': matrix[e]![key],
+            'g+': matrix[e]![key],
+            'i': kriteriaAll[key]!.w,
+            'beda': (matrix[e]![key]! - matrix[e]![key]!) / ((kriteriaAll[key]!.w / totalW) * 100),
+          };
+        }
+        if (matrix[e]![key]! < parameter[key]!['g-']!) {
+          parameter[key]!['g-'] = matrix[e]![key];
+        }
+        if (matrix[e]![key]! > parameter[key]!['g+']!) {
+          parameter[key]!['g+'] = matrix[e]![key];
+        }
+        parameter[key]!['beda'] = (parameter[key]!['g+']! - parameter[key]!['g-']!) /
+            ((kriteriaAll[key]!.w / totalW) * 100);
       }
     }
-    print(matrix);
+    // print(matrix);
+    // perengkingan
+    final Map<String, num> ranking = {};
+    for (var e in matrix.keys) {
+      final data = matrix[e]!;
+      ranking[e] = 0;
+      for (var key in data.keys) {
+        matrix[e]![key] = matrix[e]![key]! * parameter[key]!['beda']!;
+        ranking[e] = ranking[e]! + matrix[e]![key]!;
+      }
+      await _alternatifRef.child(e).update({'nilai': ranking[e], 'filled': true});
+    }
+    print(ranking);
     context.hideLoading();
   }
 
@@ -99,9 +142,11 @@ class _AlternatifPageState extends State<AlternatifPage> {
       appBar: const BaseAppBar(
         title: "Alternatif",
       ),
-      body: FirebaseAnimatedList(
+      body: RealtimeDBPagination(
         query: _alternatifRef,
-        itemBuilder: (context, snapshot, anim, i) {
+        orderBy: null,
+        onEmpty: const NoFoundWidget(),
+        itemBuilder: (context, snapshot, i) {
           final data = KtpModel.fromMap(snapshot.value as Map<Object?, Object?>);
           filledAll &= data.filled;
           return AlternatifCard(
@@ -144,7 +189,7 @@ class _AlternatifPageState extends State<AlternatifPage> {
                   minimumSize: Size(200.r, 48.r),
                 ),
                 onPressed: () {
-                  context.to.pushNamed(AppRoutes.ktpScanHome);
+                  context.to.pushNamed(AppRoutes.ktpScanHome).then((value) => setState(() {}));
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,

@@ -1,13 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_database/ui/firebase_animated_list.dart';
+import 'package:firebase_pagination/firebase_pagination.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_modular/flutter_modular.dart' show Modular;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:penilaian/app/blocs/session/session_cubit.dart';
 import 'package:penilaian/app/core/theme/theme.dart';
 import 'package:penilaian/app/core/widgets/base/base_app_bar.dart';
 import 'package:penilaian/app/core/widgets/base/base_scaffold.dart';
+import 'package:penilaian/app/core/widgets/text/no_found_widget.dart';
 import 'package:penilaian/app/data/extensions/extensions.dart';
 import 'package:penilaian/app/data/models/data_model.dart';
 import 'package:penilaian/app/data/services/local_services/selected_local_services.dart';
@@ -52,11 +54,11 @@ class _HomePageState extends State<HomePage> {
           ).pOnly(right: 12),
         ],
       ),
-      body: FirebaseAnimatedList(
-        sort: (a, b) => (DataModel.fromMap(a.value as Map<Object?, Object?>).createdAt)
-            .compareTo(DataModel.fromMap(b.value as Map<Object?, Object?>).createdAt),
+      body: RealtimeDBPagination(
         query: _penilaianRef,
-        itemBuilder: (context, snapshot, anim, i) {
+        orderBy: null,
+        onEmpty: const NoFoundWidget(),
+        itemBuilder: (context, snapshot, i) {
           final data = DataModel.fromMap(snapshot.value as Map<Object?, Object?>);
           return HomeCard(
             title: data.name,

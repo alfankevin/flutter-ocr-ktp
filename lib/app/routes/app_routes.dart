@@ -4,6 +4,7 @@ class AppRoutes {
   static const kriteriaHome = '/home/kriteria';
   static const alternatifHome = '/home/alternatif';
   static const penilaianHome = '/home/penilaian';
+  static const winnerHome = '/home/winner';
   static const ktpScanHome = '/home/ktp-scan';
   static const ktpResultHome = '/home/ktp-result';
   // auth module

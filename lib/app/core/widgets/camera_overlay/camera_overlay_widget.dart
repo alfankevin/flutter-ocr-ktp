@@ -114,30 +114,41 @@ class _FlutterCameraOverlayState extends State<CameraOverlayWidget> {
           Align(
             alignment: Alignment.bottomCenter,
             child: Material(
-                color: Colors.transparent,
-                child: Container(
-                    decoration: const BoxDecoration(
-                      color: Colors.black12,
-                      shape: BoxShape.circle,
-                    ),
-                    margin: const EdgeInsets.all(25),
-                    child: IconButton(
-                      enableFeedback: true,
-                      color: Colors.white,
-                      onPressed: () async {
-                        for (int i = 10; i > 0; i--) {
-                          await HapticFeedback.vibrate();
-                        }
+              color: Colors.transparent,
+              child: Container(
+                decoration: const BoxDecoration(
+                  color: Colors.black12,
+                  shape: BoxShape.circle,
+                ),
+                margin: const EdgeInsets.all(25),
+                child: IconButton(
+                  enableFeedback: true,
+                  color: Colors.white,
+                  onPressed: () async {
+                    for (int i = 10; i > 0; i--) {
+                      await HapticFeedback.vibrate();
+                    }
 
-                        XFile file = await controller.takePicture();
-                        widget.onCapture(file);
-                        controller.pausePreview();
-                      },
-                      icon: const Icon(
-                        Icons.camera,
-                      ),
-                      iconSize: 72,
-                    ))),
+                    if (!controller.value.isInitialized) return;
+                    if (controller.value.isTakingPicture) return;
+                    if (controller.value.isPreviewPaused) {
+                      await controller.resumePreview();
+                      setState(() {});
+                      return;
+                    }
+
+                    XFile file = await controller.takePicture();
+                    await controller.pausePreview();
+                    widget.onCapture(file);
+                    setState(() {});
+                  },
+                  icon: Icon(
+                    controller.value.isPreviewPaused ? Icons.play_circle_rounded : Icons.camera,
+                  ),
+                  iconSize: 72,
+                ),
+              ),
+            ),
           ),
       ],
     );

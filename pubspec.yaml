@@ -68,6 +68,7 @@ dependencies:
   google_sign_in: ^6.1.6
   firebase_database: ^10.3.6
   firebase_storage: ^11.5.3
+  firebase_pagination: ^3.0.1
 
   permission_handler: ^11.1.0
   connectivity_plus: ^5.0.2

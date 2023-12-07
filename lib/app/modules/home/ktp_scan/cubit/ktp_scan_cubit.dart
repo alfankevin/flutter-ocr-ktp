@@ -39,26 +39,7 @@ class KtpScanCubit extends Cubit<KtpScanState> {
 
     final inputImage = InputImage.fromFilePath(imagePath);
 
-    final faces = await faceDetector.processImage(inputImage);
-    if (faces.isNotEmpty) {
-      final face = faces.first.boundingBox;
-      img.Command cmd = img.Command()
-        ..decodeImageFile(imagePath)
-        ..copyCrop(
-            x: face.left.toInt(),
-            y: face.top.toInt(),
-            width: face.width.toInt(),
-            height: face.height.toInt())
-        ..writeToFile(savePath);
-
-      await cmd.executeThread();
-    } else {
-      emit(KtpScanError('Wajah tidak ditemukan'));
-      return;
-    }
-
-    RecognizedText recognizedText =
-        await textRecognizer.processImage(inputImage);
+    RecognizedText recognizedText = await textRecognizer.processImage(inputImage);
     final List<String> dataText = [];
     for (var item in recognizedText.blocks) {
       for (var line in item.lines) {
@@ -69,16 +50,32 @@ class KtpScanCubit extends Cubit<KtpScanState> {
     for (var i = 0; i < dataText.length; i++) {
       // print("--> ${dataText[i]} <--");
       NIKModel r = await NIKValidator.instance.parse(nik: dataText[i]);
-      textRecognizer.close();
-      faceDetector.close();
       if (r.valid == true) {
+        final faces = await faceDetector.processImage(inputImage);
+        if (faces.isNotEmpty) {
+          final face = faces.first.boundingBox;
+          img.Command cmd = img.Command()
+            ..decodeImageFile(imagePath)
+            ..copyCrop(
+                x: face.left.toInt(),
+                y: face.top.toInt(),
+                width: face.width.toInt(),
+                height: face.height.toInt())
+            ..writeToFile(savePath);
+
+          await cmd.executeThread();
+        } else {
+          emit(KtpScanError('Wajah tidak ditemukan'));
+          return;
+        }
         final ktp = KtpModel.fromScan(r);
         String name = dataText[i + 1].replaceAll(':', '');
-        emit(KtpScanLoaded(
-            ktp.copyWith(name: () => name, photo: () => savePath)));
+        emit(KtpScanLoaded(ktp.copyWith(name: () => name, photo: () => savePath)));
         return;
       }
     }
+    textRecognizer.close();
+    faceDetector.close();
 
     emit(KtpScanError('NIK tidak ditemukan'));
   }

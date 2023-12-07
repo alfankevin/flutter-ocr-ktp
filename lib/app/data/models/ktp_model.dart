@@ -54,6 +54,9 @@ class KtpModel extends Equatable {
   /// penilaian sudah terisi
   final bool filled;
 
+  /// nilai hasil penilaian
+  final num nilai;
+
   const KtpModel({
     this.nik,
     this.name,
@@ -72,6 +75,7 @@ class KtpModel extends Equatable {
     this.zodiac,
     this.photo,
     this.filled = false,
+    this.nilai = 0,
   });
 
   KtpModel copyWith({
@@ -93,6 +97,7 @@ class KtpModel extends Equatable {
     ValueGetter<bool?>? valid,
     ValueGetter<String?>? photo,
     ValueGetter<bool?>? filled,
+    num? nilai,
   }) {
     return KtpModel(
       nik: nik?.call() ?? this.nik,
@@ -112,6 +117,7 @@ class KtpModel extends Equatable {
       zodiac: zodiac?.call() ?? this.zodiac,
       photo: photo?.call() ?? this.photo,
       filled: filled?.call() ?? this.filled,
+      nilai: nilai ?? this.nilai,
     );
   }
 
@@ -134,6 +140,7 @@ class KtpModel extends Equatable {
       'zodiac': zodiac,
       'photo': photo,
       'filled': filled,
+      'nilai': nilai,
       'created_at': DateTime.now().toIso8601String(),
     };
   }
@@ -155,6 +162,7 @@ class KtpModel extends Equatable {
       uniqueCode: item.uniqueCode,
       zodiac: item.zodiac,
       filled: false,
+      nilai: 0,
     );
   }
 
@@ -177,6 +185,7 @@ class KtpModel extends Equatable {
       zodiac: map['zodiac'],
       photo: map['photo'],
       filled: map['filled'] ?? false,
+      nilai: map['nilai'] ?? 0,
     );
   }
 
@@ -200,6 +209,7 @@ class KtpModel extends Equatable {
       zodiac,
       photo,
       filled,
+      nilai,
     ];
   }
 }

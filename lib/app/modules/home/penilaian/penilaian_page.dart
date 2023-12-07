@@ -1,10 +1,11 @@
 import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_database/ui/firebase_animated_list.dart';
+import 'package:firebase_pagination/firebase_pagination.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:penilaian/app/core/widgets/base/base_app_bar.dart';
 import 'package:penilaian/app/core/widgets/base/base_loading_indicator.dart';
 import 'package:penilaian/app/core/widgets/base/base_scaffold.dart';
+import 'package:penilaian/app/core/widgets/text/no_found_widget.dart';
 import 'package:penilaian/app/data/models/kriteria_model.dart';
 import 'package:penilaian/app/data/models/penilaian_model.dart';
 import 'package:penilaian/app/data/services/local_services/selected_local_services.dart';
@@ -55,9 +56,11 @@ class _PenilaianPageState extends State<PenilaianPage> {
                   inputs[key as String] = val['nilai'] ?? 0;
                 });
               }
-              return FirebaseAnimatedList(
-                query: _kriteriaRef.orderByChild('created_at'),
-                itemBuilder: (context, snap, animation, index) {
+              return RealtimeDBPagination(
+                query: _kriteriaRef,
+                orderBy: null,
+                onEmpty: const NoFoundWidget(),
+                itemBuilder: (context, snap, i) {
                   final data = KriteriaModel.fromMap(snap.value as Map<Object?, Object?>);
                   return PenilaianFormCard(
                     label: data.name,

@@ -57,9 +57,12 @@ class _AppWidgetState extends State<AppWidget> {
                 // Todo: rollbar
               }
 
+              if (state is SessionNotReadyState) {
+                context.to.pushNamedAndRemoveUntil(AppRoutes.login, (route) => false);
+              }
+
               if (state is SessionUnAuthorizedTokenState) {
                 sessionBloc.deleteSession();
-                context.to.pushNamedAndRemoveUntil(AppRoutes.login, (route) => false);
               }
             },
           ),
