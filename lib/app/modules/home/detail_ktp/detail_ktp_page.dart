@@ -60,18 +60,18 @@ class _DetailKtpPageState extends State<DetailKtpPage> {
     final uploadTask = storageRef.child("$key.jpg");
 
     try {
-      final hasil = await uploadTask.putFile(file, metadata);
-      final url = await hasil.ref.getDownloadURL();
+      if (!filePath.contains('firebasestorage.googleapis.com')) {
+        final hasil = await uploadTask.putFile(file, metadata);
+        final url = await hasil.ref.getDownloadURL();
+        model = model.copyWith(photo: () => url);
+      }
 
-      model = model.copyWith(photo: () => url);
       await _alternatifRef.child(key).set(model.toMap());
       await local.removeSelectedEdit();
-    } on firebase_core.FirebaseException catch (e) {
-      context.showSnackbar(
-          message: e.message ?? "Terjadi kesalahan", error: true, isPop: true);
-    } finally {
       Modular.to.popUntil((p0) => p0.settings.name == AppRoutes.alternatifHome);
       context.showSnackbar(message: "Berhasil Membuat Alternatif!");
+    } on firebase_core.FirebaseException catch (e) {
+      context.showSnackbar(message: e.message ?? "Terjadi kesalahan", error: true, isPop: true);
     }
   }
 
@@ -95,8 +95,7 @@ class _DetailKtpPageState extends State<DetailKtpPage> {
               padding: const EdgeInsets.all(10),
               width: context.width,
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: Colors.black)),
+                  borderRadius: BorderRadius.circular(8), border: Border.all(color: Colors.black)),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

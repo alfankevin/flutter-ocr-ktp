@@ -32,6 +32,8 @@ extension NumExtensionX on num {
 
   EdgeInsets get all => EdgeInsets.all(toDouble().r);
 
+  num get round3 => num.parse((toDouble()).toStringAsFixed(3));
+
   /// half vertical and full horizontal
   EdgeInsets get allHalfV => EdgeInsets.symmetric(
         horizontal: toDouble().r,
@@ -52,10 +54,8 @@ extension NumExtensionX on num {
 
   String get generateRandomString {
     var r = Random();
-    const chars =
-        'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
-    return List.generate(toInt(), (index) => chars[r.nextInt(chars.length)])
-        .join();
+    const chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+    return List.generate(toInt(), (index) => chars[r.nextInt(chars.length)]).join();
   }
 
   String get randColor {
@@ -63,4 +63,8 @@ extension NumExtensionX on num {
     const chars = '0123456789ABC';
     return '#${List.generate(toInt(), (index) => chars[r.nextInt(chars.length)]).join()}';
   }
+}
+
+extension DoubleExtensionX on double {
+  double get round3 => double.parse((toDouble()).toStringAsFixed(3));
 }

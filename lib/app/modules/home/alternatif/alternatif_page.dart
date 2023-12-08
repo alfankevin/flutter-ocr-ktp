@@ -43,7 +43,7 @@ class _AlternatifPageState extends State<AlternatifPage> {
 
   Future<void> penilaian() async {
     context.showLoadingIndicator();
-    final penilaian = await _penilaianRef.once();
+    final penilaian = await _penilaianRef.orderByChild('created_at').once();
     final kriteria = (await _kriteriaRef.once()).snapshot.children;
     if (kriteria.isEmpty) {
       context.showSnackbar(message: "Data kriteria belum ada!", error: true, isPop: true);
@@ -56,38 +56,41 @@ class _AlternatifPageState extends State<AlternatifPage> {
     }
     Map<String, KriteriaModel> kriteriaAll = {};
     num totalW = 0;
+    Map<String, Map<String, num>> minMax = {};
     for (var e in kriteria) {
       final data = e.value as Map<Object?, Object?>;
       final model = KriteriaModel.fromMap(data);
       kriteriaAll.addAll({e.key!: model});
       totalW += model.w;
-    }
-    Map<String, Map<String, num>> matrix = {};
-    Map<String, Map<String, num>> minMax = {};
-    final pen = penilaian.snapshot.value as Map<Object?, Object?>;
-    for (var e in pen.keys) {
-      matrix[e.toString()] = {};
-      minMax[e.toString()] = {
+      minMax[e.key.toString()] = {
         'min': 100000,
         'max': 0,
       };
+    }
+    print(minMax);
+    Map<String, Map<String, num>> matrix = {};
+    final pen = penilaian.snapshot.value as Map<Object?, Object?>;
+    for (var e in pen.keys) {
+      matrix[e.toString()] = {};
       final data = pen[e] as Map<Object?, Object?>;
       if (kriteria.length != data.length) {
         context.showSnackbar(message: "Data penilaian belum lengkap", error: true, isPop: true);
         return;
       }
+      List<num> kr = [];
       for (var key in data.keys) {
         final isi = data[key.toString()] as Map<Object?, Object?>;
-        matrix[e.toString()]!.addAll({key.toString(): isi['nilai'] as num});
-        if (isi['nilai'] as num > minMax[e.toString()]!['max']!) {
-          minMax[e.toString()]!['max'] = isi['nilai'] as num;
+        matrix[e.toString()]!.addAll({isi['kriteria_id'].toString(): (isi['nilai'] as num).round3});
+        kr.add(isi['nilai'] as num);
+        if (isi['nilai'] as num > minMax[key.toString()]!['max']!) {
+          minMax[key.toString()]!['max'] = isi['nilai'] as num;
         }
-        if (isi['nilai'] as num < minMax[e.toString()]!['min']!) {
-          minMax[e.toString()]!['min'] = isi['nilai'] as num;
+        if (isi['nilai'] as num < minMax[key.toString()]!['min']!) {
+          minMax[key.toString()]!['min'] = isi['nilai'] as num;
         }
       }
+      print(kr);
     }
-    print(minMax);
     final Map<String, Map<String, dynamic>> parameter = {};
     // Normalisasi
     for (var e in matrix.keys) {
@@ -95,18 +98,19 @@ class _AlternatifPageState extends State<AlternatifPage> {
       for (var key in data.keys) {
         final nilai = data[key] as num;
         if (kriteriaAll[key]!.isBenefit) {
-          matrix[e]![key] = nilai / minMax[e]!['max']!;
+          matrix[e]![key] = (nilai / minMax[key]!['max']!).round3;
         } else {
-          print("Min => ${minMax[e]!['min']}");
-          matrix[e]![key] = minMax[e]!['min']! / nilai;
+          // print("Min => ${minMax[e]!['min']}");
+          matrix[e]![key] = (minMax[key]!['min']! / nilai).round3;
         }
         // perhitungan parameter
         if (parameter[key] == null) {
+          num w = (kriteriaAll[key]!.w / totalW) * 100;
           parameter[key] = {
             'g-': matrix[e]![key],
             'g+': matrix[e]![key],
-            'i': kriteriaAll[key]!.w,
-            'beda': (matrix[e]![key]! - matrix[e]![key]!) / ((kriteriaAll[key]!.w / totalW) * 100),
+            'i': w,
+            'beda': w,
           };
         }
         if (matrix[e]![key]! < parameter[key]!['g-']!) {
@@ -115,23 +119,27 @@ class _AlternatifPageState extends State<AlternatifPage> {
         if (matrix[e]![key]! > parameter[key]!['g+']!) {
           parameter[key]!['g+'] = matrix[e]![key];
         }
-        parameter[key]!['beda'] = (parameter[key]!['g+']! - parameter[key]!['g-']!) /
-            ((kriteriaAll[key]!.w / totalW) * 100);
       }
     }
     // print(matrix);
+    for (var e in parameter.keys) {
+      num beda = (parameter[e]!['g+']! - parameter[e]!['g-']!) / parameter[e]!['i']!;
+      parameter[e]!['beda'] = beda.round3;
+      print("$e => ${parameter[e]}");
+    }
+    // print(parameter);
     // perengkingan
     final Map<String, num> ranking = {};
     for (var e in matrix.keys) {
       final data = matrix[e]!;
       ranking[e] = 0;
       for (var key in data.keys) {
-        matrix[e]![key] = matrix[e]![key]! * parameter[key]!['beda']!;
+        matrix[e]![key] = (matrix[e]![key]! * parameter[key]!['beda']!).round3;
         ranking[e] = ranking[e]! + matrix[e]![key]!;
       }
-      await _alternatifRef.child(e).update({'nilai': ranking[e], 'filled': true});
+      await _alternatifRef.child(e).update({'nilai': ranking[e]!.round3, 'filled': true});
     }
-    print(ranking);
+    // print(ranking);
     context.hideLoading();
     context.to.pushNamed(AppRoutes.winnerHome);
   }
@@ -155,6 +163,7 @@ class _AlternatifPageState extends State<AlternatifPage> {
             data: data,
             onDelete: () async {
               await _alternatifRef.child(snapshot.key!).remove();
+              await _penilaianRef.child(snapshot.key!).remove();
               await _storageRef.child('${snapshot.key!}.jpg').delete();
             },
             onEdit: () async {
@@ -162,6 +171,7 @@ class _AlternatifPageState extends State<AlternatifPage> {
               Modular.to.pushNamed(AppRoutes.ktpResultHome, arguments: data);
             },
             onTap: () async {
+              print(snapshot.key!);
               await Modular.to.pushNamed(AppRoutes.penilaianHome, arguments: snapshot.key!);
               final pen = await _penilaianRef.child(snapshot.key!).once();
               final kriteria = await _kriteriaRef.once();

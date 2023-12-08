@@ -72,12 +72,12 @@ class _WinnerPageState extends State<WinnerPage> {
             separatorBuilder: (context, index) => 12.verticalSpacingRadius,
             itemBuilder: (context, i) {
               return SizedBox(
-                height: 64.r,
+                height: 75.r,
                 width: 1.sw,
                 child: Row(
                   children: [
                     Container(
-                      height: 64.r,
+                      height: 75.r,
                       width: 44.r,
                       decoration: BoxDecoration(
                         color: ColorTheme.primary,
@@ -97,7 +97,7 @@ class _WinnerPageState extends State<WinnerPage> {
                       fit: StackFit.loose,
                       children: [
                         Container(
-                          height: 64.r,
+                          height: 75.r,
                           width: 24.r,
                           margin: EdgeInsets.only(left: 22.r),
                           decoration: const BoxDecoration(color: ColorTheme.primary),
@@ -115,7 +115,7 @@ class _WinnerPageState extends State<WinnerPage> {
                     ),
                     Expanded(
                       child: Container(
-                        height: 64.r,
+                        height: 75.r,
                         padding: 10.all,
                         decoration: const BoxDecoration(
                           color: ColorTheme.primary,

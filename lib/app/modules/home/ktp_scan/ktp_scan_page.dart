@@ -24,6 +24,12 @@ class _KtpScanPageState extends State<KtpScanPage> {
   final storage = Modular.get<StorageInterface>();
 
   @override
+  void initState() {
+    super.initState();
+    Modular.get<PermissionInterface>().storage();
+  }
+
+  @override
   void dispose() {
     bloc.close();
     super.dispose();

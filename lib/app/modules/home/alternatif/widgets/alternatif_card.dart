@@ -53,12 +53,12 @@ class AlternatifCard extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         child: SizedBox(
-          height: 64.r,
+          height: 75.r,
           width: 1.sw,
           child: Row(
             children: [
               Container(
-                height: 64.r,
+                height: 75.r,
                 width: 44.r,
                 decoration: BoxDecoration(
                   color: ColorTheme.primary,
@@ -78,13 +78,13 @@ class AlternatifCard extends StatelessWidget {
                 fit: StackFit.loose,
                 children: [
                   Container(
-                    height: 64.r,
+                    height: 75.r,
                     width: 24.r,
                     margin: EdgeInsets.only(left: 22.r),
                     decoration: const BoxDecoration(color: ColorTheme.primary),
                   ),
                   Positioned(
-                    top: 9.r,
+                    top: 12.r,
                     left: 0,
                     child: ImageWithLoader(
                       imageUrl: data.photo ?? "https://picsum.photos/200/300",
@@ -96,7 +96,7 @@ class AlternatifCard extends StatelessWidget {
               ),
               Expanded(
                 child: Container(
-                  height: 64.r,
+                  height: 75.r,
                   padding: 10.all,
                   decoration: const BoxDecoration(
                     color: ColorTheme.primary,
