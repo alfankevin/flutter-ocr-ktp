@@ -44,7 +44,7 @@ class AlternatifCard extends StatelessWidget {
       background: Container(
         color: ColorTheme.red,
         alignment: Alignment.centerRight,
-        padding: EdgeInsets.only(right: 16.w),
+        // padding: EdgeInsets.only(right: 16.w),
         child: const Icon(
           Icons.delete,
           color: ColorTheme.white,
@@ -147,6 +147,6 @@ class AlternatifCard extends StatelessWidget {
           ),
         ),
       ),
-    ).pOnly(bottom: 12);
+    );
   }
 }

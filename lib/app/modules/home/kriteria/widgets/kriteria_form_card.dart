@@ -55,8 +55,7 @@ class _KriteriaFormCardState extends State<KriteriaFormCard> {
         final snackbarController = ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Yakin Ingin Hapus Kriteria ${widget.number}?'),
-            action:
-                SnackBarAction(label: 'Hapus', onPressed: () => delete = true),
+            action: SnackBarAction(label: 'Hapus', onPressed: () => delete = true),
           ),
         );
         await snackbarController.closed;
@@ -99,7 +98,7 @@ class _KriteriaFormCardState extends State<KriteriaFormCard> {
                 controller: nameCont,
                 onSubmitted: (value) {
                   if (nameCont.text.isNotEmpty) {
-                    final clear = wCont.text.replaceAll(RegExp(r'[^0-9]'), '');
+                    final clear = wCont.text.replaceAll(RegExp(r'[^0-9.]'), '');
                     wCont.text = clear;
                     widget.onChanged(nameCont.text, clear);
                   }
@@ -116,13 +115,13 @@ class _KriteriaFormCardState extends State<KriteriaFormCard> {
                 style: AppStyles.text16Px.copyWith(color: ColorTheme.black),
                 onChanged: (_) {
                   if (wCont.text.isNotEmpty) {
-                    final clear = wCont.text.replaceAll(RegExp(r'[^0-9]'), '');
+                    final clear = wCont.text.replaceAll(RegExp(r'[^0-9.]'), '');
                     wCont.text = clear;
                   }
                 },
                 onSubmitted: (value) {
                   if (wCont.text.isNotEmpty && nameCont.text.isNotEmpty) {
-                    final clear = wCont.text.replaceAll(RegExp(r'[^0-9]'), '');
+                    final clear = wCont.text.replaceAll(RegExp(r'[^0-9.]'), '');
                     wCont.text = clear;
                     widget.onChanged(nameCont.text, clear);
                   }

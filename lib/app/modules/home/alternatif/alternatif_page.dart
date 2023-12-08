@@ -30,7 +30,6 @@ class _AlternatifPageState extends State<AlternatifPage> {
   late final DatabaseReference _kriteriaRef;
   late final Reference _storageRef;
   late final String _refKey;
-  bool filledAll = true;
 
   @override
   void initState() {
@@ -134,6 +133,7 @@ class _AlternatifPageState extends State<AlternatifPage> {
     }
     print(ranking);
     context.hideLoading();
+    context.to.pushNamed(AppRoutes.winnerHome);
   }
 
   @override
@@ -143,12 +143,13 @@ class _AlternatifPageState extends State<AlternatifPage> {
         title: "Alternatif",
       ),
       body: RealtimeDBPagination(
-        query: _alternatifRef,
+        query: _alternatifRef.orderByChild('created_at'),
         orderBy: null,
+        isLive: true,
         onEmpty: const NoFoundWidget(),
+        separatorBuilder: (p0, p1) => 12.verticalSpacingRadius,
         itemBuilder: (context, snapshot, i) {
           final data = KtpModel.fromMap(snapshot.value as Map<Object?, Object?>);
-          filledAll &= data.filled;
           return AlternatifCard(
             number: i + 1,
             data: data,
@@ -216,11 +217,9 @@ class _AlternatifPageState extends State<AlternatifPage> {
                   textStyle: AppStyles.text16PxMedium,
                   minimumSize: Size(200.r, 48.r),
                 ),
-                onPressed: filledAll
-                    ? () {
-                        penilaian();
-                      }
-                    : null,
+                onPressed: () {
+                  penilaian();
+                },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

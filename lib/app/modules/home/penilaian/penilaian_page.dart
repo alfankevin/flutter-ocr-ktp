@@ -57,7 +57,7 @@ class _PenilaianPageState extends State<PenilaianPage> {
                 });
               }
               return RealtimeDBPagination(
-                query: _kriteriaRef,
+                query: _kriteriaRef.orderByChild('created_at'),
                 orderBy: null,
                 onEmpty: const NoFoundWidget(),
                 itemBuilder: (context, snap, i) {

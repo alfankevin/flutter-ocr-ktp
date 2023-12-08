@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart' show Modular;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:penilaian/app/blocs/session/session_cubit.dart';
+import 'package:penilaian/app/core/permission/permission.dart';
 import 'package:penilaian/app/core/theme/theme.dart';
 import 'package:penilaian/app/core/widgets/base/base_app_bar.dart';
 import 'package:penilaian/app/core/widgets/base/base_scaffold.dart';
@@ -36,6 +37,12 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     user = FirebaseAuth.instance.currentUser!;
     _penilaianRef = FirebaseDatabase.instance.ref('data/${user.uid}');
+    permission();
+  }
+
+  permission() async {
+    await Modular.get<PermissionInterface>().camera();
+    await Modular.get<PermissionInterface>().storage();
   }
 
   @override
@@ -55,9 +62,10 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       body: RealtimeDBPagination(
-        query: _penilaianRef,
+        query: _penilaianRef.orderByChild('created_at'),
         orderBy: null,
         onEmpty: const NoFoundWidget(),
+        isLive: true,
         itemBuilder: (context, snapshot, i) {
           final data = DataModel.fromMap(snapshot.value as Map<Object?, Object?>);
           return HomeCard(
@@ -161,7 +169,7 @@ class _HomePageState extends State<HomePage> {
                   ElevatedButton(
                     onPressed: () {
                       final data = DataModel.initial(nameCont.text, textCont.text, 6.randColor);
-                      _penilaianRef.push().set(data.toMap()).then((value) => Modular.to.pop());
+                      _penilaianRef.push().set(data.toMap()).then((value) => context.to.pop());
                     },
                     child: const Row(
                       mainAxisAlignment: MainAxisAlignment.center,

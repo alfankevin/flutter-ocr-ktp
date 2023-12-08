@@ -51,13 +51,14 @@ class _KriteriaPageState extends State<KriteriaPage> {
           ),
           12.verticalSpacingRadius,
           RealtimeDBPagination(
-            query: _kriteriaRef,
+            query: _kriteriaRef.orderByChild('created_at'),
             orderBy: null,
+            isLive: true,
             onEmpty: const NoFoundWidget(),
             itemBuilder: (context, snapshot, i) {
               final data = KriteriaModel.fromMap(snapshot.value as Map<Object?, Object?>);
               return KriteriaFormCard(
-                number: 1,
+                number: i + 1,
                 name: data.name,
                 w: "${data.w}",
                 isBenefit: data.isBenefit,
