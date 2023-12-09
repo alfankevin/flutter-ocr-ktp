@@ -29,15 +29,15 @@ class WinnerPage extends StatefulWidget {
 
 class _WinnerPageState extends State<WinnerPage> {
   late final CollectionReference _alternatifRef;
-  late final CollectionReference _dataRef;
-  late String _refKey;
+  late final DocumentReference _dataRef;
+  late List<String> _refKey;
 
   @override
   void initState() {
     super.initState();
-    _refKey = Modular.get<SelectedLocalServices>().selected;
-    _alternatifRef = FirebaseFirestore.instance.collection('$_refKey/alternatif');
-    _dataRef = FirebaseFirestore.instance.collection(_refKey);
+    _refKey = Modular.get<SelectedLocalServices>().selected.split('/');
+    _alternatifRef = FirebaseFirestore.instance.collection("${_refKey.join('/')}/alternatif");
+    _dataRef = FirebaseFirestore.instance.collection(_refKey[1]).doc(_refKey.last);
   }
 
   @override
@@ -168,14 +168,13 @@ class _WinnerPageState extends State<WinnerPage> {
         child: ElevatedButton(
           onPressed: () {
             _dataRef.get().then((value) async {
-              final data = value.docChanges.single.doc.data() as Map<Object?, dynamic>;
+              final data = value.data() as Map<Object?, dynamic>;
               final model = DataModel.fromMap(data);
-              print(data['alternatif'].values);
               final List<KtpModel> list = [];
-              for (var e in data["alternatif"].values) {
-                list.add(KtpModel.fromMap(e as Map<Object?, Object?>));
+              final alternatif = await _alternatifRef.orderBy('nilai', descending: true).get();
+              for (var e in alternatif.docs) {
+                list.add(KtpModel.fromMap(e.data() as Map<Object?, Object?>));
               }
-              list.sort((a, b) => b.nilai.compareTo(a.nilai));
               // print(list);
               final bytes = await PdfHelper.generateDocument(PdfPageFormat.a4, model, list);
               final appDocPath = (await getApplicationDocumentsDirectory()).path;
@@ -184,7 +183,7 @@ class _WinnerPageState extends State<WinnerPage> {
               await file.writeAsBytes(bytes);
               final rest = await Share.shareXFiles([XFile(file.path)], text: 'Simpan PDF');
               if (rest.status == ShareResultStatus.dismissed) {
-                // await OpenFile.open(file.path);
+                //   // await OpenFile.open(file.path);
                 await OpenFilex.open(file.path);
               }
             });
@@ -193,10 +192,10 @@ class _WinnerPageState extends State<WinnerPage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.print),
+              const Icon(Icons.share_rounded),
               6.horizontalSpaceRadius,
               Text(
-                "Unduh PDF",
+                "Share PDF",
                 style: AppStyles.text16PxBold.copyWith(color: ColorTheme.white),
               ),
             ],

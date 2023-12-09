@@ -12,6 +12,7 @@ import 'package:penilaian/app/core/widgets/text/no_found_widget.dart';
 import 'package:penilaian/app/data/extensions/extensions.dart';
 import 'package:penilaian/app/data/models/kriteria_model.dart';
 import 'package:penilaian/app/data/models/ktp_model.dart';
+import 'package:penilaian/app/data/models/penilaian_model.dart';
 import 'package:penilaian/app/data/services/local_services/selected_local_services.dart';
 import 'package:penilaian/app/routes/app_routes.dart';
 
@@ -36,20 +37,28 @@ class _AlternatifPageState extends State<AlternatifPage> {
     super.initState();
     _refKey = Modular.get<SelectedLocalServices>().selected;
     _alternatifRef = FirebaseFirestore.instance.collection('$_refKey/alternatif');
-    _penilaianRef = FirebaseFirestore.instance.collection('$_refKey/penilaian');
+    _penilaianRef = FirebaseFirestore.instance.collection('$_refKey/nilai');
     _kriteriaRef = FirebaseFirestore.instance.collection('$_refKey/kriteria');
     _storageRef = FirebaseStorage.instance.ref(StringHelper.imageStorage);
   }
 
   Future<void> penilaian() async {
     context.showLoadingIndicator();
-    final penilaian = await _penilaianRef.orderBy('created_at').get();
+    final penilaian = await _penilaianRef.get();
     final kriteria = (await _kriteriaRef.get()).docs;
+    final alternatifCount = (await _alternatifRef.count().get()).count;
     if (kriteria.isEmpty) {
       context.showSnackbar(message: "Data kriteria belum ada!", error: true, isPop: true);
       return;
     }
     if (penilaian.docs.isEmpty) {
+      context.showSnackbar(
+          message: "Data alternatif per kriteria belum diisi!", error: true, isPop: true);
+      return;
+    }
+    print(
+        "kriteria: $alternatifCount / penilaian: ${penilaian.docs.length} = ${penilaian.docs.length ~/ kriteria.length}");
+    if (alternatifCount != penilaian.docs.length ~/ kriteria.length) {
       context.showSnackbar(
           message: "Data alternatif per kriteria belum diisi!", error: true, isPop: true);
       return;
@@ -71,25 +80,24 @@ class _AlternatifPageState extends State<AlternatifPage> {
     Map<String, Map<String, num>> matrix = {};
     final pen = penilaian.docs;
     for (var e in pen) {
-      matrix[e.id] = {};
-      final data = e.data() as Map<Object?, Object?>;
-      if (kriteria.length != data.length) {
-        context.showSnackbar(message: "Data penilaian belum lengkap", error: true, isPop: true);
-        return;
+      final data = PenilaianModel.fromJson(e.data() as Map<String, Object?>);
+      if (matrix[data.alternatifId] == null) {
+        matrix[data.alternatifId] = {};
       }
-      List<num> kr = [];
+      matrix[data.alternatifId]!.addAll({data.kriteriaId: data.nilai.round3});
+    }
+    // cari min max
+    for (var e in matrix.keys) {
+      final data = matrix[e]!;
       for (var key in data.keys) {
-        final isi = data[key.toString()] as Map<Object?, Object?>;
-        matrix[e.toString()]!.addAll({isi['kriteria_id'].toString(): (isi['nilai'] as num).round3});
-        kr.add(isi['nilai'] as num);
-        if (isi['nilai'] as num > minMax[key.toString()]!['max']!) {
-          minMax[key.toString()]!['max'] = isi['nilai'] as num;
+        final nilai = data[key] as num;
+        if (nilai < minMax[key]!['min']!) {
+          minMax[key]!['min'] = nilai;
         }
-        if (isi['nilai'] as num < minMax[key.toString()]!['min']!) {
-          minMax[key.toString()]!['min'] = isi['nilai'] as num;
+        if (nilai > minMax[key]!['max']!) {
+          minMax[key]!['max'] = nilai;
         }
       }
-      print(kr);
     }
     final Map<String, Map<String, dynamic>> parameter = {};
     // Normalisasi
@@ -100,7 +108,6 @@ class _AlternatifPageState extends State<AlternatifPage> {
         if (kriteriaAll[key]!.isBenefit) {
           matrix[e]![key] = (nilai / minMax[key]!['max']!).round3;
         } else {
-          // print("Min => ${minMax[e]!['min']}");
           matrix[e]![key] = (minMax[key]!['min']! / nilai).round3;
         }
         // perhitungan parameter
@@ -170,11 +177,11 @@ class _AlternatifPageState extends State<AlternatifPage> {
               Modular.to.pushNamed(AppRoutes.ktpResultHome, arguments: data);
             },
             onTap: () async {
-              print(snapshot.id);
               await Modular.to.pushNamed(AppRoutes.penilaianHome, arguments: snapshot.id);
-              final pen = await _penilaianRef.doc(snapshot.id).collection('/').get();
-              final kriteria = await _kriteriaRef.get();
-              bool filled = pen.docs.length == kriteria.docs.length;
+              final pen =
+                  await _penilaianRef.where('alternatif_id', isEqualTo: snapshot.id).count().get();
+              final kriteria = await _kriteriaRef.count().get();
+              bool filled = pen.count == kriteria.count;
               await _alternatifRef.doc(snapshot.id).update({'filled': filled});
             },
           );

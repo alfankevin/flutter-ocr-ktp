@@ -129,7 +129,7 @@ class _HomePageState extends State<HomePage> {
             },
             onTap: () async {
               final key = snapshot.id;
-              await Modular.get<SelectedLocalServices>().setSelected("${user.uid}/$key");
+              await Modular.get<SelectedLocalServices>().setSelected("/${user.uid}/$key");
               Modular.to.pushNamed(AppRoutes.kriteriaHome);
             },
           ).py(8);

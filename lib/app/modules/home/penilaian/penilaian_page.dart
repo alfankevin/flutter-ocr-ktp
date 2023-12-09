@@ -34,7 +34,7 @@ class _PenilaianPageState extends State<PenilaianPage> {
   void initState() {
     super.initState();
     _refKey = Modular.get<SelectedLocalServices>().selected;
-    _penilaianRef = FirebaseFirestore.instance.collection('$_refKey/penilaian/${widget.altKey}');
+    _penilaianRef = FirebaseFirestore.instance.collection('$_refKey/nilai');
     _kriteriaRef = FirebaseFirestore.instance.collection('$_refKey/kriteria');
   }
 
@@ -45,16 +45,17 @@ class _PenilaianPageState extends State<PenilaianPage> {
         title: 'Penilaian',
       ),
       body: FutureBuilder(
-          future: _penilaianRef.get(),
+          future: _penilaianRef.where('alternatif_id', isEqualTo: widget.altKey).get(),
           builder: (context, snapshot) {
             final Map<String, num> inputs = {};
             if (snapshot.hasData) {
               if (snapshot.data!.docs.isNotEmpty) {
                 final stream = snapshot.data!.docs;
-                stream.map((e) {
-                  final val = e.data() as Map<dynamic, dynamic>;
-                  inputs[e.id] = val['nilai'] ?? 0;
-                });
+                for (var e in stream) {
+                  final val = e.data() as Map<String, dynamic>;
+                  final model = PenilaianModel.fromJson(val);
+                  inputs[model.kriteriaId] = model.nilai;
+                }
               }
               return FirestorePagination(
                 query: _kriteriaRef.orderBy('created_at'),
@@ -65,9 +66,9 @@ class _PenilaianPageState extends State<PenilaianPage> {
                     label: data.name,
                     value: inputs[snap.id].toString(),
                     onChanged: (value) {
-                      PenilaianModel model =
-                          PenilaianModel.initial(snap.id, double.tryParse(value) ?? 0);
-                      _penilaianRef.doc(snap.id).set(model.toJson());
+                      PenilaianModel model = PenilaianModel.initial(
+                          widget.altKey, snap.id, double.tryParse(value) ?? 0);
+                      _penilaianRef.doc().set(model.toJson());
                     },
                   );
                 },
