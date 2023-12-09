@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart' as firebase_core;
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -31,7 +32,7 @@ class DetailKtpPage extends StatefulWidget {
 
 class _DetailKtpPageState extends State<DetailKtpPage> {
   final storageRef = FirebaseStorage.instance.ref(StringHelper.imageStorage);
-  late final DatabaseReference _alternatifRef;
+  late final CollectionReference _alternatifRef;
   final local = Modular.get<SelectedLocalServices>();
   late final String _refKey;
   late KtpModel model;
@@ -41,7 +42,7 @@ class _DetailKtpPageState extends State<DetailKtpPage> {
     super.initState();
     _refKey = local.selected;
     model = widget.nikResult;
-    _alternatifRef = FirebaseDatabase.instance.ref('$_refKey/alternatif');
+    _alternatifRef = FirebaseFirestore.instance.collection('$_refKey/alternatif');
   }
 
   Future<void> kirim() async {
@@ -66,7 +67,7 @@ class _DetailKtpPageState extends State<DetailKtpPage> {
         model = model.copyWith(photo: () => url);
       }
 
-      await _alternatifRef.child(key).set(model.toMap());
+      await _alternatifRef.doc(key).set(model.toMap());
       await local.removeSelectedEdit();
       Modular.to.popUntil((p0) => p0.settings.name == AppRoutes.alternatifHome);
       context.showSnackbar(message: "Berhasil Membuat Alternatif!");

@@ -1,4 +1,4 @@
-import 'package:firebase_database/firebase_database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_pagination/firebase_pagination.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -27,14 +27,14 @@ class KriteriaPage extends StatefulWidget {
 class _KriteriaPageState extends State<KriteriaPage> {
   final List<String> listKriteria = [16.generateRandomString];
 
-  late DatabaseReference _kriteriaRef;
+  late CollectionReference _kriteriaRef;
   late String _refKey;
 
   @override
   void initState() {
     super.initState();
     _refKey = Modular.get<SelectedLocalServices>().selected;
-    _kriteriaRef = FirebaseDatabase.instance.ref('$_refKey/kriteria');
+    _kriteriaRef = FirebaseFirestore.instance.collection('$_refKey/kriteria');
   }
 
   @override
@@ -50,32 +50,31 @@ class _KriteriaPageState extends State<KriteriaPage> {
                 "Untuk menentukan jenis kriteria, dapat diklik bagian kotak nomor. Jika berwarna biru maka kriteria benefit dan berwarna merah untuk cost.",
           ),
           12.verticalSpacingRadius,
-          RealtimeDBPagination(
-            query: _kriteriaRef.orderByChild('created_at'),
-            orderBy: null,
+          FirestorePagination(
+            query: _kriteriaRef.orderBy('created_at'),
             isLive: true,
             onEmpty: const NoFoundWidget(),
             itemBuilder: (context, snapshot, i) {
-              final data = KriteriaModel.fromMap(snapshot.value as Map<Object?, Object?>);
+              final data = KriteriaModel.fromMap(snapshot.data() as Map<Object?, Object?>);
               return KriteriaFormCard(
                 number: i + 1,
                 name: data.name,
                 w: "${data.w}",
                 isBenefit: data.isBenefit,
                 onChanged: (name, w) {
-                  _kriteriaRef.child(snapshot.key!).update(data
+                  _kriteriaRef.doc(snapshot.id).update(data
                       .copyWith(
                         name: name,
                         w: double.tryParse(w),
                       )
                       .toMap());
                 },
-                onDelete: () {
-                  _kriteriaRef.child(snapshot.key!).remove();
+                onDelete: () async {
+                  await _kriteriaRef.doc(snapshot.id).delete();
                 },
                 onTap: () {
                   _kriteriaRef
-                      .child(snapshot.key!)
+                      .doc(snapshot.id)
                       .update(data.copyWith(isBenefit: !data.isBenefit).toMap());
                 },
               ).py(8);
@@ -104,7 +103,7 @@ class _KriteriaPageState extends State<KriteriaPage> {
                 ),
                 onPressed: () {
                   final v = KriteriaModel.init();
-                  _kriteriaRef.child(16.generateRandomString).set(v.toMap());
+                  _kriteriaRef.doc(16.generateRandomString).set(v.toMap());
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,

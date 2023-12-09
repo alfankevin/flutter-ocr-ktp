@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:firebase_database/firebase_database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -28,16 +28,16 @@ class WinnerPage extends StatefulWidget {
 }
 
 class _WinnerPageState extends State<WinnerPage> {
-  late final DatabaseReference _alternatifRef;
-  late final DatabaseReference _dataRef;
+  late final CollectionReference _alternatifRef;
+  late final CollectionReference _dataRef;
   late String _refKey;
 
   @override
   void initState() {
     super.initState();
     _refKey = Modular.get<SelectedLocalServices>().selected;
-    _alternatifRef = FirebaseDatabase.instance.ref('$_refKey/alternatif');
-    _dataRef = FirebaseDatabase.instance.ref(_refKey);
+    _alternatifRef = FirebaseFirestore.instance.collection('$_refKey/alternatif');
+    _dataRef = FirebaseFirestore.instance.collection(_refKey);
   }
 
   @override
@@ -47,7 +47,7 @@ class _WinnerPageState extends State<WinnerPage> {
         title: 'Hasil',
       ),
       body: FutureBuilder(
-        future: _alternatifRef.once(),
+        future: _alternatifRef.get(),
         builder: (context, snapshot) {
           // final data = KtpModel.fromMap(snapshot.value as Map<Object?, Object?>);
           if (!snapshot.hasData) {
@@ -55,7 +55,7 @@ class _WinnerPageState extends State<WinnerPage> {
               child: Text(snapshot.error.toString()),
             );
           }
-          if (!snapshot.data!.snapshot.exists) {
+          if (snapshot.data!.docs.isEmpty) {
             return const NoFoundWidget();
           }
           if (snapshot.hasError) {
@@ -64,8 +64,9 @@ class _WinnerPageState extends State<WinnerPage> {
               onTap: () => Modular.to.pop(),
             );
           }
-          final stream = snapshot.data?.snapshot.value as Map<Object?, dynamic>;
-          final data = stream.values.map((e) => KtpModel.fromMap(e)).toList();
+          final data = snapshot.data!.docs
+              .map((e) => KtpModel.fromMap(e.data() as Map<Object?, Object?>))
+              .toList();
           data.sort((a, b) => b.nilai.compareTo(a.nilai));
           return ListView.separated(
             itemCount: data.length,
@@ -166,8 +167,8 @@ class _WinnerPageState extends State<WinnerPage> {
         padding: 16.all.copyWith(top: 0),
         child: ElevatedButton(
           onPressed: () {
-            _dataRef.once().then((value) async {
-              final data = value.snapshot.value as Map<Object?, dynamic>;
+            _dataRef.get().then((value) async {
+              final data = value.docChanges.single.doc.data() as Map<Object?, dynamic>;
               final model = DataModel.fromMap(data);
               print(data['alternatif'].values);
               final List<KtpModel> list = [];

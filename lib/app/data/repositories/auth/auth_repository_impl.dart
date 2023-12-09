@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:penilaian/app/core/helpers/result_helper.dart';
@@ -47,8 +48,7 @@ class AuthRepositoryImpl implements AuthRepository {
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
       // Obtain the auth details from the request
-      final GoogleSignInAuthentication? googleAuth =
-          await googleUser?.authentication;
+      final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
 
       // Create a new credential
       final credential = GoogleAuthProvider.credential(
@@ -58,6 +58,11 @@ class AuthRepositoryImpl implements AuthRepository {
 
       // Once signed in, return the UserCredential
       final result = await _auth.signInWithCredential(credential);
+      await FirebaseFirestore.instance.collection('/').doc(result.user?.uid).set({
+        'name': result.user?.displayName,
+        'email': result.user?.email,
+        'uid': result.user?.uid,
+      });
       return Result.success(result.user!);
     } catch (e) {
       return Result.error(message: "Login dibatalkan!");
@@ -68,19 +73,22 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<void> logout() => _auth.signOut();
 
   @override
-  ResultResponse<User> register(
-      String name, String email, String password) async {
+  ResultResponse<User> register(String name, String email, String password) async {
     try {
       final credential = await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
       await credential.user?.updateDisplayName(name);
+      await FirebaseFirestore.instance.collection('/').doc(credential.user?.uid).set({
+        'name': credential.user?.displayName,
+        'email': credential.user?.email,
+        'uid': credential.user?.uid,
+      });
       return Result.success(credential.user!);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
-        return Result.error(
-            message: 'Password yang anda masukkan terlalu lemah!');
+        return Result.error(message: 'Password yang anda masukkan terlalu lemah!');
       } else if (e.code == 'email-already-in-use') {
         return Result.error(message: 'Email sudah digunakan!');
       }

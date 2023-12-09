@@ -1,5 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_pagination/firebase_pagination.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,14 +29,14 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final controller = Modular.get<HomeCubit>();
   String file = '';
-  late final DatabaseReference _penilaianRef;
+  late final CollectionReference _penilaianRef;
   late final User user;
 
   @override
   void initState() {
     super.initState();
     user = FirebaseAuth.instance.currentUser!;
-    _penilaianRef = FirebaseDatabase.instance.ref('data/${user.uid}');
+    _penilaianRef = FirebaseFirestore.instance.collection(user.uid);
     permission();
   }
 
@@ -53,27 +53,26 @@ class _HomePageState extends State<HomePage> {
         isBack: false,
         actions: [
           IconButton(
-            onPressed: () {
-              context.read<SessionCubit>().deleteSession();
+            onPressed: () async {
+              await context.read<SessionCubit>().deleteSession();
             },
             icon: const Icon(Icons.logout_rounded, color: ColorTheme.white),
             tooltip: "Logout",
           ).pOnly(right: 12),
         ],
       ),
-      body: RealtimeDBPagination(
-        query: _penilaianRef.orderByChild('created_at'),
-        orderBy: null,
+      body: FirestorePagination(
+        query: _penilaianRef.orderBy('created_at'),
         onEmpty: const NoFoundWidget(),
         isLive: true,
         itemBuilder: (context, snapshot, i) {
-          final data = DataModel.fromMap(snapshot.value as Map<Object?, Object?>);
+          final data = DataModel.fromMap(snapshot.data() as Map<Object?, Object?>);
           return HomeCard(
             title: data.name,
             subTitle: data.deskripsi,
             color: data.color,
-            onDelete: () {
-              _penilaianRef.child(snapshot.key!).remove();
+            onDelete: () async {
+              await _penilaianRef.doc(snapshot.id).delete();
             },
             onChange: () {
               showDialog(
@@ -111,7 +110,7 @@ class _HomePageState extends State<HomePage> {
                             color: data.color,
                           );
                           _penilaianRef
-                              .child(snapshot.key!)
+                              .doc(snapshot.id)
                               .set(model.toMap())
                               .then((value) => Modular.to.pop());
                         },
@@ -129,8 +128,8 @@ class _HomePageState extends State<HomePage> {
               );
             },
             onTap: () async {
-              final key = snapshot.key!;
-              await Modular.get<SelectedLocalServices>().setSelected("data/${user.uid}/$key");
+              final key = snapshot.id;
+              await Modular.get<SelectedLocalServices>().setSelected("${user.uid}/$key");
               Modular.to.pushNamed(AppRoutes.kriteriaHome);
             },
           ).py(8);
@@ -169,7 +168,7 @@ class _HomePageState extends State<HomePage> {
                   ElevatedButton(
                     onPressed: () {
                       final data = DataModel.initial(nameCont.text, textCont.text, 6.randColor);
-                      _penilaianRef.push().set(data.toMap()).then((value) => context.to.pop());
+                      _penilaianRef.doc().set(data.toMap()).then((value) => context.to.pop());
                     },
                     child: const Row(
                       mainAxisAlignment: MainAxisAlignment.center,

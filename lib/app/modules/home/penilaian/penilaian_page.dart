@@ -1,4 +1,4 @@
-import 'package:firebase_database/firebase_database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_pagination/firebase_pagination.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -26,16 +26,16 @@ class PenilaianPage extends StatefulWidget {
 
 class _PenilaianPageState extends State<PenilaianPage> {
   late final String _refKey;
-  late final DatabaseReference _penilaianRef;
-  late final DatabaseReference _kriteriaRef;
+  late final CollectionReference _penilaianRef;
+  late final CollectionReference _kriteriaRef;
   bool filledAll = true;
 
   @override
   void initState() {
     super.initState();
     _refKey = Modular.get<SelectedLocalServices>().selected;
-    _penilaianRef = FirebaseDatabase.instance.ref('$_refKey/penilaian/${widget.altKey}');
-    _kriteriaRef = FirebaseDatabase.instance.ref('$_refKey/kriteria');
+    _penilaianRef = FirebaseFirestore.instance.collection('$_refKey/penilaian/${widget.altKey}');
+    _kriteriaRef = FirebaseFirestore.instance.collection('$_refKey/kriteria');
   }
 
   @override
@@ -45,30 +45,29 @@ class _PenilaianPageState extends State<PenilaianPage> {
         title: 'Penilaian',
       ),
       body: FutureBuilder(
-          future: _penilaianRef.once(),
+          future: _penilaianRef.get(),
           builder: (context, snapshot) {
             final Map<String, num> inputs = {};
             if (snapshot.hasData) {
-              if (snapshot.data!.snapshot.exists && snapshot.data?.snapshot.value is Map) {
-                final stream = snapshot.data?.snapshot.value as Map<Object?, dynamic>;
-                stream.forEach((key, value) {
-                  final val = value as Map<dynamic, dynamic>;
-                  inputs[key as String] = val['nilai'] ?? 0;
+              if (snapshot.data!.docs.isNotEmpty) {
+                final stream = snapshot.data!.docs;
+                stream.map((e) {
+                  final val = e.data() as Map<dynamic, dynamic>;
+                  inputs[e.id] = val['nilai'] ?? 0;
                 });
               }
-              return RealtimeDBPagination(
-                query: _kriteriaRef.orderByChild('created_at'),
-                orderBy: null,
+              return FirestorePagination(
+                query: _kriteriaRef.orderBy('created_at'),
                 onEmpty: const NoFoundWidget(),
                 itemBuilder: (context, snap, i) {
-                  final data = KriteriaModel.fromMap(snap.value as Map<Object?, Object?>);
+                  final data = KriteriaModel.fromMap(snap.data() as Map<Object?, Object?>);
                   return PenilaianFormCard(
                     label: data.name,
-                    value: inputs[snap.key!].toString(),
+                    value: inputs[snap.id].toString(),
                     onChanged: (value) {
                       PenilaianModel model =
-                          PenilaianModel.initial(snap.key!, double.tryParse(value) ?? 0);
-                      _penilaianRef.child(snap.key!).set(model.toJson());
+                          PenilaianModel.initial(snap.id, double.tryParse(value) ?? 0);
+                      _penilaianRef.doc(snap.id).set(model.toJson());
                     },
                   );
                 },
