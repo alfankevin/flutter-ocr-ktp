@@ -35,13 +35,13 @@ jobs:
         run: flutter build apk --release lib/main_bantu.dart --flavor bantu --no-tree-shake-icons
 
       - name: move APK file Staging
-        run: mv build/app/outputs/apk/release/app-bantu-release.apk app-bantu-release.apk
+        run: mv build/app/outputs/flutter-apk/app-bantu-release.apk app-release.apk
 
       - name: Upload to gdrive Staging
         uses: agusprayogi02/auto-upload-gdrive@v1.0.1
         with:
           credentials: ${{ secrets.GOOGLE_DRIVE_SERVICE_ACCOUNT }}
-          filename: app-bantu-release.apk
+          filename: app-release.apk
           mimeType: "application/vnd.android.package-archive"
           # filename: release/login.json
           folderId: 1Ysa54l9vzESOMvatc8gn1FrlA77KG2ZJ
@@ -52,7 +52,7 @@ jobs:
         run: flutter build apk --release lib/main_bisa.dart --flavor bisa --no-tree-shake-icons
 
       - name: move APK file Develop
-        run: mv build/app/outputs/apk/release/app-bisa-release.apk app-bisa-release.apk
+        run: mv build/app/outputs/flutter-apk/app-bisa-release.apk app-release.apk
       #       - name: Archive files
       #         # run: cp login.json release/login.json
       #         run: zip -r app.zip app-release.apk
@@ -61,7 +61,7 @@ jobs:
         uses: agusprayogi02/auto-upload-gdrive@v1.0.1
         with:
           credentials: ${{ secrets.GOOGLE_DRIVE_SERVICE_ACCOUNT }}
-          filename: app-bisa-release.apk
+          filename: app-release.apk
           mimeType: "application/vnd.android.package-archive"
           # filename: release/login.json
           folderId: 1wm6mcU9uUz195t7V85kTJaPvG1Kjpm2g
