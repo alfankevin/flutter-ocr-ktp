@@ -45,38 +45,39 @@ class _PenilaianPageState extends State<PenilaianPage> {
         title: 'Penilaian',
       ),
       body: FutureBuilder(
-          future: _penilaianRef.where('alternatif_id', isEqualTo: widget.altKey).get(),
-          builder: (context, snapshot) {
-            final Map<String, num> inputs = {};
-            if (snapshot.hasData) {
-              if (snapshot.data!.docs.isNotEmpty) {
-                final stream = snapshot.data!.docs;
-                for (var e in stream) {
-                  final val = e.data() as Map<String, dynamic>;
-                  final model = PenilaianModel.fromJson(val);
-                  inputs[model.kriteriaId] = model.nilai;
-                }
+        future: _penilaianRef.where('alternatif_id', isEqualTo: widget.altKey).get(),
+        builder: (context, snapshot) {
+          final Map<String, num> inputs = {};
+          if (snapshot.hasData) {
+            if (snapshot.data!.docs.isNotEmpty) {
+              final stream = snapshot.data!.docs;
+              for (var e in stream) {
+                final val = e.data() as Map<String, dynamic>;
+                final model = PenilaianModel.fromJson(val);
+                inputs[model.kriteriaId] = model.nilai;
               }
-              return FirestorePagination(
-                query: _kriteriaRef.orderBy('created_at'),
-                onEmpty: const NoFoundWidget(),
-                itemBuilder: (context, snap, i) {
-                  final data = KriteriaModel.fromMap(snap.data() as Map<Object?, Object?>);
-                  return PenilaianFormCard(
-                    label: data.name,
-                    value: inputs[snap.id].toString(),
-                    onChanged: (value) {
-                      PenilaianModel model = PenilaianModel.initial(
-                          widget.altKey, snap.id, double.tryParse(value) ?? 0);
-                      _penilaianRef.doc().set(model.toJson());
-                    },
-                  );
-                },
-              );
-            } else {
-              return const BaseLoadingIndicator();
             }
-          }),
+            return FirestorePagination(
+              query: _kriteriaRef.orderBy('created_at'),
+              onEmpty: const NoFoundWidget(),
+              itemBuilder: (context, snap, i) {
+                final data = KriteriaModel.fromMap(snap.data() as Map<Object?, Object?>);
+                return PenilaianFormCard(
+                  label: data.name,
+                  value: inputs[snap.id].toString(),
+                  onChanged: (value) {
+                    PenilaianModel model =
+                        PenilaianModel.initial(widget.altKey, snap.id, double.tryParse(value) ?? 0);
+                    _penilaianRef.doc(snap.id).set(model.toJson());
+                  },
+                );
+              },
+            );
+          } else {
+            return const BaseLoadingIndicator();
+          }
+        },
+      ),
     );
   }
 }

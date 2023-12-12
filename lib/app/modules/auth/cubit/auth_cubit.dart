@@ -26,8 +26,8 @@ class AuthCubit extends Cubit<AuthState> {
 
   Future<void> loginGoogle() async {
     final rest = await LoginWithGoogleUseCase().call(NoParams());
-    rest.when(
-      success: (data) {
+    await rest.when(
+      success: (data) async {
         emit(AuthSuccess(data));
       },
       error: (message) {
