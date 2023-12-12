@@ -46,6 +46,11 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BaseScaffold(
       appBar: BaseAppBar(
@@ -54,10 +59,6 @@ class _HomePageState extends State<HomePage> {
         actions: [
           IconButton(
             onPressed: () async {
-              await Modular.to.pushNamedAndRemoveUntil(
-                AppRoutes.login,
-                (p0) => false,
-              );
               await context.read<SessionCubit>().deleteSession();
             },
             icon: const Icon(Icons.logout_rounded, color: ColorTheme.white),

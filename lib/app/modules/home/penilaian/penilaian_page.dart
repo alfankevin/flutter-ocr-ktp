@@ -54,7 +54,7 @@ class _PenilaianPageState extends State<PenilaianPage> {
               for (var e in stream) {
                 final val = e.data() as Map<String, dynamic>;
                 final model = PenilaianModel.fromJson(val);
-                inputs[model.kriteriaId] = model.nilai;
+                inputs[widget.altKey + model.kriteriaId] = model.nilai;
               }
             }
             return FirestorePagination(
@@ -64,11 +64,11 @@ class _PenilaianPageState extends State<PenilaianPage> {
                 final data = KriteriaModel.fromMap(snap.data() as Map<Object?, Object?>);
                 return PenilaianFormCard(
                   label: data.name,
-                  value: inputs[snap.id].toString(),
+                  value: inputs[widget.altKey + snap.id].toString(),
                   onChanged: (value) {
                     PenilaianModel model =
                         PenilaianModel.initial(widget.altKey, snap.id, double.tryParse(value) ?? 0);
-                    _penilaianRef.doc(snap.id).set(model.toJson());
+                    _penilaianRef.doc(widget.altKey + snap.id).set(model.toJson());
                   },
                 );
               },
