@@ -1,6 +1,5 @@
 import 'dart:typed_data';
 
-import 'package:flutter/services.dart' show rootBundle;
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:penilaian/app/data/models/data_model.dart';
@@ -10,8 +9,6 @@ class PdfHelper {
   static Future<Uint8List> generateDocument(
       PdfPageFormat format, DataModel data, List<KtpModel> list) async {
     final doc = pw.Document(pageMode: PdfPageMode.outlines);
-
-    final logo = await rootBundle.load('assets/img/logo.png');
 
     doc.addPage(
       pw.MultiPage(

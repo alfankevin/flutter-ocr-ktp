@@ -170,7 +170,7 @@ class _AlternatifPageState extends State<AlternatifPage> {
             onDelete: () async {
               await _alternatifRef.doc(snapshot.id).delete();
               await _penilaianRef.doc(snapshot.id).delete();
-              await _storageRef.child('${snapshot.id}.jpg').delete();
+              // await _storageRef.child('${snapshot.id}.jpg').delete();
             },
             onEdit: () async {
               await Modular.get<SelectedLocalServices>().setSelectedEdit(snapshot.id);

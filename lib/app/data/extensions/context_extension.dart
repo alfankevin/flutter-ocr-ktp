@@ -13,6 +13,8 @@ extension BuildContextX on BuildContext {
 
   IModularNavigator get to => Modular.to;
 
+  B get<B extends Object>({String? key}) => Modular.get();
+
   ColorScheme get colorScheme => Theme.of(this).colorScheme;
 
   TextTheme get textTheme => Theme.of(this).textTheme;

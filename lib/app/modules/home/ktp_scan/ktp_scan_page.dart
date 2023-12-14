@@ -50,7 +50,7 @@ class _KtpScanPageState extends State<KtpScanPage> {
           }
           if (state is KtpScanLoaded) {
             context.hideLoading();
-            Modular.to.pushNamed(AppRoutes.ktpResultHome, arguments: state.item);
+            Modular.to.pushReplacementNamed(AppRoutes.ktpResultHome, arguments: state.item);
             context.showSnackbar(message: "NIK ditemukan");
           }
         },
@@ -64,7 +64,7 @@ class _KtpScanPageState extends State<KtpScanPage> {
                     extensions: ["jpg", "jpeg", "png"],
                   );
                   if (file != null) {
-                    bloc.scanKtp(file.path);
+                    bloc.scanKtp(file.path, CardOverlay.byFormat(format), MediaQuery.of(context));
                   }
                 },
                 icon: const Icon(Icons.upload_file_rounded, color: ColorTheme.white),
@@ -89,7 +89,8 @@ class _KtpScanPageState extends State<KtpScanPage> {
                   snapshot.data!.first,
                   CardOverlay.byFormat(format),
                   (XFile file) async {
-                    bloc.scanKtp(file.path);
+                    bloc.scanKtp(file.path, CardOverlay.byFormat(format), MediaQuery.of(context),
+                        crop: true);
                     // Modular.to.pop(file.path);
                   },
                   info:

@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart' as firebase_core;
-import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -105,7 +104,8 @@ class _DetailKtpPageState extends State<DetailKtpPage> {
                       child: widget.nikResult.photo!.contains('firebase')
                           ? ImageWithLoader(
                               imageUrl: widget.nikResult.photo!,
-                              size: 200,
+                              width: 200,
+                              fit: BoxFit.fitWidth,
                             )
                           : Image.file(
                               File(widget.nikResult.photo!),
