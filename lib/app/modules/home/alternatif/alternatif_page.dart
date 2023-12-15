@@ -102,8 +102,9 @@ class _AlternatifPageState extends State<AlternatifPage> {
     final Map<String, Map<String, dynamic>> parameter = {};
     // Normalisasi
     for (var e in matrix.keys) {
-      final data = matrix[e]!;
+      final data = matrix[e]!; // alternatif id
       for (var key in data.keys) {
+        // alternatif id
         final nilai = data[key] as num;
         if (kriteriaAll[key]!.isBenefit) {
           matrix[e]![key] = (nilai / minMax[key]!['max']!).round3;

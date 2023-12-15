@@ -63,7 +63,7 @@ class _PenilaianPageState extends State<PenilaianPage> {
               itemBuilder: (context, snap, i) {
                 final data = KriteriaModel.fromMap(snap.data() as Map<Object?, Object?>);
                 return PenilaianFormCard(
-                  label: data.name,
+                  label: """${data.name} (${data.isBenefit ? 'Benefit' : 'Cost'})""",
                   value: inputs[widget.altKey + snap.id].toString(),
                   onChanged: (value) {
                     PenilaianModel model =
