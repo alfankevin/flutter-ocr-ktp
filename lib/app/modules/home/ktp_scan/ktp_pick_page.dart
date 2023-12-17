@@ -42,6 +42,8 @@ class _KtpPickPageState extends State<KtpPickPage> {
     );
     if (file != null) {
       bloc.scanKtp(file.path, CardOverlay.byFormat(format), MediaQuery.of(context));
+    } else {
+      Navigator.of(context).pop();
     }
   }
 
