@@ -57,8 +57,7 @@ class ImageWithLoader extends StatelessWidget {
               height: width,
               width: width,
               decoration: BoxDecoration(
-                borderRadius: borderRadius ??
-                    BorderRadius.zero,
+                borderRadius: BorderRadius.zero,
                 image: DecorationImage(
                   image: imageProvider,
                   fit: fit ?? BoxFit.cover,
@@ -73,8 +72,7 @@ class ImageWithLoader extends StatelessWidget {
                     height: width,
                     width: width,
                     decoration: BoxDecoration(
-                      borderRadius:
-                          BorderRadius.zero,
+                      borderRadius: BorderRadius.zero,
                       color: Colors.white,
                       boxShadow: boxShadow,
                     ),

@@ -206,7 +206,7 @@ class _HomePageState extends State<HomePage> {
           ),
           Positioned(
             top: 10,
-            left: MediaQuery.of(context).size.width / 2 - 100,
+            left: MediaQuery.of(context).size.width / 2 - 110,
             right: MediaQuery.of(context).size.width / 2 - 150,
             bottom: 10,
             child: Container(

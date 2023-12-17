@@ -82,6 +82,13 @@ class _DetailKtpPageState extends State<DetailKtpPage> {
       appBar: AppBar(
         title: const Text('Details'),
         centerTitle: true,
+        leading: IconButton(
+          padding: EdgeInsets.only(left: 15),
+          icon: Icon(Icons.arrow_back_rounded),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
         actions: [
           Padding(
             padding: EdgeInsets.only(right: 15),
