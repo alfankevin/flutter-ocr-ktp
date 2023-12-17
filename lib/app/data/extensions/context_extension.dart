@@ -46,10 +46,10 @@ extension BuildContextX on BuildContext {
           content: Container(
             width: 150.w,
             height: 150.h,
-            color: Colors.white,
+            color: Colors.transparent,
             child: BaseLoadingIndicator(
               color: ColorTheme.primary,
-              semanticsLabel: message,
+              // semanticsLabel: message,
             ),
           ),
         ),

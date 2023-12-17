@@ -78,7 +78,7 @@ android {
     productFlavors {
         bantu {
             dimension "app"
-            resValue "string", "app_name", "Tentu Bantu"
+            resValue "string", "app_name", "OCR KTP"
         }
 
         bisa {

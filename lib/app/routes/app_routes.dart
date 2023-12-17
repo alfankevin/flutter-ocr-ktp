@@ -1,11 +1,13 @@
 class AppRoutes {
   // home module
   static const home = '/home';
+  // static const home = '/home/alternatif';
   static const kriteriaHome = '/home/kriteria';
   static const alternatifHome = '/home/alternatif';
   static const penilaianHome = '/home/penilaian';
   static const winnerHome = '/home/winner';
   static const ktpScanHome = '/home/ktp-scan';
+  static const ktpPickHome = '/home/ktp-pick';
   static const ktpResultHome = '/home/ktp-result';
   // auth module
   static const register = '/auth/register';

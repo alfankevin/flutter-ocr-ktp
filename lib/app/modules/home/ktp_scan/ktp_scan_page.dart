@@ -46,32 +46,31 @@ class _KtpScanPageState extends State<KtpScanPage> {
             context.showLoadingIndicator();
           }
           if (state is KtpScanError) {
-            context.showSnackbar(message: "NIK ditemukan", error: true, isPop: true);
+            context.showSnackbar(message: "KTP not found.", error: true, isPop: true);
           }
           if (state is KtpScanLoaded) {
             context.hideLoading();
             Modular.to.pushReplacementNamed(AppRoutes.ktpResultHome, arguments: state.item);
-            context.showSnackbar(message: "NIK ditemukan");
+            // context.showSnackbar(message: "NIK ditemukan");
           }
         },
         child: Scaffold(
-          appBar: BaseAppBar(
-            title: "Scan KTP",
-            actions: [
-              IconButton(
-                onPressed: () async {
-                  final file = await storage.pickFile(
-                    extensions: ["jpg", "jpeg", "png"],
-                  );
-                  if (file != null) {
-                    bloc.scanKtp(file.path, CardOverlay.byFormat(format), MediaQuery.of(context));
-                  }
-                },
-                icon: const Icon(Icons.upload_file_rounded, color: ColorTheme.white),
-                tooltip: "Upload KTP",
-              ),
-            ],
-          ),
+          // appBar: AppBar(
+          //   actions: [
+          //     IconButton(
+          //       onPressed: () async {
+          //         final file = await storage.pickFile(
+          //           extensions: ["jpg", "jpeg", "png"],
+          //         );
+          //         if (file != null) {
+          //           bloc.scanKtp(file.path, CardOverlay.byFormat(format), MediaQuery.of(context));
+          //         }
+          //       },
+          //       icon: const Icon(Icons.upload_file_rounded, color: Colors.black),
+          //       tooltip: "Upload KTP",
+          //     ),
+          //   ],
+          // ),
           body: FutureBuilder<List<CameraDescription>?>(
             future: availableCameras(),
             builder: (context, snapshot) {
@@ -93,9 +92,9 @@ class _KtpScanPageState extends State<KtpScanPage> {
                         crop: true);
                     // Modular.to.pop(file.path);
                   },
-                  info:
-                      'Position your ID card within the rectangle and ensure the image is perfectly readable.',
-                  label: 'Scanning KTP',
+                  // info:
+                  //     'Position your ID card within the rectangle and ensure the image is perfectly readable.',
+                  // label: 'Scanning KTP',
                 );
               } else {
                 return const Align(

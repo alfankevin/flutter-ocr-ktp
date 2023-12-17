@@ -14,6 +14,7 @@ import 'package:penilaian/app/data/extensions/extensions.dart';
 import 'package:penilaian/app/data/models/ktp_model.dart';
 import 'package:penilaian/app/data/services/local_services/selected_local_services.dart';
 import 'package:penilaian/app/routes/app_routes.dart';
+import 'package:penilaian/app/core/config/app_asset.dart';
 
 import 'widgets/text_result_card.dart';
 
@@ -69,9 +70,9 @@ class _DetailKtpPageState extends State<DetailKtpPage> {
       await _alternatifRef.doc(key).set(model.toMap());
       await local.removeSelectedEdit();
       Modular.to.popUntil((p0) => p0.settings.name == AppRoutes.alternatifHome);
-      context.showSnackbar(message: "Berhasil Membuat Alternatif!");
+      // context.showSnackbar(message: "Berhasil Membuat Alternatif!");
     } on firebase_core.FirebaseException catch (e) {
-      context.showSnackbar(message: e.message ?? "Terjadi kesalahan", error: true, isPop: true);
+      // context.showSnackbar(message: e.message ?? "Terjadi kesalahan", error: true, isPop: true);
     }
   }
 
@@ -79,23 +80,29 @@ class _DetailKtpPageState extends State<DetailKtpPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Detail KTP'),
+        title: const Text('Details'),
         centerTitle: true,
+        actions: [
+          Padding(
+            padding: EdgeInsets.only(right: 15),
+            child: IconButton(
+              icon: Image.asset(
+                'assets/img/print.png',
+                height: 24,
+              ),
+              onPressed: () {},
+            ),
+          )
+        ],
       ),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Column(
           children: [
-            16.verticalSpacingRadius,
-            const WarningText(
-              text: "Klik pada bagian yang ingin diubah!",
-            ).px(16),
             Container(
-              margin: const EdgeInsets.all(20),
-              padding: const EdgeInsets.all(10),
+              margin: const EdgeInsets.all(10),
+              padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
               width: context.width,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8), border: Border.all(color: Colors.black)),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -104,15 +111,15 @@ class _DetailKtpPageState extends State<DetailKtpPage> {
                       child: widget.nikResult.photo!.contains('firebase')
                           ? ImageWithLoader(
                               imageUrl: widget.nikResult.photo!,
-                              width: 200,
-                              fit: BoxFit.fitWidth,
+                              width: 125,
+                              height: 125,
+                              fit: BoxFit.cover,
                             )
                           : Image.file(
                               File(widget.nikResult.photo!),
                             ),
                     ),
-                  16.verticalSpacingRadius,
-                  const Divider(color: Colors.black),
+                  30.verticalSpacingRadius,
                   TextResultCard(
                     title: "NIK",
                     value: widget.nikResult.nik!,
@@ -121,7 +128,8 @@ class _DetailKtpPageState extends State<DetailKtpPage> {
                       setState(() {});
                     },
                   ),
-                  const Divider(color: Colors.black),
+                  const Divider(color: Colors.grey),
+                  5.verticalSpacingRadius,
                   TextResultCard(
                     title: "Nama",
                     value: widget.nikResult.name!,
@@ -130,25 +138,8 @@ class _DetailKtpPageState extends State<DetailKtpPage> {
                       setState(() {});
                     },
                   ),
-                  const Divider(color: Colors.black),
-                  TextResultCard(
-                    title: "Kode Unik",
-                    value: widget.nikResult.uniqueCode!,
-                    onChanged: (x) {
-                      model = model.copyWith(uniqueCode: () => x);
-                      setState(() {});
-                    },
-                  ),
-                  const Divider(color: Colors.black),
-                  TextResultCard(
-                    title: "Jenis Kelamin",
-                    value: widget.nikResult.gender!,
-                    onChanged: (x) {
-                      model = model.copyWith(gender: () => x);
-                      setState(() {});
-                    },
-                  ),
-                  const Divider(color: Colors.black),
+                  const Divider(color: Colors.grey),
+                  5.verticalSpacingRadius,
                   TextResultCard(
                     title: "Tanggal Lahir",
                     value: widget.nikResult.bornDate!,
@@ -157,7 +148,8 @@ class _DetailKtpPageState extends State<DetailKtpPage> {
                       setState(() {});
                     },
                   ),
-                  const Divider(color: Colors.black),
+                  const Divider(color: Colors.grey),
+                  5.verticalSpacingRadius,
                   TextResultCard(
                     title: "Usia",
                     value: widget.nikResult.age!,
@@ -166,25 +158,28 @@ class _DetailKtpPageState extends State<DetailKtpPage> {
                       setState(() {});
                     },
                   ),
-                  const Divider(color: Colors.black),
+                  const Divider(color: Colors.grey),
+                  5.verticalSpacingRadius,
                   TextResultCard(
-                    title: "Ulang Tahun",
-                    value: widget.nikResult.nextBirthday!,
+                    title: "Jenis Kelamin",
+                    value: widget.nikResult.gender!,
                     onChanged: (x) {
-                      model = model.copyWith(nextBirthday: () => x);
+                      model = model.copyWith(gender: () => x);
                       setState(() {});
                     },
                   ),
-                  const Divider(color: Colors.black),
+                  const Divider(color: Colors.grey),
+                  5.verticalSpacingRadius,
                   TextResultCard(
-                    title: "Zodiak",
-                    value: widget.nikResult.zodiac!,
+                    title: "Gol Darah",
+                    value: '-',
                     onChanged: (x) {
-                      model = model.copyWith(zodiac: () => x);
+                      model = model.copyWith(uniqueCode: () => x);
                       setState(() {});
                     },
                   ),
-                  const Divider(color: Colors.black),
+                  const Divider(color: Colors.grey),
+                  5.verticalSpacingRadius,
                   TextResultCard(
                     title: "Provinsi",
                     value: widget.nikResult.province!,
@@ -193,7 +188,8 @@ class _DetailKtpPageState extends State<DetailKtpPage> {
                       setState(() {});
                     },
                   ),
-                  const Divider(color: Colors.black),
+                  const Divider(color: Colors.grey),
+                  5.verticalSpacingRadius,
                   TextResultCard(
                     title: "Kota/Kabupaten",
                     value: widget.nikResult.city!,
@@ -202,7 +198,8 @@ class _DetailKtpPageState extends State<DetailKtpPage> {
                       setState(() {});
                     },
                   ),
-                  const Divider(color: Colors.black),
+                  const Divider(color: Colors.grey),
+                  5.verticalSpacingRadius,
                   TextResultCard(
                     title: "Kecamatan",
                     value: widget.nikResult.subdistrict!,
@@ -211,7 +208,8 @@ class _DetailKtpPageState extends State<DetailKtpPage> {
                       setState(() {});
                     },
                   ),
-                  const Divider(color: Colors.black),
+                  const Divider(color: Colors.grey),
+                  5.verticalSpacingRadius,
                   TextResultCard(
                     title: "Kode Pos",
                     value: widget.nikResult.postalCode!,
@@ -220,70 +218,36 @@ class _DetailKtpPageState extends State<DetailKtpPage> {
                       setState(() {});
                     },
                   ),
+                  const Divider(color: Colors.grey),
                 ],
               ),
             ),
-            16.verticalSpacingRadius,
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: ColorTheme.red,
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(16.r),
-                          bottomLeft: Radius.circular(16.r),
-                        ),
-                      ),
-                      textStyle: AppStyles.text16PxMedium,
-                      minimumSize: Size(200.r, 48.r),
-                    ),
-                    onPressed: () {
-                      Modular.to.pop();
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(Icons.replay_rounded),
-                        6.horizontalSpaceRadius,
-                        const Text('Ulangi'),
-                      ],
-                    ),
-                  ),
-                ),
-                12.horizontalSpaceRadius,
-                Expanded(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: ColorTheme.primary,
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(16.r),
-                          bottomRight: Radius.circular(16.r),
-                        ),
-                      ),
-                      textStyle: AppStyles.text16PxMedium,
-                      minimumSize: Size(200.r, 48.r),
-                    ),
-                    onPressed: () {
-                      kirim();
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text('Simpan'),
-                        6.horizontalSpaceRadius,
-                        const Icon(Icons.save_rounded),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ).px(16),
-            16.verticalSpacingRadius,
+          ],
+        ),
+      ),
+      bottomNavigationBar: SizedBox(
+        height: 100,
+        child: BottomNavigationBar(
+          backgroundColor: Color(0xFFDDDBFF),
+          selectedItemColor: Colors.black,
+          unselectedItemColor: Colors.black,
+          type: BottomNavigationBarType.fixed,
+          onTap: (index) {
+            if (index == 0) {
+              Modular.to.pop();
+            } else if (index == 1) {
+              kirim();
+            }
+          },
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.arrow_back_rounded),
+              label: 'Cancel',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.check_rounded),
+              label: 'Save',
+            ),
           ],
         ),
       ),

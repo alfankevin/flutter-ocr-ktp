@@ -15,6 +15,7 @@ import 'cubit/home_cubit.dart';
 import 'home_page.dart';
 import 'ktp_scan/cubit/ktp_scan_cubit.dart';
 import 'ktp_scan/ktp_scan_page.dart';
+import 'ktp_scan/ktp_pick_page.dart';
 
 class HomeModule extends Module {
   @override
@@ -33,6 +34,7 @@ class HomeModule extends Module {
   void routes(r) {
     r.child(AppRoutes.home, child: (context) => const HomePage());
     r.child(AppRoutes.ktpScanHome, child: (context) => const KtpScanPage());
+    r.child(AppRoutes.ktpPickHome, child: (context) => const KtpPickPage());
     r.child(AppRoutes.ktpResultHome,
         child: (context) => DetailKtpPage(nikResult: r.args.data as KtpModel));
     r.child(AppRoutes.kriteriaHome, child: (ctx) => const KriteriaPage());

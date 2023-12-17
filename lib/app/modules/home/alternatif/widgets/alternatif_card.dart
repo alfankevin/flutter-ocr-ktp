@@ -34,118 +34,98 @@ class AlternatifCard extends StatelessWidget {
         bool delete = false;
         final snackbarController = ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Yakin Ingin Hapus Kriteria ${data.name}?'),
-            action: SnackBarAction(label: 'Hapus', onPressed: () => delete = true),
+            content: Text('Delete Data ${data.name}?'),
+            action: SnackBarAction(label: 'Delete', onPressed: () => delete = true),
           ),
         );
         await snackbarController.closed;
         return delete;
       },
       background: Container(
-        color: ColorTheme.red,
         alignment: Alignment.centerRight,
-        // padding: EdgeInsets.only(right: 16.w),
+        padding: EdgeInsets.only(right: 8.w),
+        decoration: BoxDecoration(
+          color: Colors.red,
+          borderRadius: BorderRadius.circular(16),
+        ),
         child: const Icon(
           Icons.delete,
           color: ColorTheme.white,
         ),
       ),
-      child: InkWell(
-        onTap: onTap,
-        child: SizedBox(
-          height: 75.r,
-          width: 1.sw,
-          child: Row(
-            children: [
-              Container(
-                height: 75.r,
-                width: 44.r,
-                decoration: BoxDecoration(
-                  color: ColorTheme.primary,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(10.r),
-                    bottomLeft: Radius.circular(10.r),
-                  ),
-                ),
-                alignment: Alignment.center,
-                child: Text(
-                  number.toString(),
-                  style: AppStyles.text18PxBold.copyWith(color: ColorTheme.white),
-                ),
+      child: Column(
+        children: [
+          GestureDetector(
+            onTap: onEdit,
+            child: Container(
+              padding: EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(color: Color(0xffDDDBFF).withOpacity(0.5), width: 1),
+                borderRadius: BorderRadius.circular(16),
               ),
-              8.horizontalSpaceRadius,
-              Stack(
-                fit: StackFit.loose,
+              child: Row(
                 children: [
                   Container(
-                    height: 75.r,
-                    width: 24.r,
-                    margin: EdgeInsets.only(left: 22.r),
-                    decoration: const BoxDecoration(color: ColorTheme.primary),
-                  ),
-                  Positioned(
-                    top: 12.r,
-                    left: 0,
-                    child: ImageWithLoader(
-                      imageUrl: data.photo ?? "https://picsum.photos/200/300",
-                      size: 45.r,
-                      radius: 45.r,
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: Color(0xffDDDBFF).withOpacity(1),
+                          spreadRadius: 1,
+                          blurRadius: 2,
+                          offset: Offset(2, 3)
+                        ),
+                      ],
+                    ),
+                    child: ClipRRect(
+                      child: Image.asset(
+                        'assets/img/image4.png',
+                        fit: BoxFit.cover,
+                        width: 45,
+                        height: 60,
+                      ),
                     ),
                   ),
-                ],
-              ),
-              Expanded(
-                child: Container(
-                  height: 75.r,
-                  padding: 10.all,
-                  decoration: const BoxDecoration(
-                    color: ColorTheme.primary,
-                    borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(10),
-                      bottomRight: Radius.circular(10),
-                    ),
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Column(
+                  Expanded(
+                    child: Container(
+                      padding: EdgeInsets.only(left: 16),
+                      child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Text(
-                            data.name ?? "-",
-                            style: AppStyles.text16PxBold.copyWith(color: ColorTheme.white),
-                          ).expand(),
-                          Text.rich(
-                            TextSpan(
-                              text: "Status: ",
-                              children: [
-                                TextSpan(
-                                  text: data.filled ? "Sudah Diisi!" : "Belum Diisi!",
-                                  style: AppStyles.text14PxMedium.copyWith(
-                                    color: ColorTheme.white,
-                                    backgroundColor:
-                                        data.filled ? ColorTheme.green : ColorTheme.red,
-                                  ),
+                          Text(data.name ?? "-",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold
+                            )
+                          ),
+                          SizedBox(height: 4),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Today',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.grey
                                 )
-                              ],
-                            ),
-                            style: AppStyles.text14PxMedium.copyWith(color: ColorTheme.white),
+                              ),
+                              Text(
+                                '1 page',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                )
+                              ),
+                            ],
                           )
                         ],
-                      ).expand(),
-                      IconRoundedButton(
-                        icon: Icons.edit_square,
-                        color: ColorTheme.orangeColor,
-                        onTap: onEdit,
                       ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
+                    ),
+                  )
+                ],
+              )
+            ),
           ),
-        ),
+        ]
       ),
     );
   }

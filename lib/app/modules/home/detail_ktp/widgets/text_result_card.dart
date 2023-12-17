@@ -37,10 +37,26 @@ class _TextResultCardState extends State<TextResultCard> {
             final nameCont = TextEditingController(text: value);
 
             return AlertDialog(
-              title: Text('Ubah ${widget.title}'),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              title: Text(
+                '${widget.title}',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.black
+                ),
+              ),
               content: TextField(
-                decoration:
-                    GenerateTheme.inputDecoration("Masukkan ${widget.title}"),
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide.none,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  contentPadding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 16.0),
+                  filled: true,
+                  fillColor: Colors.white,
+                ),
                 style: AppStyles.text16Px.copyWith(color: ColorTheme.black),
                 controller: nameCont,
               ),
@@ -49,11 +65,20 @@ class _TextResultCardState extends State<TextResultCard> {
                   onPressed: () {
                     Navigator.pop(context, nameCont.text);
                   },
+                  style: ButtonStyle(
+                    minimumSize: MaterialStateProperty.all(Size.fromHeight(47.5)),
+                    shadowColor: MaterialStateProperty.all(Colors.transparent),
+                    backgroundColor: MaterialStateProperty.all(Colors.blue),
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                  ),
                   child: const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.save_rounded),
-                      Text('Simpan'),
+                      Text('Save'),
                     ],
                   ),
                 ),

@@ -30,11 +30,11 @@ class AuthRepositoryImpl implements AuthRepository {
       return Result.success(credential.user!);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
-        return Result.error(message: 'Email tidak ditemukan!');
+        return Result.error(message: 'Email not found.');
       } else if (e.code == 'wrong-password') {
-        return Result.error(message: 'Password salah!');
+        return Result.error(message: 'Wrong password.');
       }
-      return Result.error(message: e.message ?? 'Terjadi kesalahan!');
+      return Result.error(message: e.message ?? 'An error has occurred.');
     } catch (e) {
       return Result.error(message: e.toString());
     }
@@ -59,7 +59,7 @@ class AuthRepositoryImpl implements AuthRepository {
       final result = await _auth.signInWithCredential(credential);
       return Result.success(result.user!);
     } catch (e) {
-      return Result.error(message: "Login dibatalkan!");
+      return Result.error(message: "Login canceled.");
     }
   }
 
@@ -77,11 +77,11 @@ class AuthRepositoryImpl implements AuthRepository {
       return Result.success(credential.user!);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
-        return Result.error(message: 'Password yang anda masukkan terlalu lemah!');
+        return Result.error(message: 'Password is too weak.');
       } else if (e.code == 'email-already-in-use') {
-        return Result.error(message: 'Email sudah digunakan!');
+        return Result.error(message: 'Email has already been used.');
       }
-      return Result.error(message: e.message ?? 'Terjadi kesalahan!');
+      return Result.error(message: e.message ?? 'An error has occurred.');
     } catch (e) {
       return Result.error(message: e.toString());
     }

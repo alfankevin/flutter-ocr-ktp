@@ -13,8 +13,8 @@ class FlavorBisa extends FlavorHelper {
 
 class FlavorTentu extends FlavorHelper {
   @override
-  String get image => "assets/img/logo_lama.png";
+  String get image => "assets/img/app-development1.png";
 
   @override
-  String get name => "Tentu Bantu";
+  String get name => "OCR KTP";
 }

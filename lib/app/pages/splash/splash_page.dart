@@ -19,7 +19,7 @@ class _SplashPageState extends State<SplashPage> {
   final local = FlavorLocalServicesImpl();
 
   Future<void> _init() async {
-    await Future.delayed(const Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 0));
     // ignore: use_build_context_synchronously
     context.read<SessionCubit>().checkSession();
   }
@@ -41,15 +41,15 @@ class _SplashPageState extends State<SplashPage> {
         }
       },
       child: Scaffold(
-        backgroundColor: ColorTheme.primary,
-        body: SafeArea(
-          child: Center(
-            child: Image.asset(
-              local.image,
-              width: 250.r,
-            ),
-          ),
-        ),
+      //   backgroundColor: ColorTheme.primary,
+      //   body: SafeArea(
+      //     child: Center(
+      //       child: Image.asset(
+      //         local.image,
+      //         width: 250.r,
+      //       ),
+      //     ),
+      //   ),
       ),
     );
   }

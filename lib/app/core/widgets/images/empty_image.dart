@@ -5,12 +5,13 @@ class EmptyImage extends StatelessWidget {
   const EmptyImage({
     super.key,
     this.width,
+    this.height,
     this.size,
     this.child,
     this.radius,
   });
 
-  final double? size, width;
+  final double? size, width, height;
   final Widget? child;
   final double? radius;
 

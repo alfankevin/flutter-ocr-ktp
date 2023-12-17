@@ -29,11 +29,11 @@ class _PasswordInputState extends State<PasswordInput> {
   bool showPassword = false;
 
   final Map<String, String Function(Object)> message = {
-    ValidationMessage.required: (_) => 'inputan ini tidak boleh kosong',
-    ValidationMessage.minLength: (_) =>
-        'inputan password kurang dari 8 karakter',
-    ValidationMessage.mustMatch: (_) => 'inputan password tidak sama',
-    'validation_error': (e) => (e as String),
+    // ValidationMessage.required: (_) => 'inputan ini tidak boleh kosong',
+    // ValidationMessage.minLength: (_) =>
+    //     'inputan password kurang dari 8 karakter',
+    // ValidationMessage.mustMatch: (_) => 'inputan password tidak sama',
+    // 'validation_error': (e) => (e as String),
   };
 
   @override
@@ -53,17 +53,17 @@ class _PasswordInputState extends State<PasswordInput> {
               TextSpan(
                 text: widget.title,
               ),
-              if (widget.isRequiredText)
-                TextSpan(
-                  text: "*",
-                  style:
-                      AppStyles.text16PxMedium.copyWith(color: ColorTheme.red),
-                ),
+              // if (widget.isRequiredText)
+              //   TextSpan(
+              //     text: "*",
+              //     style:
+              //         AppStyles.text16PxMedium.copyWith(color: ColorTheme.red),
+              //   ),
             ],
           ),
-          style: AppStyles.text16PxMedium.copyWith(fontWeight: FontWeight.w700),
+          style: AppStyles.text16PxMedium,
         ),
-        8.verticalSpacingRadius,
+        // 8.verticalSpacingRadius,
         ReactiveTextField(
           formControlName: widget.formControlName,
           obscureText: !showPassword,
@@ -72,31 +72,31 @@ class _PasswordInputState extends State<PasswordInput> {
           validationMessages: message,
           decoration: GenerateTheme.inputDecorationIcon(
             widget.hint,
-            Padding(
-              padding: EdgeInsets.only(
-                left: 12.w,
-              ),
-              child: widget.prefix,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(right: 10.0),
-              child: IconButton(
-                onPressed: () {
-                  setState(() {
-                    showPassword = !showPassword;
-                  });
-                },
-                icon: showPassword
-                    ? Icon(
-                        Icons.visibility_off,
-                        color: ColorTheme.neutral[600],
-                      )
-                    : Icon(
-                        Icons.visibility,
-                        color: ColorTheme.neutral[600],
-                      ),
-              ),
-            ),
+            // Padding(
+            //   padding: EdgeInsets.only(
+            //     left: 12.w,
+            //   ),
+            //   child: widget.prefix,
+            // ),
+            // child: Padding(
+            //   padding: const EdgeInsets.only(right: 10.0),
+            //   child: IconButton(
+            //     onPressed: () {
+            //       setState(() {
+            //         showPassword = !showPassword;
+            //       });
+            //     },
+            //     icon: showPassword
+            //         ? Icon(
+            //             Icons.visibility_off,
+            //             color: ColorTheme.neutral[600],
+            //           )
+            //         : Icon(
+            //             Icons.visibility,
+            //             color: ColorTheme.neutral[600],
+            //           ),
+            //   ),
+            // ),
           ),
         ),
       ],

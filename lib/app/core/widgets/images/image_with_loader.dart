@@ -9,8 +9,9 @@ class ImageWithLoader extends StatelessWidget {
   const ImageWithLoader({
     super.key,
     required this.imageUrl,
-    this.size = 100,
+    this.size = 125,
     this.width,
+    this.height,
     this.radius,
     this.child,
     this.boxShadow,
@@ -23,6 +24,7 @@ class ImageWithLoader extends StatelessWidget {
   final String imageUrl;
   final double size;
   final double? width;
+  final double? height;
   final double? radius;
   final Widget? child;
   final List<BoxShadow>? boxShadow;
@@ -36,7 +38,8 @@ class ImageWithLoader extends StatelessWidget {
     return imageUrl == ''
         ? EmptyImage(
             size: size,
-            width: width ?? size,
+            width: width,
+            height: height,
           )
         : CachedNetworkImage(
             imageUrl: imageUrl,
@@ -45,16 +48,17 @@ class ImageWithLoader extends StatelessWidget {
               highlightColor: Colors.white,
               child: EmptyImage(
                 size: size,
-                width: width ?? size,
+                width: width,
+                height: height,
                 radius: radius,
               ),
             ),
             imageBuilder: (context, imageProvider) => Container(
-              height: size,
-              width: width ?? size,
+              height: width,
+              width: width,
               decoration: BoxDecoration(
                 borderRadius: borderRadius ??
-                    BorderRadius.circular(radius ?? (size / 10)),
+                    BorderRadius.zero,
                 image: DecorationImage(
                   image: imageProvider,
                   fit: fit ?? BoxFit.cover,
@@ -66,18 +70,19 @@ class ImageWithLoader extends StatelessWidget {
             ),
             errorWidget: (context, url, error) => isBG
                 ? Container(
-                    height: size,
-                    width: width ?? size,
+                    height: width,
+                    width: width,
                     decoration: BoxDecoration(
                       borderRadius:
-                          BorderRadius.circular(radius ?? (size / 10)),
+                          BorderRadius.zero,
                       color: Colors.white,
                       boxShadow: boxShadow,
                     ),
                   )
                 : EmptyImage(
                     size: size,
-                    width: width ?? size,
+                    width: width,
+                    height: height,
                     radius: radius,
                     child: const Center(
                       child: Icon(CupertinoIcons.photo, color: Colors.grey),

@@ -100,7 +100,7 @@ class KtpScanCubit extends Cubit<KtpScanState> {
 
           await cmd.executeThread();
         } else {
-          emit(KtpScanError('Wajah tidak ditemukan'));
+          emit(KtpScanError('Face not detected.'));
           return;
         }
         final ktp = KtpModel.fromScan(r);
@@ -112,6 +112,6 @@ class KtpScanCubit extends Cubit<KtpScanState> {
     textRecognizer.close();
     faceDetector.close();
 
-    emit(KtpScanError('NIK tidak ditemukan'));
+    emit(KtpScanError('NIK not found.'));
   }
 }

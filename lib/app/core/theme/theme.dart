@@ -21,15 +21,15 @@ final colorTheme = ThemeData(
       color: ColorTheme.neutral.shade800,
     ),
   ),
-  appBarTheme: AppBarTheme(
-    backgroundColor: ColorTheme.primary,
-    shadowColor: ColorTheme.neutral.shade400,
-    elevation: 0.5,
-    foregroundColor: Colors.white,
-    titleTextStyle: AppStyles.text18PxSemiBold.copyWith(
-      color: Colors.white,
-    ),
-  ),
+  // appBarTheme: AppBarTheme(
+  //   backgroundColor: ColorTheme.primary,
+  //   shadowColor: ColorTheme.neutral.shade400,
+  //   elevation: 0.5,
+  //   foregroundColor: Colors.white,
+  //   titleTextStyle: AppStyles.text18PxSemiBold.copyWith(
+  //     color: Colors.white,
+  //   ),
+  // ),
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
       backgroundColor: ColorTheme.primary,
@@ -65,5 +65,5 @@ final colorTheme = ThemeData(
     ),
   ),
   colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.blue),
-  scaffoldBackgroundColor: ColorTheme.scaffoldBackground,
+  scaffoldBackgroundColor: ColorTheme.white,
 );

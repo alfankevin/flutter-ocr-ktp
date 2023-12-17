@@ -15,9 +15,15 @@ import 'package:penilaian/app/data/extensions/extensions.dart';
 import 'package:penilaian/app/data/models/data_model.dart';
 import 'package:penilaian/app/data/services/local_services/selected_local_services.dart';
 import 'package:penilaian/app/routes/app_routes.dart';
+import 'package:penilaian/app/data/models/ktp_model.dart';
+import 'package:penilaian/app/core/config/app_asset.dart';
+import 'package:penilaian/app/modules/home/ktp_scan/cubit/ktp_scan_cubit.dart';
+import 'package:penilaian/app/core/widgets/camera_overlay/camera_overlay_widget.dart';
+import 'package:penilaian/app/core/storage/storage_interface.dart';
 
 import 'cubit/home_cubit.dart';
 import 'widgets/home_card.dart';
+import 'alternatif/widgets/alternatif_card.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -27,16 +33,28 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final controller = Modular.get<HomeCubit>();
+  int _currentIndex = 0;
   String file = '';
+
+  final KtpScanCubit bloc = Modular.get<KtpScanCubit>();
+  OverlayFormat format = OverlayFormat.cardID2;
+  final storage = Modular.get<StorageInterface>();
+
+  final controller = Modular.get<HomeCubit>();
   late final CollectionReference _penilaianRef;
+  late final CollectionReference _alternatifRef;
+  late final CollectionReference _kriteriaRef;
+  late final String _refKey;
   late final User user;
 
   @override
   void initState() {
     super.initState();
     user = FirebaseAuth.instance.currentUser!;
-    _penilaianRef = FirebaseFirestore.instance.collection(user.uid);
+    _refKey = Modular.get<SelectedLocalServices>().selected;
+    _alternatifRef = FirebaseFirestore.instance.collection('$_refKey/alternatif');
+    _penilaianRef = FirebaseFirestore.instance.collection('$_refKey/nilai');
+    _kriteriaRef = FirebaseFirestore.instance.collection('$_refKey/kriteria');
     permission();
   }
 
@@ -50,148 +68,403 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return BaseScaffold(
-      appBar: BaseAppBar(
-        title: "Beranda",
-        isBack: false,
-        actions: [
-          IconButton(
-            onPressed: () async {
-              await context.read<SessionCubit>().deleteSession();
-            },
-            icon: const Icon(Icons.logout_rounded, color: ColorTheme.white),
-            tooltip: "Logout",
-          ).pOnly(right: 12),
-        ],
-      ),
-      body: FirestorePagination(
-        query: _penilaianRef.orderBy('created_at'),
-        onEmpty: const NoFoundWidget(),
-        isLive: true,
-        itemBuilder: (context, snapshot, i) {
-          final data = DataModel.fromMap(snapshot.data() as Map<Object?, Object?>);
-          return HomeCard(
-            title: data.name,
-            subTitle: data.deskripsi,
-            color: data.color,
-            onDelete: () async {
-              await _penilaianRef.doc(snapshot.id).delete();
-            },
-            onChange: () {
-              showDialog(
-                context: context,
-                builder: (context) {
-                  final nameCont = TextEditingController(text: data.name);
-                  final textCont = TextEditingController(text: data.deskripsi);
-
-                  return AlertDialog(
-                    title: const Text('Ubah data'),
-                    content: IntrinsicHeight(
-                      child: Column(
-                        children: [
-                          TextField(
-                            decoration: GenerateTheme.inputDecoration("Nama Jenis"),
-                            style: AppStyles.text16Px.copyWith(color: ColorTheme.black),
-                            controller: nameCont,
-                          ),
-                          16.verticalSpacingRadius,
-                          TextField(
-                            maxLines: 4,
-                            decoration: GenerateTheme.inputDecoration("Deskripsi"),
-                            style: AppStyles.text16Px.copyWith(color: ColorTheme.black),
-                            controller: textCont,
-                          ),
-                        ],
-                      ),
-                    ),
-                    actions: [
-                      ElevatedButton(
-                        onPressed: () {
-                          final model = data.copyWith(
-                            name: nameCont.text,
-                            deskripsi: textCont.text,
-                            color: data.color,
-                          );
-                          _penilaianRef
-                              .doc(snapshot.id)
-                              .set(model.toMap())
-                              .then((value) => Modular.to.pop());
-                        },
-                        child: const Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.save_rounded),
-                            Text('Simpan'),
-                          ],
-                        ),
-                      ),
-                    ],
-                  );
+  void _showDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierColor: Color.fromRGBO(0,0,0,0.25),
+      builder: (BuildContext context) {
+        return Stack(
+          children: [
+            Positioned(
+              bottom: 120,
+              left: 30,
+              right: MediaQuery.of(context).size.width / 2 + 7.5,
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pushNamed(AppRoutes.ktpScanHome).then((value) {
+                    setState(() {});
+                  });
                 },
-              );
-            },
-            onTap: () async {
-              final key = snapshot.id;
-              await Modular.get<SelectedLocalServices>().setSelected("/${user.uid}/$key");
-              Modular.to.pushNamed(AppRoutes.kriteriaHome);
-            },
-          ).py(8);
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        tooltip: 'Tambah data',
-        onPressed: () {
-          showDialog(
-            context: context,
-            builder: (context) {
-              final nameCont = TextEditingController();
-              final textCont = TextEditingController();
-
-              return AlertDialog(
-                title: const Text('Tambah data'),
-                content: IntrinsicHeight(
-                  child: Column(
-                    children: [
-                      TextField(
-                        decoration: GenerateTheme.inputDecoration("Nama Jenis"),
-                        style: AppStyles.text16Px.copyWith(color: ColorTheme.black),
-                        controller: nameCont,
-                      ),
-                      16.verticalSpacingRadius,
-                      TextField(
-                        maxLines: 4,
-                        decoration: GenerateTheme.inputDecoration("Deskripsi"),
-                        style: AppStyles.text16Px.copyWith(color: ColorTheme.black),
-                        controller: textCont,
-                      ),
-                    ],
+                child: Container(
+                  height: 100,
+                  decoration: BoxDecoration(
+                    color: Color(0xffF7F8FD),
+                    borderRadius: BorderRadius.circular(16)
+                  ),
+                  child: Center(
+                    child: Image.asset(
+                      'assets/img/camera.png',
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
-                actions: [
-                  ElevatedButton(
-                    onPressed: () {
-                      final data = DataModel.initial(nameCont.text, textCont.text, 6.randColor);
-                      _penilaianRef.doc().set(data.toMap()).then((value) => context.to.pop());
-                    },
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.save_rounded),
-                        Text('Simpan'),
-                      ],
+              ),
+            ),
+            Positioned(
+              bottom: 120,
+              right: 30,
+              left: MediaQuery.of(context).size.width / 2 + 7.5,
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pushNamed(AppRoutes.ktpPickHome).then((value) {
+                    setState(() {});
+                  });
+                },
+                child: Container(
+                  height: 100,
+                  decoration: BoxDecoration(
+                    color: Color(0xffF7F8FD),
+                    borderRadius: BorderRadius.circular(16)
+                  ),
+                  child: Center(
+                    child: Image.asset(
+                      'assets/img/gallery.png',
+                      fit: BoxFit.cover,
                     ),
                   ),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _recentContainer(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: 200,
+      child: Stack(
+        children: [
+          Positioned(
+            top: 20,
+            right: 0,
+            bottom: 20,
+            child: Container(
+              width: 175,
+              decoration: BoxDecoration(
+                border: Border.all(color: Color(0xffDDDBFF).withOpacity(0.5), width: 1),
+                borderRadius: BorderRadius.circular(8),
+                boxShadow: [
+                  BoxShadow(
+                    color: Color(0xffDDDBFF).withOpacity(0.2),
+                    spreadRadius: 0.1,
+                    blurRadius: 10,
+                    offset: Offset(5, 5),
+                  ),
                 ],
-              );
-            },
-          );
-        },
-        // child: const Icon(Icons.qr_code_scanner_rounded),
-        child: const Icon(
-          Icons.add_circle_outline_outlined,
-          size: 30,
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Column(
+                  children: [
+                    Image.asset(
+                      'assets/img/image3.png',
+                    ),
+                    Expanded(
+                      child: Container(
+                        padding: EdgeInsets.all(16),
+                        color: Colors.white,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Scan 01:11:2020 03:57:06',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold
+                              )
+                            ),
+                            SizedBox(height: 4),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'Today',
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                    color: Colors.grey
+                                  )
+                                ),
+                                Text(
+                                  '1 page',
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                  )
+                                ),
+                              ],
+                            )
+                          ]
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              )
+            ),
+          ),
+          Positioned(
+            top: 10,
+            left: MediaQuery.of(context).size.width / 2 - 100,
+            right: MediaQuery.of(context).size.width / 2 - 150,
+            bottom: 10,
+            child: Container(
+              width: 200,
+              decoration: BoxDecoration(
+                border: Border.all(color: Color(0xffDDDBFF).withOpacity(0.5), width: 1),
+                borderRadius: BorderRadius.circular(8),
+                boxShadow: [
+                  BoxShadow(
+                    color: Color(0xffDDDBFF).withOpacity(0.2),
+                    spreadRadius: 0.1,
+                    blurRadius: 10,
+                    offset: Offset(5, 5),
+                  ),
+                ],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Column(
+                  children: [
+                    Image.asset(
+                      'assets/img/image2.png',
+                    ),
+                    Expanded(
+                      child: Container(
+                        padding: EdgeInsets.all(16),
+                        color: Colors.white,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Scan 20:02:2021 01:36:43',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold
+                              )
+                            ),
+                            SizedBox(height: 4),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'Today',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.grey
+                                  )
+                                ),
+                                Text(
+                                  '1 page',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                  )
+                                ),
+                              ],
+                            )
+                          ]
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            ),
+          ),
+          Positioned(
+            top: 0,
+            left: 0,
+            bottom: 0,
+            child: Container(
+              width: 225,
+              decoration: BoxDecoration(
+                border: Border.all(color: Color(0xffDDDBFF).withOpacity(0.5), width: 1),
+                borderRadius: BorderRadius.circular(8),
+                boxShadow: [
+                  BoxShadow(
+                    color: Color(0xffDDDBFF).withOpacity(0.2),
+                    spreadRadius: 0.1,
+                    blurRadius: 10,
+                    offset: Offset(5, 5),
+                  ),
+                ],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Column(
+                  children: [
+                    Image.asset(
+                      'assets/img/image1.png',
+                    ),
+                    Expanded(
+                      child: Container(
+                        padding: EdgeInsets.all(16),
+                        color: Colors.white,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Scan 01:11:2020 03:57:06',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold
+                              )
+                            ),
+                            SizedBox(height: 4),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'Today',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.grey
+                                  )
+                                ),
+                                Text(
+                                  '1 page',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                  )
+                                ),
+                              ],
+                            )
+                          ]
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Color(0xffF7F8FD),
+      appBar: AppBar(
+        title: Text(
+          'FlamScan',
+          style: TextStyle(
+            fontSize: 28,
+            fontWeight: FontWeight.bold,
+            color: Color(0xFF2F4FCD)
+          )
+        ),
+        actions: [
+          Padding(
+            padding: EdgeInsets.only(right: 15),
+            child: IconButton(
+              icon: Image.asset(
+                'assets/img/search.png',
+                height: 24,
+              ),
+              onPressed: () async {
+                await context.read<SessionCubit>().deleteSession();
+              },
+            ),
+          )
+        ],
+        titleSpacing: 30,
+        backgroundColor: Color(0xffF7F8FD),
+      ),
+      body: Container(
+        margin: EdgeInsets.fromLTRB(30, 0, 30, 0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: 12),
+            Text(
+              'Recent',
+              style: TextStyle(
+                fontSize: 18,
+                color: Colors.grey,
+              ),
+            ),
+            SizedBox(height: 16),
+            _recentContainer(context),
+            SizedBox(height: 24),
+            Text(
+              'Documents',
+              style: TextStyle(
+                fontSize: 18,
+                color: Colors.grey,
+              ),
+            ),
+            SizedBox(height: 16),
+            Expanded(
+              child: FirestorePagination(
+                query: _alternatifRef.orderBy('created_at'),
+                isLive: true,
+                onEmpty: const NoFoundWidget(),
+                // separatorBuilder: (p0, p1) => 8.verticalSpacingRadius,
+                itemBuilder: (context, snapshot, i) {
+                  final data = KtpModel.fromMap(snapshot.data() as Map<Object?, Object?>);
+                  return Padding(
+                    padding: EdgeInsets.only(bottom: 8),
+                    child: AlternatifCard(
+                      number: i + 1,
+                      data: data,
+                      onDelete: () async {
+                        await _alternatifRef.doc(snapshot.id).delete();
+                        await _penilaianRef.doc(snapshot.id).delete();
+                        // await _storageRef.child('${snapshot.id}.jpg').delete();
+                      },
+                      onEdit: () async {
+                        await Modular.get<SelectedLocalServices>().setSelectedEdit(snapshot.id);
+                        Modular.to.pushNamed(AppRoutes.ktpResultHome, arguments: data);
+                      },
+                      onTap: () async {
+                        await Modular.to.pushNamed(AppRoutes.penilaianHome, arguments: snapshot.id);
+                        final pen =
+                            await _penilaianRef.where('alternatif_id', isEqualTo: snapshot.id).count().get();
+                        final kriteria = await _kriteriaRef.count().get();
+                        bool filled = pen.count == kriteria.count;
+                        await _alternatifRef.doc(snapshot.id).update({'filled': filled});
+                      },
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: SizedBox(
+        height: 100,
+        child: BottomNavigationBar(
+          backgroundColor: Color(0xFFDDDBFF),
+          selectedItemColor: Color(0xff2F4FCD),
+          unselectedItemColor: Colors.black,
+          type: BottomNavigationBarType.fixed,
+          currentIndex: _currentIndex,
+          onTap: (index) {
+            if (index == 1) {
+              _showDialog(context);
+            }
+          },
+          items: const [
+            BottomNavigationBarItem(
+              icon: ImageIcon(AssetImage(AppAsset.icon_files)),
+              label: 'Files',
+            ),
+            BottomNavigationBarItem(
+              icon: ImageIcon(AssetImage(AppAsset.icon_create)),
+              label: 'Scan',
+            ),
+            BottomNavigationBarItem(
+              icon: ImageIcon(AssetImage(AppAsset.icon_settings)),
+              label: 'Settings',
+            ),
+          ],
         ),
       ),
     );

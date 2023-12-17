@@ -23,34 +23,30 @@ class GenerateTheme {
         ),
       );
 
-  static InputDecoration inputDecorationIcon(String hint, Widget? prefix, Widget? suffix) =>
-      InputDecoration(
-        contentPadding: 12.all,
+  static InputDecoration inputDecorationIcon(String hint) => InputDecoration(
+        contentPadding: 0.all,
         fillColor: ColorTheme.white,
         filled: true,
         hintText: hint,
-        prefixIcon: prefix,
-        suffixIcon: suffix,
-        prefixIconColor: ColorTheme.tint.shade400,
-        errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: ColorTheme.red, width: 1),
+        // border: OutlineInputBorder(
+        //   borderRadius: BorderRadius.circular(8),
+        //   borderSide: const BorderSide(color: ColorTheme.primary, width: 1),
+        // ),
+        // disabledBorder: OutlineInputBorder(
+        //   borderRadius: BorderRadius.circular(8),
+        //   borderSide: BorderSide(color: ColorTheme.tint[200]!, width: 1),
+        // ),
+        errorBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: ColorTheme.red),
         ),
-        focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: ColorTheme.red, width: 1),
+        focusedErrorBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: ColorTheme.red),
         ),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: ColorTheme.primary, width: 1),
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.grey[800]!),
         ),
-        disabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: ColorTheme.tint[200]!, width: 1),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: ColorTheme.tint[400]!, width: 1),
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: Color.fromRGBO(47, 79, 205, 1.0)),
         ),
       );
 

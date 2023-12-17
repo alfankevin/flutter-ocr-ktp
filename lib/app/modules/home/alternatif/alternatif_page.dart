@@ -15,6 +15,9 @@ import 'package:penilaian/app/data/models/ktp_model.dart';
 import 'package:penilaian/app/data/models/penilaian_model.dart';
 import 'package:penilaian/app/data/services/local_services/selected_local_services.dart';
 import 'package:penilaian/app/routes/app_routes.dart';
+import 'package:penilaian/app/blocs/session/session_cubit.dart';
+import 'package:penilaian/app/core/permission/permission.dart';
+import 'package:penilaian/app/core/config/app_asset.dart';
 
 import 'widgets/alternatif_card.dart';
 
@@ -26,6 +29,8 @@ class AlternatifPage extends StatefulWidget {
 }
 
 class _AlternatifPageState extends State<AlternatifPage> {
+  int _currentIndex = 0;
+
   late final CollectionReference _alternatifRef;
   late final CollectionReference _penilaianRef;
   late final CollectionReference _kriteriaRef;
@@ -42,210 +47,250 @@ class _AlternatifPageState extends State<AlternatifPage> {
     _storageRef = FirebaseStorage.instance.ref(StringHelper.imageStorage);
   }
 
+  permission() async {
+    await Modular.get<PermissionInterface>().camera();
+    await Modular.get<PermissionInterface>().storage();
+  }
+
   Future<void> penilaian() async {
     context.showLoadingIndicator();
-    final penilaian = await _penilaianRef.get();
-    final kriteria = (await _kriteriaRef.get()).docs;
-    final alternatifCount = (await _alternatifRef.count().get()).count;
-    if (kriteria.isEmpty) {
-      context.showSnackbar(message: "Data kriteria belum ada!", error: true, isPop: true);
-      return;
-    }
-    if (penilaian.docs.isEmpty) {
-      context.showSnackbar(
-          message: "Data alternatif per kriteria belum diisi!", error: true, isPop: true);
-      return;
-    }
-    print(
-        "kriteria: $alternatifCount / penilaian: ${penilaian.docs.length} = ${penilaian.docs.length ~/ kriteria.length}");
-    if (alternatifCount != penilaian.docs.length ~/ kriteria.length) {
-      context.showSnackbar(
-          message: "Data alternatif per kriteria belum diisi!", error: true, isPop: true);
-      return;
-    }
-    Map<String, KriteriaModel> kriteriaAll = {};
-    num totalW = 0;
-    Map<String, Map<String, num>> minMax = {};
-    for (var e in kriteria) {
-      final data = e.data() as Map<Object?, Object?>;
-      final model = KriteriaModel.fromMap(data);
-      kriteriaAll.addAll({e.id: model});
-      totalW += model.w;
-      minMax[e.id] = {
-        'min': 100000,
-        'max': 0,
-      };
-    }
-    print(minMax);
-    Map<String, Map<String, num>> matrix = {};
-    final pen = penilaian.docs;
-    for (var e in pen) {
-      final data = PenilaianModel.fromJson(e.data() as Map<String, Object?>);
-      if (matrix[data.alternatifId] == null) {
-        matrix[data.alternatifId] = {};
-      }
-      matrix[data.alternatifId]!.addAll({data.kriteriaId: data.nilai.round3});
-    }
-    // cari min max
-    for (var e in matrix.keys) {
-      final data = matrix[e]!;
-      for (var key in data.keys) {
-        final nilai = data[key] as num;
-        if (nilai < minMax[key]!['min']!) {
-          minMax[key]!['min'] = nilai;
-        }
-        if (nilai > minMax[key]!['max']!) {
-          minMax[key]!['max'] = nilai;
-        }
-      }
-    }
-    final Map<String, Map<String, dynamic>> parameter = {};
-    // Normalisasi
-    for (var e in matrix.keys) {
-      final data = matrix[e]!; // alternatif id
-      for (var key in data.keys) {
-        // alternatif id
-        final nilai = data[key] as num;
-        if (kriteriaAll[key]!.isBenefit) {
-          matrix[e]![key] = (nilai / minMax[key]!['max']!).round3;
-        } else {
-          matrix[e]![key] = (minMax[key]!['min']! / nilai).round3;
-        }
-        // perhitungan parameter
-        if (parameter[key] == null) {
-          num w = (kriteriaAll[key]!.w / totalW) * 100;
-          parameter[key] = {
-            'g-': matrix[e]![key],
-            'g+': matrix[e]![key],
-            'i': w,
-            'beda': w,
-          };
-        }
-        if (matrix[e]![key]! < parameter[key]!['g-']!) {
-          parameter[key]!['g-'] = matrix[e]![key];
-        }
-        if (matrix[e]![key]! > parameter[key]!['g+']!) {
-          parameter[key]!['g+'] = matrix[e]![key];
-        }
-      }
-    }
-    // print(matrix);
-    for (var e in parameter.keys) {
-      num beda = (parameter[e]!['g+']! - parameter[e]!['g-']!) / parameter[e]!['i']!;
-      parameter[e]!['beda'] = beda.round3;
-      print("$e => ${parameter[e]}");
-    }
-    // print(parameter);
-    // perengkingan
-    final Map<String, num> ranking = {};
-    for (var e in matrix.keys) {
-      final data = matrix[e]!;
-      ranking[e] = 0;
-      for (var key in data.keys) {
-        matrix[e]![key] = (matrix[e]![key]! * parameter[key]!['beda']!).round3;
-        ranking[e] = ranking[e]! + matrix[e]![key]!;
-      }
-      await _alternatifRef.doc(e).update({'nilai': ranking[e]!.round3, 'filled': true});
-    }
-    // print(ranking);
-    context.hideLoading();
-    context.to.pushNamed(AppRoutes.winnerHome);
   }
 
   @override
   Widget build(BuildContext context) {
-    return BaseScaffold(
-      appBar: const BaseAppBar(
-        title: "Alternatif",
+    return Scaffold(
+      backgroundColor: Color(0xffF7F8FD),
+      appBar: AppBar(
+        title: Text(
+          'FlamScan',
+          style: TextStyle(
+            fontSize: 28,
+            fontWeight: FontWeight.bold,
+            color: Color(0xFF2F4FCD)
+          )
+        ),
+        actions: [
+          IconButton(
+            onPressed: () async {
+              await context.read<SessionCubit>().deleteSession();
+            },
+            icon: const Icon(Icons.logout_rounded, color: ColorTheme.black),
+            tooltip: "Logout",
+          ).pOnly(right: 12),
+        ],
+        titleSpacing: 24,
+        backgroundColor: Color(0xffF7F8FD),
       ),
-      body: FirestorePagination(
-        query: _alternatifRef.orderBy('created_at'),
-        isLive: true,
-        onEmpty: const NoFoundWidget(),
-        separatorBuilder: (p0, p1) => 12.verticalSpacingRadius,
-        itemBuilder: (context, snapshot, i) {
-          final data = KtpModel.fromMap(snapshot.data() as Map<Object?, Object?>);
-          return AlternatifCard(
-            number: i + 1,
-            data: data,
-            onDelete: () async {
-              await _alternatifRef.doc(snapshot.id).delete();
-              await _penilaianRef.doc(snapshot.id).delete();
-              // await _storageRef.child('${snapshot.id}.jpg').delete();
-            },
-            onEdit: () async {
-              await Modular.get<SelectedLocalServices>().setSelectedEdit(snapshot.id);
-              Modular.to.pushNamed(AppRoutes.ktpResultHome, arguments: data);
-            },
-            onTap: () async {
-              await Modular.to.pushNamed(AppRoutes.penilaianHome, arguments: snapshot.id);
-              final pen =
-                  await _penilaianRef.where('alternatif_id', isEqualTo: snapshot.id).count().get();
-              final kriteria = await _kriteriaRef.count().get();
-              bool filled = pen.count == kriteria.count;
-              await _alternatifRef.doc(snapshot.id).update({'filled': filled});
-            },
-          );
-        },
-      ),
-      bottomNavigationBar: Padding(
-        padding: 16.all.copyWith(top: 0),
-        child: Row(
+      body: Container(
+        margin: EdgeInsets.fromLTRB(24, 0, 24, 0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: ColorTheme.green,
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(16.r),
-                      bottomLeft: Radius.circular(16.r),
-                    ),
-                  ),
-                  textStyle: AppStyles.text16PxMedium,
-                  minimumSize: Size(200.r, 48.r),
-                ),
-                onPressed: () {
-                  context.to.pushNamed(AppRoutes.ktpScanHome).then((value) => setState(() {}));
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(Icons.qr_code_scanner_rounded),
-                    6.horizontalSpaceRadius,
-                    const Text('Tambah'),
-                  ],
-                ),
+            SizedBox(height: 12),
+            Text(
+              'Recent',
+              style: TextStyle(
+                fontSize: 18,
+                color: Colors.grey,
               ),
             ),
-            12.horizontalSpaceRadius,
-            Expanded(
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: ColorTheme.primary,
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(16.r),
-                      bottomRight: Radius.circular(16.r),
-                    ),
+            SizedBox(height: 16),
+            Container(
+              width: 225,
+              decoration: BoxDecoration(
+                border: Border.all(color: Color(0xffDDDBFF).withOpacity(0.5), width: 1),
+                borderRadius: BorderRadius.circular(8),
+                boxShadow: [
+                  BoxShadow(
+                    color: Color(0xffDDDBFF).withOpacity(0.2),
+                    spreadRadius: 0.1,
+                    blurRadius: 10,
+                    offset: Offset(5, 5),
                   ),
-                  textStyle: AppStyles.text16PxMedium,
-                  minimumSize: Size(200.r, 48.r),
-                ),
-                onPressed: () {
-                  penilaian();
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                ],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Column(
                   children: [
-                    const Text('Hitung'),
-                    6.horizontalSpaceRadius,
-                    const Icon(Icons.calculate),
+                    Image.asset(
+                      'assets/img/image1.png',
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(16),
+                      color: Colors.white,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Scan 01:11:2020 03:57:06',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold
+                            )
+                          ),
+                          SizedBox(height: 4),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Today',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.grey
+                                )
+                              ),
+                              Text(
+                                '1 page',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                )
+                              ),
+                            ],
+                          )
+                        ]
+                      ),
+                    )
                   ],
                 ),
+              )
+            ),
+            SizedBox(height: 24),
+            Text(
+              'Documents',
+              style: TextStyle(
+                fontSize: 18,
+                color: Colors.grey,
               ),
+            ),
+            SizedBox(height: 16),
+            Expanded(
+              child: FirestorePagination(
+                query: _alternatifRef.orderBy('created_at'),
+                isLive: true,
+                onEmpty: const NoFoundWidget(),
+                // separatorBuilder: (p0, p1) => 8.verticalSpacingRadius,
+                itemBuilder: (context, snapshot, i) {
+                  final data = KtpModel.fromMap(snapshot.data() as Map<Object?, Object?>);
+                  return Padding(
+                    padding: EdgeInsets.only(bottom: 8),
+                    child: AlternatifCard(
+                      number: i + 1,
+                      data: data,
+                      onDelete: () async {
+                        await _alternatifRef.doc(snapshot.id).delete();
+                        await _penilaianRef.doc(snapshot.id).delete();
+                        // await _storageRef.child('${snapshot.id}.jpg').delete();
+                      },
+                      onEdit: () async {
+                        await Modular.get<SelectedLocalServices>().setSelectedEdit(snapshot.id);
+                        Modular.to.pushNamed(AppRoutes.ktpResultHome, arguments: data);
+                      },
+                      onTap: () async {
+                        await Modular.to.pushNamed(AppRoutes.penilaianHome, arguments: snapshot.id);
+                        final pen =
+                            await _penilaianRef.where('alternatif_id', isEqualTo: snapshot.id).count().get();
+                        final kriteria = await _kriteriaRef.count().get();
+                        bool filled = pen.count == kriteria.count;
+                        await _alternatifRef.doc(snapshot.id).update({'filled': filled});
+                      },
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+      // bottomNavigationBar: Padding(
+      //   padding: 0.all.copyWith(top: 0),
+      //   child: Row(
+      //     children: [
+      //       Expanded(
+      //         child: ElevatedButton(
+      //           style: ElevatedButton.styleFrom(
+      //             backgroundColor: ColorTheme.green,
+      //             foregroundColor: Colors.white,
+      //             shape: RoundedRectangleBorder(
+      //               borderRadius: BorderRadius.only(
+      //                 topLeft: Radius.circular(16.r),
+      //                 bottomLeft: Radius.circular(16.r),
+      //               ),
+      //             ),
+      //             textStyle: AppStyles.text16PxMedium,
+      //             minimumSize: Size(200.r, 48.r),
+      //           ),
+      //           onPressed: () {
+      //             context.to.pushNamed(AppRoutes.ktpScanHome).then((value) => setState(() {}));
+      //           },
+      //           child: Row(
+      //             mainAxisAlignment: MainAxisAlignment.center,
+      //             children: [
+      //               const Icon(Icons.qr_code_scanner_rounded),
+      //               6.horizontalSpaceRadius,
+      //               const Text('Tambah'),
+      //             ],
+      //           ),
+      //         ),
+      //       ),
+      //       12.horizontalSpaceRadius,
+      //       Expanded(
+      //         child: ElevatedButton(
+      //           style: ElevatedButton.styleFrom(
+      //             backgroundColor: ColorTheme.primary,
+      //             foregroundColor: Colors.white,
+      //             shape: RoundedRectangleBorder(
+      //               borderRadius: BorderRadius.only(
+      //                 topRight: Radius.circular(16.r),
+      //                 bottomRight: Radius.circular(16.r),
+      //               ),
+      //             ),
+      //             textStyle: AppStyles.text16PxMedium,
+      //             minimumSize: Size(200.r, 48.r),
+      //           ),
+      //           onPressed: () {
+      //             penilaian();
+      //           },
+      //           child: Row(
+      //             mainAxisAlignment: MainAxisAlignment.center,
+      //             children: [
+      //               const Text('Hitung'),
+      //               6.horizontalSpaceRadius,
+      //               const Icon(Icons.calculate),
+      //             ],
+      //           ),
+      //         ),
+      //       ),
+      //     ],
+      //   ),
+      // ),
+      bottomNavigationBar: SizedBox(
+        height: 100,
+        child: BottomNavigationBar(
+          backgroundColor: Color(0xFFDDDBFF),
+          selectedItemColor: Color(0xff2F4FCD),
+          unselectedItemColor: Colors.black,
+          type: BottomNavigationBarType.fixed,
+          currentIndex: _currentIndex,
+          onTap: (index) {
+            if (index == 1) {
+              Navigator.of(context).pushNamed(AppRoutes.ktpScanHome).then((value) {
+                setState(() {});
+              });
+            }
+          },
+          items: const [
+            BottomNavigationBarItem(
+              icon: ImageIcon(AssetImage(AppAsset.icon_files)),
+              label: 'Files',
+            ),
+            BottomNavigationBarItem(
+              icon: ImageIcon(AssetImage(AppAsset.icon_create)),
+              label: 'Scan',
+            ),
+            BottomNavigationBarItem(
+              icon: ImageIcon(AssetImage(AppAsset.icon_settings)),
+              label: 'Settings',
             ),
           ],
         ),

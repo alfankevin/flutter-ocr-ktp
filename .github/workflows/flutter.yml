@@ -31,7 +31,7 @@ jobs:
       - name: Get dependencies
         run: flutter pub get
 
-      - name: Build APK Tentu bantu
+      - name: Build APK OCR KTP
         run: flutter build apk --release lib/main_bantu.dart --flavor bantu --no-tree-shake-icons
 
       - name: move APK file Staging

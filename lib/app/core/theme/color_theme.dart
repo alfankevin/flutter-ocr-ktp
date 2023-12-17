@@ -53,7 +53,7 @@ class ColorTheme {
   static const Color red = Color(0xffDE453A);
   static const Color yellow = Color(0xffFAFF00);
 
-  //text colors
+  // text colors
   static const Color textDark = Color(0xFF222222);
   static const Color textLight = Color(0xFFCFCFCF);
   static const Color textGrey = Color(0xFF898989);
@@ -71,7 +71,7 @@ class ColorTheme {
   static const Color main100 = Color(0xFF3498DB);
   static const Color main90 = Color(0xFF3498DB);
 
-  //status color
+  // status color
   static const Color statusRed = Color(0xFFFF4D4F);
   static const Color statusLightRed = Color(0xFFF9E3E3);
   static const Color statusGreen = Color(0xFF52C41A);
@@ -85,7 +85,7 @@ class ColorTheme {
   static const Color brandBackgroundLight = Color(0xFFABC4F1);
   static const Color secondaryButtonBackground = Color(0xFFEBEBEB);
 
-  //default
+  // default
   static const Color border = Color(0xFFD6D6D6);
   static const Color dashBorder = Color(0xFFABC4F1);
   static const Color white = Color(0xFFFFFFFF);

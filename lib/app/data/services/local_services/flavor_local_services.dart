@@ -14,10 +14,10 @@ class FlavorLocalServicesImpl extends FlavorLocalServices {
   final _keyImage = "flavor-Image-ddddd";
 
   @override
-  String get image => _box.read(_keyImage) ?? "assets/img/logo.png";
+  String get image => _box.read(_keyImage) ?? "assets/img/app-development1.png";
 
   @override
-  String get name => _box.read(_keyName) ?? "Tentu Bisa";
+  String get name => _box.read(_keyName) ?? "OCR KTP";
 
   @override
   Future<void> setImage(String value) {

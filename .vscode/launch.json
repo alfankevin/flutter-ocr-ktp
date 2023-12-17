@@ -2,7 +2,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Tentu Bantu",
+            "name": "OCR KTP",
             "request": "launch",
             "type": "dart",
             "flutterMode": "debug",

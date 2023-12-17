@@ -13,11 +13,14 @@ class NoFoundWidget extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.info_outline_rounded, size: 64.r, color: ColorTheme.greyScale50),
-          12.verticalSpacingRadius,
+          Image.asset('assets/img/blank.png', height: 100,),
+          SizedBox(height: 16),
           Text(
-            "Data kosong",
-            style: AppStyles.text16PxMedium.copyWith(color: ColorTheme.greyScale50),
+            "You don't have any documents",
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.grey,
+            ),
           ),
         ],
       ),

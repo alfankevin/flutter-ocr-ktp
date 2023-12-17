@@ -69,10 +69,10 @@ class _FlutterCameraOverlayState extends State<CameraOverlayWidget> {
           color: Colors.white,
           height: double.infinity,
           width: double.infinity,
-          child: const Align(
-            alignment: Alignment.center,
-            child: Text('loading camera'),
-          ),
+          // child: const Align(
+          //   alignment: Alignment.center,
+          //   child: Text('loading camera'),
+          // ),
         );
 
     if (!controller.value.isInitialized) {
@@ -107,8 +107,9 @@ class _FlutterCameraOverlayState extends State<CameraOverlayWidget> {
                           style: const TextStyle(color: Colors.white),
                         ),
                       ),
-                  ],
-                )),
+                    ],
+                  )
+                ),
           ),
         if (widget.enableCaptureButton)
           Align(

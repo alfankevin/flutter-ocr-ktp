@@ -19,18 +19,21 @@ class OverlayShape extends StatelessWidget {
     return Stack(
       children: [
         Align(
-            alignment: Alignment.center,
-            child: Container(
-              width: width,
-              height: width / ratio,
-              decoration: ShapeDecoration(
-                  color: Colors.transparent,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(radius),
-                      side: const BorderSide(width: 1, color: Colors.white))),
-            )),
+          alignment: Alignment.center,
+          child: Container(
+            width: width,
+            height: width / ratio,
+            decoration: ShapeDecoration(
+              color: Colors.transparent,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(radius),
+                side: const BorderSide(width: 1, color: Colors.white)
+              )
+            ),
+          )
+        ),
         ColorFiltered(
-          colorFilter: const ColorFilter.mode(Colors.black54, BlendMode.srcOut),
+          colorFilter: const ColorFilter.mode(Colors.transparent, BlendMode.srcOut),
           child: Stack(
             children: [
               Container(

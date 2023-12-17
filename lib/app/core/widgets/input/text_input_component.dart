@@ -35,9 +35,9 @@ class TextInputComponent extends StatefulWidget {
 
 class _TextInputComponentState extends State<TextInputComponent> {
   final Map<String, String Function(Object)> message = {
-    ValidationMessage.required: (_) => 'Inputan ini tidak boleh kosong',
-    ValidationMessage.email: (_) => 'Email yang ada masukkan tidak valid',
-    'validation_error': (e) => (e as String),
+    // ValidationMessage.required: (_) => 'Inputan ini tidak boleh kosong',
+    // ValidationMessage.email: (_) => 'Email yang ada masukkan tidak valid',
+    // 'validation_error': (e) => (e as String),
   };
 
   @override
@@ -57,23 +57,23 @@ class _TextInputComponentState extends State<TextInputComponent> {
               TextSpan(
                 text: widget.label,
               ),
-              if (widget.isRequiredText)
-                TextSpan(
-                  text: "*",
-                  style:
-                      AppStyles.text16PxMedium.copyWith(color: ColorTheme.red),
-                ),
+              // if (widget.isRequiredText)
+              //   TextSpan(
+              //     text: "*",
+              //     style:
+              //         AppStyles.text16PxMedium.copyWith(color: ColorTheme.red),
+              //   ),
             ],
           ),
-          style: AppStyles.text16PxMedium.copyWith(fontWeight: FontWeight.w700),
+          style: AppStyles.text16PxMedium,
         ),
-        8.verticalSpacingRadius,
+        // 8.verticalSpacingRadius,
         ReactiveTextField(
           keyboardType: widget.textInputType,
           formControlName: widget.formControlName,
           style: AppStyles.text18Px.copyWith(color: ColorTheme.neutral[800]),
           decoration: GenerateTheme.inputDecorationIcon(
-              widget.hint, widget.prefix, widget.suffix),
+              widget.hint),
           validationMessages: message,
           maxLines: widget.maxLines,
           onChanged: widget.onChanged,
