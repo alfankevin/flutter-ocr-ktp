@@ -1,11 +1,8 @@
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:penilaian/app/core/permission/permission.dart';
 import 'package:penilaian/app/core/storage/storage_interface.dart';
-import 'package:penilaian/app/core/theme/theme.dart';
-import 'package:penilaian/app/core/widgets/base/base_app_bar.dart';
 import 'package:penilaian/app/core/widgets/camera_overlay/camera_overlay_widget.dart';
 import 'package:penilaian/app/data/extensions/extensions.dart';
 import 'package:penilaian/app/modules/home/ktp_scan/cubit/ktp_scan_cubit.dart';
@@ -41,7 +38,8 @@ class _KtpPickPageState extends State<KtpPickPage> {
       extensions: ["jpg", "jpeg", "png"],
     );
     if (file != null) {
-      bloc.scanKtp(file.path, CardOverlay.byFormat(format), MediaQuery.of(context));
+      bloc.scanKtp(
+          file.path, CardOverlay.byFormat(format), MediaQuery.of(context));
     } else {
       Navigator.of(context).pop();
     }
@@ -58,16 +56,23 @@ class _KtpPickPageState extends State<KtpPickPage> {
             context.showLoadingIndicator();
           }
           if (state is KtpScanError) {
-            context.showSnackbar(message: "KTP not found.", error: true, isPop: true);
+            context.showSnackbar(
+                message: "KTP not found.", error: true, isPop: true);
             Navigator.of(context).pop();
           }
           if (state is KtpScanLoaded) {
             context.hideLoading();
-            Modular.to.pushReplacementNamed(AppRoutes.ktpResultHome, arguments: state.item);
+            Modular.to.pushReplacementNamed(
+              AppRoutes.ktpResultHome,
+              arguments: {
+                'item': state.item,
+                'key': '',
+              },
+            );
             // context.showSnackbar(message: "NIK ditemukan");
           }
         },
-        child: Scaffold(
+        child: const Scaffold(
           body: Scaffold(),
         ),
       ),

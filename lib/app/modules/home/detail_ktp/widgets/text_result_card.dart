@@ -41,11 +41,9 @@ class _TextResultCardState extends State<TextResultCard> {
                 borderRadius: BorderRadius.circular(8),
               ),
               title: Text(
-                '${widget.title}',
+                widget.title,
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.black
-                ),
+                style: const TextStyle(color: Colors.black),
               ),
               content: TextField(
                 decoration: InputDecoration(
@@ -53,7 +51,8 @@ class _TextResultCardState extends State<TextResultCard> {
                     borderSide: BorderSide.none,
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  contentPadding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 16.0),
+                  contentPadding: const EdgeInsets.symmetric(
+                      vertical: 0.0, horizontal: 16.0),
                   filled: true,
                   fillColor: Colors.white,
                 ),
@@ -66,7 +65,8 @@ class _TextResultCardState extends State<TextResultCard> {
                     Navigator.pop(context, nameCont.text);
                   },
                   style: ButtonStyle(
-                    minimumSize: MaterialStateProperty.all(Size.fromHeight(47.5)),
+                    minimumSize:
+                        MaterialStateProperty.all(const Size.fromHeight(47.5)),
                     shadowColor: MaterialStateProperty.all(Colors.transparent),
                     backgroundColor: MaterialStateProperty.all(Colors.blue),
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -97,6 +97,7 @@ class _TextResultCardState extends State<TextResultCard> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Expanded(
+            flex: 1,
             child: Text(
               widget.title,
               style:
@@ -104,6 +105,7 @@ class _TextResultCardState extends State<TextResultCard> {
             ),
           ),
           Expanded(
+            flex: 2,
             child: Text(
               value,
               textAlign: TextAlign.end,

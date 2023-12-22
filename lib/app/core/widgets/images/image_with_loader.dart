@@ -1,17 +1,17 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:penilaian/app/data/services/local_services/flavor_local_services.dart';
 import 'package:shimmer/shimmer.dart';
 
 import 'empty_image.dart';
 
 class ImageWithLoader extends StatelessWidget {
-  const ImageWithLoader({
+  ImageWithLoader({
     super.key,
     required this.imageUrl,
-    this.size = 125,
+    this.size = 100,
     this.width,
-    this.height,
     this.radius,
     this.child,
     this.boxShadow,
@@ -24,7 +24,6 @@ class ImageWithLoader extends StatelessWidget {
   final String imageUrl;
   final double size;
   final double? width;
-  final double? height;
   final double? radius;
   final Widget? child;
   final List<BoxShadow>? boxShadow;
@@ -32,32 +31,35 @@ class ImageWithLoader extends StatelessWidget {
   final bool isBG;
   final BoxFit? fit;
   final BoxBorder? border;
+  final local = FlavorLocalServicesImpl();
 
   @override
   Widget build(BuildContext context) {
-    return imageUrl == ''
+    var image = imageUrl;
+    if (!image.contains('http') && imageUrl != '') {
+      image = local.baseUrl + image;
+    }
+    return image == ''
         ? EmptyImage(
             size: size,
-            width: width,
-            height: height,
+            width: width ?? size,
           )
         : CachedNetworkImage(
-            imageUrl: imageUrl,
+            imageUrl: image,
             placeholder: (context, url) => Shimmer.fromColors(
               baseColor: Colors.grey[200]!,
               highlightColor: Colors.white,
               child: EmptyImage(
                 size: size,
-                width: width,
-                height: height,
+                width: width ?? size,
                 radius: radius,
               ),
             ),
             imageBuilder: (context, imageProvider) => Container(
-              height: width,
-              width: width,
+              height: size,
+              width: width ?? size,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.zero,
+                borderRadius: borderRadius ?? BorderRadius.zero,
                 image: DecorationImage(
                   image: imageProvider,
                   fit: fit ?? BoxFit.cover,
@@ -69,8 +71,8 @@ class ImageWithLoader extends StatelessWidget {
             ),
             errorWidget: (context, url, error) => isBG
                 ? Container(
-                    height: width,
-                    width: width,
+                    height: size,
+                    width: width ?? size,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.zero,
                       color: Colors.white,
@@ -79,8 +81,7 @@ class ImageWithLoader extends StatelessWidget {
                   )
                 : EmptyImage(
                     size: size,
-                    width: width,
-                    height: height,
+                    width: width ?? size,
                     radius: radius,
                     child: const Center(
                       child: Icon(CupertinoIcons.photo, color: Colors.grey),

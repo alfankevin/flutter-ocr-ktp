@@ -1,20 +1,12 @@
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart' as firebase_core;
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:penilaian/app/core/helpers/string_helper.dart';
-import 'package:penilaian/app/core/theme/theme.dart';
 import 'package:penilaian/app/core/widgets/images/image_with_loader.dart';
-import 'package:penilaian/app/core/widgets/text/warning_text.dart';
 import 'package:penilaian/app/data/extensions/extensions.dart';
-import 'package:penilaian/app/data/models/ktp_model.dart';
-import 'package:penilaian/app/data/services/local_services/selected_local_services.dart';
+import 'package:penilaian/app/data/models/ktm_model.dart';
 import 'package:penilaian/app/routes/app_routes.dart';
-import 'package:penilaian/app/core/config/app_asset.dart';
 
 import 'widgets/text_result_card.dart';
 
@@ -22,19 +14,20 @@ class DetailKtpPage extends StatefulWidget {
   const DetailKtpPage({
     super.key,
     required this.nikResult,
+    required this.docKey,
   });
 
-  final KtpModel nikResult;
+  final KtmModel nikResult;
+  final String docKey;
 
   @override
   State<DetailKtpPage> createState() => _DetailKtpPageState();
 }
 
 class _DetailKtpPageState extends State<DetailKtpPage> {
-  final storageRef = FirebaseStorage.instance.ref(StringHelper.imageStorage);
   late final CollectionReference _alternatifRef;
-  final local = Modular.get<SelectedLocalServices>();
-  late KtpModel model;
+
+  late KtmModel model;
 
   @override
   void initState() {
@@ -45,32 +38,18 @@ class _DetailKtpPageState extends State<DetailKtpPage> {
 
   Future<void> kirim() async {
     context.showLoadingIndicator();
-    final filePath = widget.nikResult.photo!;
-    final file = File(filePath);
-    String key = 16.generateRandomString;
-    if (local.selectedEdit.isNotEmpty) {
-      key = local.selectedEdit;
-    }
-
-    // Create the file metadata
-    final metadata = SettableMetadata(contentType: "image/jpeg");
-
-    // Upload file and metadata to the path 'images/mountains.jpg'
-    final uploadTask = storageRef.child("$key.jpg");
+    String key =
+        widget.docKey.isEmpty ? 16.generateRandomString : widget.docKey;
 
     try {
-      if (!filePath.contains('firebasestorage.googleapis.com')) {
-        final hasil = await uploadTask.putFile(file, metadata);
-        final url = await hasil.ref.getDownloadURL();
-        model = model.copyWith(photo: () => url);
-      }
-
-      await _alternatifRef.doc(key).set(model.toMap());
-      await local.removeSelectedEdit();
+      await _alternatifRef.doc(key).set(model.toJson());
       Modular.to.popUntil((p0) => p0.settings.name == AppRoutes.alternatifHome);
-      context.showSnackbar(message: "Berhasil Membuat Alternatif!");
+      // context.showSnackbar(message: "Berhasil Membuat Alternatif!");
     } on firebase_core.FirebaseException catch (e) {
-      context.showSnackbar(message: e.message ?? "Terjadi kesalahan", error: true, isPop: true);
+      context.showSnackbar(
+          message: e.message ?? "An error has occurred.",
+          error: true,
+          isPop: true);
     }
   }
 
@@ -81,15 +60,15 @@ class _DetailKtpPageState extends State<DetailKtpPage> {
         title: const Text('Details'),
         centerTitle: true,
         leading: IconButton(
-          padding: EdgeInsets.only(left: 15),
-          icon: Icon(Icons.arrow_back_rounded),
+          padding: const EdgeInsets.only(left: 15),
+          icon: const Icon(Icons.arrow_back_rounded),
           onPressed: () {
             Navigator.of(context).pop();
           },
         ),
         actions: [
           Padding(
-            padding: EdgeInsets.only(right: 15),
+            padding: const EdgeInsets.only(right: 15),
             child: IconButton(
               icon: Image.asset(
                 'assets/img/print.png',
@@ -111,115 +90,80 @@ class _DetailKtpPageState extends State<DetailKtpPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (widget.nikResult.photo != null)
-                    Center(
-                      child: widget.nikResult.photo!.contains('firebase')
-                          ? ImageWithLoader(
-                              imageUrl: widget.nikResult.photo!,
-                              width: 125,
-                              height: 125,
-                              fit: BoxFit.cover,
-                            )
-                          : Image.file(
-                              File(widget.nikResult.photo!),
-                            ),
+                  Center(
+                    child: ImageWithLoader(
+                      imageUrl: widget.nikResult.foto,
+                      width: 150,
+                      size: 150,
+                      fit: BoxFit.fitWidth,
                     ),
+                  ),
                   30.verticalSpacingRadius,
                   TextResultCard(
-                    title: "NIK",
-                    value: widget.nikResult.nik!,
+                    title: "NIM",
+                    value: widget.nikResult.nim,
                     onChanged: (x) {
-                      model = model.copyWith(nik: () => x);
+                      model = model.copyWith(nim: x);
                       setState(() {});
                     },
                   ),
                   const Divider(color: Colors.grey),
-                  5.verticalSpacingRadius,
+                  10.verticalSpacingRadius,
                   TextResultCard(
                     title: "Nama",
-                    value: widget.nikResult.name!,
+                    value: widget.nikResult.nama,
                     onChanged: (x) {
-                      model = model.copyWith(name: () => x);
+                      model = model.copyWith(nama: x);
                       setState(() {});
                     },
                   ),
                   const Divider(color: Colors.grey),
-                  5.verticalSpacingRadius,
+                  10.verticalSpacingRadius,
                   TextResultCard(
-                    title: "Tanggal Lahir",
-                    value: widget.nikResult.bornDate!,
+                    title: "TTL",
+                    value: widget.nikResult.lahir,
                     onChanged: (x) {
-                      model = model.copyWith(bornDate: () => x);
+                      model = model.copyWith(lahir: x);
                       setState(() {});
                     },
                   ),
                   const Divider(color: Colors.grey),
-                  5.verticalSpacingRadius,
+                  10.verticalSpacingRadius,
                   TextResultCard(
-                    title: "Usia",
-                    value: widget.nikResult.age!,
+                    title: "Jurusan",
+                    value: widget.nikResult.prodi,
                     onChanged: (x) {
-                      model = model.copyWith(age: () => x);
+                      model = model.copyWith(prodi: x);
                       setState(() {});
                     },
                   ),
                   const Divider(color: Colors.grey),
-                  5.verticalSpacingRadius,
+                  10.verticalSpacingRadius,
                   TextResultCard(
-                    title: "Jenis Kelamin",
-                    value: widget.nikResult.gender!,
+                    title: "Alamat",
+                    value: widget.nikResult.dusun,
                     onChanged: (x) {
-                      model = model.copyWith(gender: () => x);
+                      model = model.copyWith(dusun: x);
                       setState(() {});
                     },
                   ),
                   const Divider(color: Colors.grey),
-                  5.verticalSpacingRadius,
+                  10.verticalSpacingRadius,
                   TextResultCard(
-                    title: "Gol Darah",
-                    value: '-',
+                    title: "Dusun",
+                    value: widget.nikResult.jalan,
                     onChanged: (x) {
-                      model = model.copyWith(uniqueCode: () => x);
+                      model = model.copyWith(jalan: x);
                       setState(() {});
                     },
                   ),
                   const Divider(color: Colors.grey),
-                  5.verticalSpacingRadius,
-                  TextResultCard(
-                    title: "Provinsi",
-                    value: widget.nikResult.province!,
-                    onChanged: (x) {
-                      model = model.copyWith(province: () => x);
-                      setState(() {});
-                    },
-                  ),
-                  const Divider(color: Colors.grey),
-                  5.verticalSpacingRadius,
+                  10.verticalSpacingRadius,
                   TextResultCard(
                     title: "Kota/Kabupaten",
-                    value: widget.nikResult.city!,
+                    value: widget.nikResult.kota,
                     onChanged: (x) {
-                      model = model.copyWith(city: () => x);
-                      setState(() {});
-                    },
-                  ),
-                  const Divider(color: Colors.grey),
-                  5.verticalSpacingRadius,
-                  TextResultCard(
-                    title: "Kecamatan",
-                    value: widget.nikResult.subdistrict!,
-                    onChanged: (x) {
-                      model = model.copyWith(subdistrict: () => x);
-                      setState(() {});
-                    },
-                  ),
-                  const Divider(color: Colors.grey),
-                  5.verticalSpacingRadius,
-                  TextResultCard(
-                    title: "Kode Pos",
-                    value: widget.nikResult.postalCode!,
-                    onChanged: (x) {
-                      model = model.copyWith(postalCode: () => x);
+                      model = model.copyWith(kota: x);
                       setState(() {});
                     },
                   ),
@@ -233,7 +177,7 @@ class _DetailKtpPageState extends State<DetailKtpPage> {
       bottomNavigationBar: SizedBox(
         height: 100,
         child: BottomNavigationBar(
-          backgroundColor: Color(0xFFDDDBFF),
+          backgroundColor: const Color(0xFFDDDBFF),
           selectedItemColor: Colors.black,
           unselectedItemColor: Colors.black,
           type: BottomNavigationBarType.fixed,

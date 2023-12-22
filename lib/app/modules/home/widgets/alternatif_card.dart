@@ -1,11 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:penilaian/app/core/theme/theme.dart';
-import 'package:penilaian/app/core/widgets/images/image_with_loader.dart';
-import 'package:penilaian/app/data/extensions/extensions.dart';
-import 'package:penilaian/app/data/models/ktp_model.dart';
-
-import '../../../../core/widgets/button/icon_rounded_button.dart';
+import 'package:penilaian/app/data/models/ktm_model.dart';
 
 class AlternatifCard extends StatelessWidget {
   const AlternatifCard({
@@ -17,11 +11,20 @@ class AlternatifCard extends StatelessWidget {
     this.onTap,
   });
 
-  final KtpModel data;
+  final KtmModel data;
   final int number;
   final VoidCallback? onDelete;
   final VoidCallback? onEdit;
   final VoidCallback? onTap;
+
+  String toTitleCase(String text) {
+    if (text.isEmpty) return text;
+
+    return text.toLowerCase().split(' ').map((word) {
+      if (word.isEmpty) return word;
+      return word[0].toUpperCase() + word.substring(1);
+    }).join(' ');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,8 +37,9 @@ class AlternatifCard extends StatelessWidget {
         bool delete = false;
         final snackbarController = ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Delete Data ${data.name}?'),
-            action: SnackBarAction(label: 'Delete', onPressed: () => delete = true),
+            content: Text('Delete Data ${data.nama}?'),
+            action:
+                SnackBarAction(label: 'Delete', onPressed: () => delete = true),
           ),
         );
         await snackbarController.closed;
@@ -43,25 +47,26 @@ class AlternatifCard extends StatelessWidget {
       },
       background: Container(
         alignment: Alignment.centerRight,
-        padding: EdgeInsets.only(right: 8.w),
+        padding: const EdgeInsets.only(right: 12),
         decoration: BoxDecoration(
-          color: Colors.red,
+          color: const Color(0xFFffa5a5),
           borderRadius: BorderRadius.circular(16),
         ),
-        child: const Icon(
-          Icons.delete,
-          color: ColorTheme.white,
+        child: Image.asset(
+          'assets/img/delete.png',
+          width: 24,
+          height: 24,
         ),
       ),
-      child: Column(
-        children: [
-          GestureDetector(
-            onTap: onEdit,
-            child: Container(
-              padding: EdgeInsets.all(16),
+      child: Column(children: [
+        GestureDetector(
+          onTap: onEdit,
+          child: Container(
+              padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: Colors.white,
-                border: Border.all(color: Color(0xffDDDBFF).withOpacity(0.5), width: 1),
+                border: Border.all(
+                    color: const Color(0xffDDDBFF).withOpacity(0.5), width: 1),
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Row(
@@ -70,11 +75,10 @@ class AlternatifCard extends StatelessWidget {
                     decoration: BoxDecoration(
                       boxShadow: [
                         BoxShadow(
-                          color: Color(0xffDDDBFF).withOpacity(1),
-                          spreadRadius: 1,
-                          blurRadius: 2,
-                          offset: Offset(2, 3)
-                        ),
+                            color: const Color(0xffDDDBFF).withOpacity(1),
+                            spreadRadius: 1,
+                            blurRadius: 2,
+                            offset: const Offset(2, 3)),
                       ],
                     ),
                     child: ClipRRect(
@@ -88,33 +92,24 @@ class AlternatifCard extends StatelessWidget {
                   ),
                   Expanded(
                     child: Container(
-                      padding: EdgeInsets.only(left: 16),
+                      padding: const EdgeInsets.only(left: 16),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(data.name ?? "-",
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold
-                            )
-                          ),
-                          SizedBox(height: 4),
-                          Row(
+                          Text(toTitleCase(data.nama),
+                              style: const TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold)),
+                          const SizedBox(height: 4),
+                          const Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                'Today',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.grey
-                                )
-                              ),
-                              Text(
-                                '1 page',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                )
-                              ),
+                              Text('Today',
+                                  style: TextStyle(
+                                      fontSize: 14, color: Colors.grey)),
+                              Text('1 page',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                  )),
                             ],
                           )
                         ],
@@ -122,11 +117,9 @@ class AlternatifCard extends StatelessWidget {
                     ),
                   )
                 ],
-              )
-            ),
-          ),
-        ]
-      ),
+              )),
+        ),
+      ]),
     );
   }
 }
