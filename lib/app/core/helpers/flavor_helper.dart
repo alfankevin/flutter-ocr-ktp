@@ -16,5 +16,5 @@ class FlavorTentu extends FlavorHelper {
   String get image => "assets/img/app-development1.png";
 
   @override
-  String get name => "OCR KTP";
+  String get name => "OCR KTM";
 }

@@ -57,7 +57,7 @@ class _KtpPickPageState extends State<KtpPickPage> {
           }
           if (state is KtpScanError) {
             context.showSnackbar(
-                message: "KTP not found.", error: true, isPop: true);
+                message: "KTM not found.", error: true, isPop: true);
             Navigator.of(context).pop();
           }
           if (state is KtpScanLoaded) {

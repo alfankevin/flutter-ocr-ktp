@@ -27,7 +27,7 @@ Future<void> main() async {
 
   final local = FlavorLocalServicesImpl();
   // await local.setImage("assets/img/logo_lama.png");
-  await local.setName("OCR KTP");
+  await local.setName("OCR KTM");
 
   runApp(
     ModularApp(

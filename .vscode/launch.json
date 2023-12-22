@@ -2,7 +2,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "OCR KTP",
+            "name": "OCR KTM",
             "request": "launch",
             "type": "dart",
             "flutterMode": "debug",

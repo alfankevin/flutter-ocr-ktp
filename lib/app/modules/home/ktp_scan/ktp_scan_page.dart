@@ -106,7 +106,7 @@ class _KtpScanPageState extends State<KtpScanPage> {
                 return const Align(
                   alignment: Alignment.center,
                   child: Text(
-                    'Fetching cameras',
+                    'Fetching camera',
                     style: TextStyle(color: Colors.black),
                   ),
                 );
