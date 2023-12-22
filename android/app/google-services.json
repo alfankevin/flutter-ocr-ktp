@@ -1,54 +1,53 @@
 {
   "project_info": {
-    "project_number": "472136949613",
-    "firebase_url": "https://penilaian-blt-uta-default-rtdb.asia-southeast1.firebasedatabase.app",
-    "project_id": "penilaian-blt-uta",
-    "storage_bucket": "penilaian-blt-uta.appspot.com"
+    "project_number": "1051080314093",
+    "project_id": "ocr-ktm",
+    "storage_bucket": "ocr-ktm.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:472136949613:android:4c6a14e1534dd9a2ccc464",
+        "mobilesdk_app_id": "1:1051080314093:android:41d37ba6f98290d8bf90e4",
         "android_client_info": {
           "package_name": "tubes.smt5.penilaian"
         }
       },
       "oauth_client": [
         {
-          "client_id": "472136949613-o0mgv6idi8o2tqu7438inptvtm96uird.apps.googleusercontent.com",
+          "client_id": "1051080314093-hkfnhdi12gs5qv9eqj09focr30nopruq.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "tubes.smt5.penilaian",
-            "certificate_hash": "ee47487e306e7d045acf48970c8944a4ed832b8d"
+            "certificate_hash": "09c2abbb47278b8535de30e26bd21d2d9548511f"
           }
         },
         {
-          "client_id": "472136949613-thr4644ld8c764q59f4te1anrtmlrd9k.apps.googleusercontent.com",
+          "client_id": "1051080314093-mrg1lmkplvnpm3tsrb7a8jn6ufj6476a.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "tubes.smt5.penilaian",
-            "certificate_hash": "4ac8edeb0d2378967e049abd96b20e54262b26a1"
+            "certificate_hash": "90a8af12009459219a3704bd0b379d03bb5b882a"
           }
         },
         {
-          "client_id": "472136949613-927671lghvk5d8jjls6e5dv0ugtatn97.apps.googleusercontent.com",
+          "client_id": "1051080314093-dbg99vsudehjb7tavbadth259o0acgjc.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAQIgN8tTmezsmsQz2V5S1cdrNmtmmWU_o"
+          "current_key": "AIzaSyCtBL3hPz_81fT3qC7Hqo4yc7g-yjhOXgo"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "472136949613-927671lghvk5d8jjls6e5dv0ugtatn97.apps.googleusercontent.com",
+              "client_id": "1051080314093-dbg99vsudehjb7tavbadth259o0acgjc.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "472136949613-q1sgf30jehi577j1abkq6sippfmvmuik.apps.googleusercontent.com",
+              "client_id": "1051080314093-ktkbtipl4sbcqqgbll5ogocp69h03d1l.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "tubes.smt5.penilaian"

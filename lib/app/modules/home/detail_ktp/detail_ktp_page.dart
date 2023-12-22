@@ -34,15 +34,13 @@ class _DetailKtpPageState extends State<DetailKtpPage> {
   final storageRef = FirebaseStorage.instance.ref(StringHelper.imageStorage);
   late final CollectionReference _alternatifRef;
   final local = Modular.get<SelectedLocalServices>();
-  late final String _refKey;
   late KtpModel model;
 
   @override
   void initState() {
     super.initState();
-    _refKey = local.selected;
     model = widget.nikResult;
-    _alternatifRef = FirebaseFirestore.instance.collection('$_refKey/alternatif');
+    _alternatifRef = FirebaseFirestore.instance.collection('scan');
   }
 
   Future<void> kirim() async {
@@ -70,9 +68,9 @@ class _DetailKtpPageState extends State<DetailKtpPage> {
       await _alternatifRef.doc(key).set(model.toMap());
       await local.removeSelectedEdit();
       Modular.to.popUntil((p0) => p0.settings.name == AppRoutes.alternatifHome);
-      // context.showSnackbar(message: "Berhasil Membuat Alternatif!");
+      context.showSnackbar(message: "Berhasil Membuat Alternatif!");
     } on firebase_core.FirebaseException catch (e) {
-      // context.showSnackbar(message: e.message ?? "Terjadi kesalahan", error: true, isPop: true);
+      context.showSnackbar(message: e.message ?? "Terjadi kesalahan", error: true, isPop: true);
     }
   }
 

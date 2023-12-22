@@ -44,17 +44,13 @@ class _HomePageState extends State<HomePage> {
   late final CollectionReference _penilaianRef;
   late final CollectionReference _alternatifRef;
   late final CollectionReference _kriteriaRef;
-  late final String _refKey;
   late final User user;
 
   @override
   void initState() {
     super.initState();
     user = FirebaseAuth.instance.currentUser!;
-    _refKey = Modular.get<SelectedLocalServices>().selected;
-    _alternatifRef = FirebaseFirestore.instance.collection('$_refKey/alternatif');
-    _penilaianRef = FirebaseFirestore.instance.collection('$_refKey/nilai');
-    _kriteriaRef = FirebaseFirestore.instance.collection('$_refKey/kriteria');
+    _alternatifRef = FirebaseFirestore.instance.collection('scan');
     permission();
   }
 
